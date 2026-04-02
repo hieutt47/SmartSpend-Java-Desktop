@@ -22,8 +22,7 @@ public class DatabaseConnection {
     }
 
 
-
-
+    
     public static void initializeDatabase() {
         String createCategoryTable = "CREATE TABLE IF NOT EXISTS categories (" +
                 "category_id INT AUTO_INCREMENT PRIMARY KEY, " +
