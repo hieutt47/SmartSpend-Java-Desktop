@@ -1,5 +1,5 @@
 package com.example.smartspend.model;
-
+import com.example.smartspend.model.enums.TransactionType;
 public class Category {
     private int categoryId;
     private String name;

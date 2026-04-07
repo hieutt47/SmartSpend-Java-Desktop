@@ -1,4 +1,4 @@
-package com.example.smartspend.repository;
+package com.example.smartspend.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,6 +18,7 @@ public class DatabaseConnection {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return connection;
     }
 
