@@ -1,4 +1,4 @@
-package com.example.smartspend;
+package com.example.smartspend.test;
 
 import javafx.application.Application;
 

@@ -1,4 +1,4 @@
-package com.example.smartspend.controller.portfolio;
+package com.example.smartspend.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;

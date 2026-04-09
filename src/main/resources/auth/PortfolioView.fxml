@@ -17,9 +17,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 
-<BorderPane fx:controller="com.example.smartspend.controller.portfolio.PortfolioController" prefHeight="850.0" prefWidth="1300.0" styleClass="root-pane" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:controller="com.example.smartspend.controller.PortfolioController" prefHeight="850.0" prefWidth="1300.0" styleClass="root-pane" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
-        <URL value="@../../css/style.css" />
+        <URL value="@../css/PortfolioView.css" />
     </stylesheets>
 
     <left>

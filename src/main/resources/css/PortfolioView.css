@@ -1,0 +1,221 @@
+/* --- BIẾN MÀU CƠ BẢN --- */
+.root-pane {
+    -fx-background-color: #f8fafc;
+    -fx-font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+}
+
+/* --- SIDEBAR --- */
+.sidebar {
+    -fx-background-color: #f8fafc; /* Cùng màu nền */
+    -fx-border-color: transparent #e2e8f0 transparent transparent;
+}
+
+.logo-text {
+    -fx-font-size: 24px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #1e3a8a; /* Xanh Navy đậm */
+}
+.logo-subtext {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #94a3b8;
+    -fx-letter-spacing: 1.5px;
+}
+
+/* Nút Menu Sidebar */
+.menu-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #64748b;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-alignment: center-left;
+    -fx-padding: 12 15;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+.menu-btn:hover {
+    -fx-background-color: #f1f5f9;
+    -fx-text-fill: #0f172a;
+}
+.menu-btn-active {
+    -fx-background-color: #eff6ff;
+    -fx-text-fill: #1d4ed8;
+    -fx-border-color: transparent transparent transparent #1d4ed8;
+    -fx-border-width: 0 0 0 4;
+    -fx-border-radius: 0 8 8 0;
+}
+
+/* Nút Add Transaction to đùng dưới cùng */
+.btn-add-transaction {
+    -fx-background-color: #1d4ed8;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 15;
+    -fx-background-radius: 12;
+    -fx-cursor: hand;
+}
+.btn-add-transaction:hover { -fx-background-color: #1e40af; }
+
+/* --- MAIN CONTENT & HEADER --- */
+.main-scroll {
+    -fx-background: #f8fafc;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.main-content {
+    -fx-background-color: transparent;
+}
+
+.search-bar {
+    -fx-background-color: #f1f5f9;
+    -fx-background-radius: 20;
+    -fx-padding: 10 20;
+    -fx-text-fill: #0f172a;
+    -fx-border-color: transparent;
+}
+
+.icon-top {
+    -fx-font-size: 18px;
+    -fx-text-fill: #64748b;
+    -fx-cursor: hand;
+}
+
+/* Chữ tiêu đề */
+.section-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #1d4ed8;
+    -fx-letter-spacing: 1px;
+}
+
+.big-balance {
+    -fx-font-size: 54px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #0f172a;
+}
+.big-balance-cents {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #94a3b8;
+}
+
+.medium-balance {
+    -fx-font-size: 28px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #0f172a;
+}
+
+/* Badges (Nhãn dán nhỏ) */
+.badge-green {
+    -fx-background-color: #dcfce7;
+    -fx-text-fill: #16a34a;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 5 12;
+    -fx-background-radius: 20;
+}
+.text-green-small { -fx-text-fill: #16a34a; -fx-font-size: 11px; -fx-font-weight: bold; }
+.text-red-small { -fx-text-fill: #ef4444; -fx-font-size: 11px; -fx-font-weight: bold; }
+
+/* --- CARDS (Khung viền bo góc) --- */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-padding: 25;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 15, 0, 0, 8);
+}
+
+.card-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #0f172a;
+}
+.card-subtitle {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #94a3b8;
+    -fx-letter-spacing: 1px;
+}
+.card-value {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+/* Icon trong Card */
+.icon-badge {
+    -fx-font-size: 20px;
+    -fx-padding: 10;
+    -fx-background-radius: 12;
+}
+.icon-blue { -fx-background-color: #eff6ff; }
+.icon-green { -fx-background-color: #dcfce7; }
+.icon-red { -fx-background-color: #fee2e2; }
+
+/* Các thành phần nhỏ */
+.text-muted { -fx-text-fill: #64748b; }
+.text-muted-small { -fx-text-fill: #94a3b8; -fx-font-size: 11px; }
+.text-bold { -fx-font-weight: bold; }
+.link-text { -fx-text-fill: #1d4ed8; -fx-font-size: 11px; -fx-font-weight: bold; -fx-cursor: hand; }
+
+/* Progress Bar (Net Savings) */
+.savings-progress {
+    -fx-accent: #10b981;
+    -fx-control-inner-background: #f1f5f9;
+    -fx-pref-height: 8px;
+}
+.savings-progress .track { -fx-background-radius: 10; }
+.savings-progress .bar { -fx-background-radius: 10; }
+
+/* Biểu đồ Donut giả lập */
+.chart-center-value {
+    -fx-font-size: 24px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #0f172a;
+}
+
+/* --- BUTTONS PHỤ --- */
+.btn-filter {
+    -fx-background-color: #f1f5f9;
+    -fx-text-fill: #475569;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 8 15;
+    -fx-background-radius: 20;
+    -fx-cursor: hand;
+}
+.btn-outline {
+    -fx-background-color: transparent;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 8;
+    -fx-text-fill: #475569;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+}
+
+/* --- TABLE VIEW --- */
+.no-border-table {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.no-border-table .column-header {
+    -fx-background-color: transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #f1f5f9;
+}
+.no-border-table .column-header .label {
+    -fx-text-fill: #94a3b8;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+.no-border-table .table-row-cell {
+    -fx-background-color: transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #f8fafc;
+    -fx-cell-size: 50px; /* Làm hàng cao hơn, rộng rãi hơn */
+}
+.no-border-table .table-row-cell:hover {
+    -fx-background-color: #f1f5f9;
+}
