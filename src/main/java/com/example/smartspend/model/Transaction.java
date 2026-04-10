@@ -8,7 +8,7 @@ public class Transaction {
     private LocalDate date; // Dùng LocalDate để khớp với JavaFX DatePicker
     private String note;
     private int categoryId; // Khóa ngoại liên kết với bảng Category
-
+    private com.example.smartspend.model.enums.TransactionType type;
     public Transaction() {}
 
     public Transaction(int transactionId, double amount, LocalDate date, String note, int categoryId) {
@@ -34,4 +34,12 @@ public class Transaction {
 
     public int getCategoryId() { return categoryId; }
     public void setCategoryId(int categoryId) { this.categoryId = categoryId; }
+
+    public com.example.smartspend.model.enums.TransactionType getType() {
+        return type;
+    }
+
+    public void setType(com.example.smartspend.model.enums.TransactionType type) {
+        this.type = type;
+    }
 }
