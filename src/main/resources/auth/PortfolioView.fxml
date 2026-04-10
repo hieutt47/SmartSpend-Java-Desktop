@@ -13,7 +13,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="800.0" prefWidth="1200.0" styleClass="root-pane" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:controller="com.example.smartspend.controller.PortfolioController" prefHeight="800.0" prefWidth="1200.0" styleClass="root-pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
         <URL value="@../css/PortfolioView.css" />
     </stylesheets>
@@ -46,18 +46,19 @@
                     </children>
                 </VBox>
 
-        <Region VBox.vgrow="ALWAYS" />
+                <Region VBox.vgrow="ALWAYS" />
 
-        <VBox spacing="10.0">
-            <children>
-                <Button fx:id="btnAddTrans" onAction="#openAddTransactionPopup" maxWidth="1.7976931348623157E308" styleClass="btn-primary" text="+ Add Transaction">
-                    <VBox.margin>
-                        <Insets bottom="20.0" />
-                    </VBox.margin>
-                </Button>
-
-                <Button maxWidth="1.7976931348623157E308" styleClass="menu-btn" text="❓  Support" />
-                <Button maxWidth="1.7976931348623157E308" styleClass="menu-btn" text="🚪  Sign Out" />
+                <VBox spacing="10.0">
+                    <children>
+                        <Button fx:id="btnAddTrans" maxWidth="1.7976931348623157E308" onAction="#openAddTransactionPopup" styleClass="btn-primary" text="+ Add Transaction">
+                            <VBox.margin>
+                                <Insets bottom="20.0" />
+                            </VBox.margin>
+                        </Button>
+                        <Button maxWidth="1.7976931348623157E308" styleClass="menu-btn" text="❓  Support" />
+                        <Button maxWidth="1.7976931348623157E308" styleClass="menu-btn" text="🚪  Sign Out" />
+                    </children>
+                </VBox>
             </children>
         </VBox>
     </left>
@@ -70,7 +71,6 @@
                         <Insets bottom="40.0" left="40.0" right="40.0" top="30.0" />
                     </padding>
                     <children>
-
                         <HBox alignment="CENTER_LEFT" spacing="20.0">
                             <children>
                                 <TextField prefWidth="300.0" promptText="🔍 Search analytics..." styleClass="search-bar" />
@@ -111,7 +111,6 @@
 
                         <HBox spacing="20.0">
                             <children>
-
                                 <VBox spacing="20.0" HBox.hgrow="ALWAYS">
                                     <children>
                                         <VBox prefHeight="300.0" styleClass="card" VBox.vgrow="ALWAYS">
@@ -123,7 +122,6 @@
                                                 <Region VBox.vgrow="ALWAYS" />
                                             </children>
                                         </VBox>
-
                                         <HBox spacing="20.0">
                                             <children>
                                                 <VBox styleClass="card" HBox.hgrow="ALWAYS">
@@ -152,10 +150,8 @@
                                                     <Button styleClass="btn-view-all" text="View All" />
                                                 </children>
                                             </HBox>
-
                                             <VBox fx:id="vboxRecentTransactions" spacing="10.0" VBox.vgrow="ALWAYS">
                                                 <children>
-
                                                     <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="transaction-item">
                                                         <children>
                                                             <Label styleClass="transaction-icon" text="🛒" />
@@ -171,23 +167,19 @@
                                                             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                         </padding>
                                                     </HBox>
-
                                                 </children>
                                             </VBox>
                                         </children>
                                     </VBox>
-                                    <children>
-                                        <VBox alignment="CENTER" spacing="15.0" styleClass="card">
-                                            <children>
-                                                <Label styleClass="card-subtitle" text="FINANCIAL HEALTH SCORE" />
-                                                <Circle fill="WHITE" radius="60.0" stroke="#0d52c6" strokeWidth="12.0" />
-                                                <Label text="Your debt-to-income ratio improved by 5% this month." textAlignment="CENTER" textFill="#64748b" wrapText="true" />
-                                                <Button maxWidth="1.7976931348623157E308" styleClass="btn-outline" text="Details" />
-                                            </children>
-                                        </VBox>
-                                    </children>
+                                    <VBox alignment="CENTER" spacing="15.0" styleClass="card">
+                                        <children>
+                                            <Label styleClass="card-subtitle" text="FINANCIAL HEALTH SCORE" />
+                                            <Circle fill="WHITE" radius="60.0" stroke="#0d52c6" strokeWidth="12.0" />
+                                            <Label text="Your debt-to-income ratio improved by 5% this month." textAlignment="CENTER" textFill="#64748b" wrapText="true" />
+                                            <Button maxWidth="1.7976931348623157E308" styleClass="btn-outline" text="Details" />
+                                        </children>
+                                    </VBox>
                                 </VBox>
-
                             </children>
                         </HBox>
                     </children>
