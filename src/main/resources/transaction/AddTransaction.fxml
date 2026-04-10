@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15.0" alignment="CENTER" prefWidth="450.0" prefHeight="380.0"
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.smartspend.controller.AddTransactionController">
+    <padding>
+        <Insets top="25" right="25" bottom="25" left="25"/>
+    </padding>
+
+    <Label text="Thêm Giao Dịch Mới" style="-fx-font-size: 20px; -fx-font-weight: 900; -fx-text-fill: #1e3a8a;"/>
+
+    <VBox spacing="5">
+        <Label text="Số tiền:"/>
+        <TextField fx:id="txtAmount" promptText="VD: 50000" style="-fx-padding: 8; -fx-background-radius: 5;"/>
+    </VBox>
+
+    <VBox spacing="5">
+        <Label text="Ngày giao dịch:"/>
+        <DatePicker fx:id="dpDate" promptText="Chọn ngày" prefWidth="400.0" style="-fx-padding: 4;"/>
+    </VBox>
+
+    <VBox spacing="5">
+        <Label text="Danh mục:"/>
+        <ComboBox fx:id="cbCategory" promptText="Chọn danh mục" prefWidth="400.0" style="-fx-padding: 4;"/>
+    </VBox>
+
+    <VBox spacing="5">
+        <Label text="Ghi chú:"/>
+        <TextField fx:id="txtNote" promptText="VD: Mua trà sữa" style="-fx-padding: 8; -fx-background-radius: 5;"/>
+    </VBox>
+
+    <HBox spacing="15" alignment="CENTER">
+        <VBox.margin><Insets top="10"/></VBox.margin>
+        <Button text="💰 Add Income" fx:id="btnAddIncome" onAction="#handleAddIncome"
+                style="-fx-background-color: #10b981; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 8; -fx-cursor: hand;"/>
+        <Button text="💸 Add Expense" fx:id="btnAddExpense" onAction="#handleAddExpense"
+                style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 8; -fx-cursor: hand;"/>
+    </HBox>
+</VBox>

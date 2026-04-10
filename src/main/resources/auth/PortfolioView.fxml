@@ -43,8 +43,7 @@
                 <Button fx:id="btnSetting" maxWidth="Infinity" styleClass="menu-btn" text="⚙️  Settings" />
 
                 <Region VBox.vgrow="ALWAYS" />
-
-                <Button fx:id="btnAddTrans" maxWidth="Infinity" styleClass="btn-add-transaction" text="+ Add Transaction" />
+                <Button fx:id="btnAddTrans" onAction="#openAddTransactionPopup" maxWidth="Infinity" styleClass="btn-add-transaction" text="+ Add Transaction" />
             </children>
         </VBox>
     </left>

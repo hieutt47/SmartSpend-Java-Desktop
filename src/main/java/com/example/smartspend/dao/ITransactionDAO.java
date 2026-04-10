@@ -1,4 +1,7 @@
 package com.example.smartspend.dao;
 
-public class ITransactionDAO {
+import com.example.smartspend.model.Transaction;
+
+public interface ITransactionDAO {
+    boolean save(Transaction transaction);
 }
