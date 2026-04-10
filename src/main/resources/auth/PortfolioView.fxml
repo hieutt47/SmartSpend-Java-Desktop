@@ -47,7 +47,6 @@
                 </VBox>
 
                 <Region VBox.vgrow="ALWAYS" />
-
                 <VBox spacing="10.0">
                     <children>
                         <Button fx:id="btnAddTrans" maxWidth="1.7976931348623157E308" onAction="#openAddTransactionPopup" styleClass="btn-primary" text="+ Add Transaction">
