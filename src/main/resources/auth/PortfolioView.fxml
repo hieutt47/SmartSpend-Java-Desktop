@@ -1,49 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.Double?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane fx:controller="com.example.smartspend.controller.PortfolioController" prefHeight="850.0" prefWidth="1300.0" styleClass="root-pane" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:controller="com.example.smartspend.controller.PortfolioController" prefHeight="800.0" prefWidth="1200.0" styleClass="root-pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
         <URL value="@../css/PortfolioView.css" />
     </stylesheets>
 
     <left>
-        <VBox prefWidth="240.0" spacing="5.0" styleClass="sidebar">
+        <VBox prefWidth="240.0" styleClass="sidebar">
             <padding>
-                <Insets bottom="30.0" left="20.0" right="20.0" top="30.0" />
+                <Insets bottom="20.0" left="20.0" right="20.0" top="30.0" />
             </padding>
             <children>
-                <VBox spacing="2.0">
-                    <Label styleClass="logo-text" text="SmartSpend" />
-                    <Label styleClass="logo-subtext" text="THE FISCAL ATELIER" />
+                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                    <children>
+                        <Region prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #0d52c6; -fx-background-radius: 8;" />
+                        <Label styleClass="logo-text" text="SmartSpend" />
+                    </children>
+                </HBox>
+                <Label styleClass="sidebar-subtitle" text="PREMIUM MANAGEMENT">
                     <VBox.margin>
-                        <Insets bottom="30.0" />
+                        <Insets bottom="30.0" top="5.0" />
                     </VBox.margin>
+                </Label>
+
+                <VBox spacing="5.0">
+                    <children>
+                        <Button maxWidth="1.7976931348623157E308" styleClass="menu-btn, menu-btn-active" text="📦  Portfolio" />
+                        <Button maxWidth="1.7976931348623157E308" styleClass="menu-btn" text="🧾  Transactions" />
+                        <Button maxWidth="1.7976931348623157E308" styleClass="menu-btn" text="📊  Insights" />
+                        <Button maxWidth="1.7976931348623157E308" styleClass="menu-btn" text="🎯  Budgets" />
+                        <Button maxWidth="1.7976931348623157E308" styleClass="menu-btn" text="🏛️  Tax Central" />
+                    </children>
                 </VBox>
 
-                <Button fx:id="btnDashboard" maxWidth="Infinity" styleClass="menu-btn, menu-btn-active" text="🎛️  Dashboard" />
-                <Button fx:id="bthHistory" maxWidth="Infinity" styleClass="menu-btn" text="🕒  History" />
-                <Button fx:id="btnBudget" maxWidth="Infinity" styleClass="menu-btn" text="👛  Budget" />
-                <Button fx:id="btnInsights" maxWidth="Infinity" styleClass="menu-btn" text="📈  Insights" />
-                <Button fx:id="btnSetting" maxWidth="Infinity" styleClass="menu-btn" text="⚙️  Settings" />
-
                 <Region VBox.vgrow="ALWAYS" />
-                <Button fx:id="btnAddTrans" onAction="#openAddTransactionPopup" maxWidth="Infinity" styleClass="btn-add-transaction" text="+ Add Transaction" />
+
+                <VBox spacing="10.0">
+                    <children>
+                        <Button fx:id="btnAddTrans" maxWidth="1.7976931348623157E308" onAction="#openAddTransactionPopup" styleClass="btn-primary" text="+ Add Transaction">
+                            <VBox.margin>
+                                <Insets bottom="20.0" />
+                            </VBox.margin>
+                        </Button>
+                        <Button maxWidth="1.7976931348623157E308" styleClass="menu-btn" text="❓  Support" />
+                        <Button maxWidth="1.7976931348623157E308" styleClass="menu-btn" text="🚪  Sign Out" />
+                    </children>
+                </VBox>
             </children>
         </VBox>
     </left>
@@ -51,151 +66,119 @@
     <center>
         <ScrollPane fitToWidth="true" styleClass="main-scroll">
             <content>
-                <VBox spacing="35.0" styleClass="main-content">
+                <VBox spacing="30.0" styleClass="main-content">
                     <padding>
-                        <Insets bottom="40.0" left="50.0" right="50.0" top="30.0" />
+                        <Insets bottom="40.0" left="40.0" right="40.0" top="30.0" />
                     </padding>
                     <children>
-
                         <HBox alignment="CENTER_LEFT" spacing="20.0">
                             <children>
-                                <TextField prefWidth="350.0" promptText="🔍 Search transactions, budgets..." styleClass="search-bar" />
+                                <TextField prefWidth="300.0" promptText="🔍 Search analytics..." styleClass="search-bar" />
                                 <Region HBox.hgrow="ALWAYS" />
-                                <Label styleClass="icon-top" text="🔔" />
-                                <Label styleClass="icon-top" text="❓" />
-                                <Circle fill="#1d4ed8" radius="16.0" />
+                                <Label text="🔔" textFill="#64748b">
+                                    <font><Font size="18.0" /></font>
+                                </Label>
+                                <Label text="⚙️" textFill="#64748b">
+                                    <font><Font size="18.0" /></font>
+                                </Label>
+                                <Circle fill="#0d52c6" radius="16.0" />
                             </children>
                         </HBox>
 
-                        <HBox spacing="40.0">
+                        <HBox alignment="BOTTOM_LEFT">
                             <children>
-                                <VBox spacing="10.0" HBox.hgrow="ALWAYS">
+                                <VBox spacing="5.0">
                                     <children>
-                                        <Label styleClass="section-title" text="PORTFOLIO OVERVIEW" />
-                                        <HBox alignment="BASELINE_LEFT">
+                                        <Label styleClass="section-title" text="TOTAL WEALTH OVERVIEW" />
+                                        <Label styleClass="big-balance" text="\$1,248,590.00" />
+                                        <HBox alignment="CENTER_LEFT" spacing="10.0">
                                             <children>
-                                                <Label styleClass="big-balance" text="\$124,562" />
-                                                <Label styleClass="big-balance-cents" text=".50" />
-                                            </children>
-                                        </HBox>
-                                        <HBox alignment="CENTER_LEFT" spacing="15.0">
-                                            <children>
-                                                <Label styleClass="badge-green" text="↗ +12.5% this month" />
-                                                <Label styleClass="text-muted" text="📅 Since Jan 1st, 2024" />
+                                                <Label styleClass="badge-green" text="↗ +12.5% THIS YEAR" />
+                                                <Label text="Last updated: 2 minutes ago" textFill="#94a3b8" />
                                             </children>
                                         </HBox>
                                     </children>
                                 </VBox>
-
-                                <VBox prefWidth="300.0" spacing="10.0" styleClass="card">
+                                <Region HBox.hgrow="ALWAYS" />
+                                <HBox spacing="15.0">
                                     <children>
-                                        <HBox alignment="CENTER_LEFT">
-                                            <children>
-                                                <Label styleClass="card-subtitle" text="NET SAVINGS" />
-                                                <Region HBox.hgrow="ALWAYS" />
-                                                <Label text="✅" textFill="#10b981" />
-                                            </children>
-                                        </HBox>
-                                        <Label styleClass="medium-balance" text="\$8,240.00" />
-                                        <ProgressBar maxWidth="Infinity" progress="0.75" styleClass="savings-progress" />
-                                        <Label styleClass="text-muted-small" text="75% of your $11,000 goal reached" />
+                                        <Button styleClass="btn-secondary" text="📥 Add Income" />
+                                        <Button styleClass="btn-primary" text="📤 Add Expense" />
                                     </children>
-                                </VBox>
+                                </HBox>
                             </children>
                         </HBox>
 
                         <HBox spacing="20.0">
                             <children>
-                                <VBox spacing="10.0" styleClass="card" HBox.hgrow="ALWAYS">
+                                <VBox spacing="20.0" HBox.hgrow="ALWAYS">
                                     <children>
-                                        <Label styleClass="icon-badge, icon-blue" text="🏦" />
-                                        <Label styleClass="text-muted" text="Total Assets" />
-                                        <Label styleClass="card-value" text="\$148,290.00" />
-                                        <Label styleClass="text-muted-small" text="Across 4 linked accounts" />
-                                    </children>
-                                </VBox>
-                                <VBox spacing="10.0" styleClass="card" HBox.hgrow="ALWAYS">
-                                    <children>
-                                        <Label styleClass="icon-badge, icon-green" text="💵" />
-                                        <Label styleClass="text-muted" text="Monthly Income" />
-                                        <Label styleClass="card-value" text="\$12,400.00" />
-                                        <Label styleClass="text-green-small" text="↗ 4.2% VS LAST MONTH" />
-                                    </children>
-                                </VBox>
-                                <VBox spacing="10.0" styleClass="card" HBox.hgrow="ALWAYS">
-                                    <children>
-                                        <Label styleClass="icon-badge, icon-red" text="🛍️" />
-                                        <Label styleClass="text-muted" text="Monthly Expenses" />
-                                        <Label styleClass="card-value" text="\$4,160.00" />
-                                        <Label styleClass="text-red-small" text="↘ STAYED WITHIN BUDGET" />
-                                    </children>
-                                </VBox>
-                            </children>
-                        </HBox>
-
-                        <HBox spacing="20.0" VBox.vgrow="ALWAYS">
-                            <children>
-                                <VBox prefWidth="300.0" spacing="20.0" styleClass="card">
-                                    <children>
-                                        <HBox alignment="CENTER_LEFT">
+                                        <VBox prefHeight="300.0" styleClass="card" VBox.vgrow="ALWAYS">
                                             <children>
-                                                <Label styleClass="card-title" text="Categories" />
-                                                <Region HBox.hgrow="ALWAYS" />
-                                                <Label styleClass="link-text" text="DETAILS" />
+                                                <Label styleClass="card-title" text="Portfolio Performance" />
+                                                <Label text="Asset growth over the last 12 months" textFill="#64748b" />
+                                                <Region VBox.vgrow="ALWAYS" />
+                                                <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="[ Khu vực hiển thị BarChart ]" textFill="#cbd5e1" />
+                                                <Region VBox.vgrow="ALWAYS" />
                                             </children>
-                                        </HBox>
-                                        <StackPane prefHeight="200.0">
-                                            <children>
-                                                <Circle fill="TRANSPARENT" radius="80.0" stroke="#f1f5f9" strokeWidth="20.0" />
-                                                <Circle fill="TRANSPARENT" radius="80.0" stroke="#1d4ed8" strokeWidth="20.0">
-                                                    <strokeDashArray>
-                                                        <Double fx:value="250.0" />
-                                                        <Double fx:value="500.0" />
-                                                    </strokeDashArray>
-                                                </Circle>
-                                                <VBox alignment="CENTER">
-                                                    <Label styleClass="chart-center-value" text="\$4.1k" />
-                                                    <Label styleClass="text-muted-small" text="TOTAL SPEND" />
-                                                </VBox>
-                                            </children>
-                                        </StackPane>
-                                        <VBox spacing="15.0">
-                                            <HBox><Label text="🔵 Housing" /><Region HBox.hgrow="ALWAYS" /><Label styleClass="text-bold" text="40%" /></HBox>
-                                            <HBox><Label text="🟢 Food &amp; Dining" /><Region HBox.hgrow="ALWAYS" /><Label styleClass="text-bold" text="25%" /></HBox>
-                                            <HBox><Label text="🔴 Leisure" /><Region HBox.hgrow="ALWAYS" /><Label styleClass="text-bold" text="20%" /></HBox>
                                         </VBox>
+                                        <HBox spacing="20.0">
+                                            <children>
+                                                <VBox styleClass="card" HBox.hgrow="ALWAYS">
+                                                    <children>
+                                                        <Label styleClass="card-subtitle" text="Monthly Savings Rate" />
+                                                        <HBox alignment="BASELINE_LEFT" spacing="10.0">
+                                                            <children>
+                                                                <Label styleClass="metric-value" text="32.4%" />
+                                                                <Label styleClass="text-green" text="+4.2% vs last month" />
+                                                            </children>
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                        </HBox>
                                     </children>
                                 </VBox>
 
-                                <VBox spacing="15.0" styleClass="card" HBox.hgrow="ALWAYS">
-                                    <children>
-                                        <HBox alignment="CENTER_LEFT">
-                                            <children>
-                                                <VBox>
-                                                    <Label styleClass="card-title" text="Recent Activity" />
-                                                    <Label styleClass="text-muted-small" text="Updates in real-time from linked accounts" />
-                                                </VBox>
-                                                <Region HBox.hgrow="ALWAYS" />
-                                                <Button styleClass="btn-filter" text="≡ Filters" />
-                                            </children>
-                                        </HBox>
-
-                                        <TableView fx:id="tblActivity" styleClass="no-border-table" VBox.vgrow="ALWAYS">
-                                            <columns>
-                                                <TableColumn prefWidth="250.0" text="ENTITY" />
-                                                <TableColumn prefWidth="120.0" text="CATEGORY" />
-                                                <TableColumn prefWidth="150.0" text="DATE" />
-                                                <TableColumn prefWidth="150.0" style="-fx-alignment: CENTER-RIGHT;" text="AMOUNT" />
-                                            </columns>
-                                            <columnResizePolicy>
-                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                            </columnResizePolicy>
-                                        </TableView>
-
-                                        <HBox alignment="CENTER">
-                                            <Button styleClass="btn-outline" text="VIEW ALL TRANSACTIONS" />
-                                        </HBox>
-                                    </children>
+                                <VBox prefWidth="320.0" spacing="20.0">
+                                    <VBox spacing="15.0" styleClass="card" VBox.vgrow="ALWAYS">
+                                        <children>
+                                            <HBox alignment="CENTER_LEFT">
+                                                <children>
+                                                    <Label styleClass="card-title" text="Recent Transactions" />
+                                                    <Region HBox.hgrow="ALWAYS" />
+                                                    <Button styleClass="btn-view-all" text="View All" />
+                                                </children>
+                                            </HBox>
+                                            <VBox fx:id="vboxRecentTransactions" spacing="10.0" VBox.vgrow="ALWAYS">
+                                                <children>
+                                                    <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="transaction-item">
+                                                        <children>
+                                                            <Label styleClass="transaction-icon" text="🛒" />
+                                                            <VBox HBox.hgrow="ALWAYS">
+                                                                <children>
+                                                                    <Label style="-fx-font-weight: bold;" text="Amazon.com" />
+                                                                    <Label style="-fx-text-fill: #94a3b8; -fx-font-size: 11px;" text="Shopping" />
+                                                                </children>
+                                                            </VBox>
+                                                            <Label style="-fx-font-weight: bold; -fx-text-fill: #ef4444;" text="-$120.50" />
+                                                        </children>
+                                                        <padding>
+                                                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                        </padding>
+                                                    </HBox>
+                                                </children>
+                                            </VBox>
+                                        </children>
+                                    </VBox>
+                                    <VBox alignment="CENTER" spacing="15.0" styleClass="card">
+                                        <children>
+                                            <Label styleClass="card-subtitle" text="FINANCIAL HEALTH SCORE" />
+                                            <Circle fill="WHITE" radius="60.0" stroke="#0d52c6" strokeWidth="12.0" />
+                                            <Label text="Your debt-to-income ratio improved by 5% this month." textAlignment="CENTER" textFill="#64748b" wrapText="true" />
+                                            <Button maxWidth="1.7976931348623157E308" styleClass="btn-outline" text="Details" />
+                                        </children>
+                                    </VBox>
                                 </VBox>
                             </children>
                         </HBox>
