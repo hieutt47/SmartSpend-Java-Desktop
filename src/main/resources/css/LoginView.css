@@ -1,0 +1,63 @@
+.login-card {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.08), 25, 0, 0, 8);
+}
+
+.left-pane {
+    -fx-background-color: #F8F9FA;
+    -fx-background-radius: 20 0 0 20; /* Chỉ bo góc bên trái */
+}
+
+/* Phần bên phải trắng tinh */
+.right-pane {
+    -fx-background-color: white;
+    -fx-background-radius: 0 20 20 0;
+}
+
+.title-text {
+    -fx-font-size: 34px;
+    -fx-font-weight: bold;
+    -fx-fill: #1A2B4C;
+}
+
+.highlight-text {
+    -fx-fill: #0052D4;
+}
+
+.custom-text-field {
+    -fx-background-color: #F0F2F5;
+    -fx-background-radius: 8;
+    /* Padding: trên 0, phải 40 (chừa chỗ cho mắt), dưới 0, trái 15 */
+    -fx-padding: 0 40 0 15;
+    -fx-border-color: transparent;
+}
+
+.custom-text-field:focused {
+    -fx-border-color: #0052D4;
+    -fx-border-radius: 8;
+    -fx-background-color: white;
+}
+
+.button-primary {
+    -fx-background-color: #0052D4;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+.button-primary:hover {
+    -fx-background-color: #0041A8;
+}
+
+.social-button {
+    -fx-background-color: #F0F2F5;
+    -fx-text-fill: #1a2b4c;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+.social-button:hover {
+    -fx-background-color: #E4E7EB;
+}
