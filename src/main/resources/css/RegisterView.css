@@ -1,13 +1,9 @@
-/* ---- STYLES CHO MÀN HÌNH ĐĂNG KÝ ---- */
-
 .register-card {
     -fx-background-color: white;
     -fx-background-radius: 20;
-    /* Dùng chung hiệu ứng đổ bóng của Login cho đồng bộ */
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.08), 25, 0, 0, 8);
 }
 
-/* Phần bên trái: Đổ màu Gradient tối nghệ thuật */
 .left-pane-register {
     -fx-background-color: linear-gradient(to bottom right, #111827, #1f2937, #030712);
     -fx-background-radius: 20 0 0 20;
@@ -18,15 +14,13 @@
     -fx-background-radius: 0 20 20 0;
 }
 
-/* Thẻ kính mờ (Glassmorphism) chứa text giới thiệu */
 .glass-card {
-    -fx-background-color: rgba(255, 255, 255, 0.85);
+    -fx-background-color: rgba(255, 255, 255, 0.85); /* Màu trắng trong suốt */
     -fx-background-radius: 15;
     -fx-padding: 25;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 15, 0, 0, 5);
 }
 
-/* Label nhỏ trên các form input (Đồng bộ màu #8a94a6 của Login) */
 .input-label {
     -fx-font-size: 11px;
     -fx-font-weight: bold;
@@ -34,7 +28,7 @@
     -fx-letter-spacing: 1px;
 }
 
-/* Vỏ bọc giả làm TextField (Đồng bộ màu nền #F0F2F5 của Login) */
+/* Vỏ bọc giả làm TextField (Đã đổi nền sang #F0F2F5) */
 .input-container {
     -fx-background-color: #F0F2F5;
     -fx-background-radius: 8;
@@ -44,13 +38,11 @@
     -fx-pref-height: 45px;
 }
 
-/* Khi click vào ô nhập (Đồng bộ viền xanh #0052D4 của Login) */
 .input-container:focused-within {
     -fx-border-color: #0052D4;
     -fx-background-color: white;
 }
 
-/* TextField thật bị làm trong suốt */
 .input-field-transparent {
     -fx-background-color: transparent;
     -fx-padding: 0;
@@ -61,49 +53,6 @@
     -fx-background-color: transparent;
 }
 
-
-/* ---- STYLES DÙNG CHUNG & CHO MÀN HÌNH LOGIN ---- */
-
-.login-card {
-    -fx-background-color: white;
-    -fx-background-radius: 20;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.08), 25, 0, 0, 8);
-}
-
-.left-pane {
-    -fx-background-color: #F8F9FA;
-    -fx-background-radius: 20 0 0 20;
-}
-
-.right-pane {
-    -fx-background-color: white;
-    -fx-background-radius: 0 20 20 0;
-}
-
-.title-text {
-    -fx-font-size: 34px;
-    -fx-font-weight: bold;
-    -fx-fill: #1A2B4C;
-}
-
-.highlight-text {
-    -fx-fill: #0052D4;
-}
-
-.custom-text-field {
-    -fx-background-color: #F0F2F5;
-    -fx-background-radius: 8;
-    -fx-padding: 0 40 0 15;
-    -fx-border-color: transparent;
-}
-
-.custom-text-field:focused {
-    -fx-border-color: #0052D4;
-    -fx-border-radius: 8;
-    -fx-background-color: white;
-}
-
-/* Các nút bấm dùng chung cho cả Login và Register */
 .button-primary {
     -fx-background-color: #0052D4;
     -fx-text-fill: white;
