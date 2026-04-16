@@ -13,54 +13,10 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:controller="com.example.smartspend.controller.PortfolioController" prefHeight="800.0" prefWidth="1200.0" styleClass="root-pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:controller="com.example.smartspend.controller.PortfolioController" prefHeight="800.0" prefWidth="960.0" styleClass="root-pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
         <URL value="@../css/PortfolioView.css" />
     </stylesheets>
-
-    <left>
-        <VBox prefWidth="240.0" styleClass="sidebar">
-            <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="30.0" />
-            </padding>
-            <children>
-                <HBox alignment="CENTER_LEFT" spacing="10.0">
-                    <children>
-                        <Region prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #0d52c6; -fx-background-radius: 8;" />
-                        <Label styleClass="logo-text" text="SmartSpend" />
-                    </children>
-                </HBox>
-                <Label styleClass="sidebar-subtitle" text="PREMIUM MANAGEMENT">
-                    <VBox.margin>
-                        <Insets bottom="30.0" top="5.0" />
-                    </VBox.margin>
-                </Label>
-
-                <VBox spacing="5.0">
-                    <children>
-                        <Button maxWidth="1.7976931348623157E308" styleClass="menu-btn, menu-btn-active" text="📦  Portfolio" />
-                        <Button maxWidth="1.7976931348623157E308" styleClass="menu-btn" text="🧾  Transactions" />
-                        <Button maxWidth="1.7976931348623157E308" styleClass="menu-btn" text="📊  Insights" />
-                        <Button maxWidth="1.7976931348623157E308" styleClass="menu-btn" text="🎯  Budgets" />
-                        <Button maxWidth="1.7976931348623157E308" styleClass="menu-btn" text="🏛️  Tax Central" />
-                    </children>
-                </VBox>
-
-                <Region VBox.vgrow="ALWAYS" />
-                <VBox spacing="10.0">
-                    <children>
-                        <Button fx:id="btnAddTrans" maxWidth="1.7976931348623157E308" onAction="#openAddTransactionPopup" styleClass="btn-primary" text="+ Add Transaction">
-                            <VBox.margin>
-                                <Insets bottom="20.0" />
-                            </VBox.margin>
-                        </Button>
-                        <Button maxWidth="1.7976931348623157E308" styleClass="menu-btn" text="❓  Support" />
-                        <Button maxWidth="1.7976931348623157E308" styleClass="menu-btn" text="🚪  Sign Out" />
-                    </children>
-                </VBox>
-            </children>
-        </VBox>
-    </left>
 
     <center>
         <ScrollPane fitToWidth="true" styleClass="main-scroll">
@@ -170,6 +126,7 @@
                                             </VBox>
                                         </children>
                                     </VBox>
+
                                     <VBox alignment="CENTER" spacing="15.0" styleClass="card">
                                         <children>
                                             <Label styleClass="card-subtitle" text="FINANCIAL HEALTH SCORE" />

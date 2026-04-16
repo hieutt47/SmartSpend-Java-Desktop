@@ -46,11 +46,22 @@ public class DatabaseConnection {
                 "year INT NOT NULL" +
                 ");";
 
+
+        String createBillTable = "CREATE TABLE IF NOT EXISTS bills (" +
+                "bill_id INT AUTO_INCREMENT PRIMARY KEY, " +
+                "title VARCHAR(255) NOT NULL, " +
+                "amount DECIMAL(15, 2) NOT NULL, " +
+                "due_date DATE NOT NULL, " +
+                "is_paid BOOLEAN DEFAULT FALSE" +
+                ");";
+        // Nhớ thêm stmt.execute(createBillTable); vào khối try-catch nhé!
+
         try (Connection conn = getConnection(); Statement stmt = conn.createStatement()) {
             if (conn != null) {
                 stmt.execute(createCategoryTable);
                 stmt.execute(createTransactionTable);
                 stmt.execute(createBudgetTable);
+                stmt.execute(createBillTable);
                 System.out.println("Tạo 3 Bảng (Categories, Transactions, Budgets) trên Aiven thành công!");
             }
         } catch (SQLException e) {
