@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="10" style="-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 4);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Upcoming Bills" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+    <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-background-color: #F8FAFC; -fx-padding: 10; -fx-background-radius: 8;">
+        <VBox alignment="CENTER" style="-fx-background-color: white; -fx-padding: 5 10; -fx-background-radius: 6;">
+            <Label text="NOV" style="-fx-font-size: 10px; -fx-text-fill: #64748B;"/>
+            <Label text="24" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+        </VBox>
+        <VBox HBox.hgrow="ALWAYS">
+            <Label text="Adobe Creative Cloud" style="-fx-font-weight: bold;"/>
+            <Label text="$54.99 • Auto-pay" style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+        </VBox>
+    </HBox>
+</VBox>

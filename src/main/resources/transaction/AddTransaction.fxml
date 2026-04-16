@@ -38,5 +38,6 @@
                 style="-fx-background-color: #10b981; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 8; -fx-cursor: hand;"/>
         <Button text="💸 Add Expense" fx:id="btnAddExpense" onAction="#handleAddExpense"
                 style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 8; -fx-cursor: hand;"/>
+        <Button maxWidth="Infinity" onAction="#openAddTransaction" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 12; -fx-background-radius: 8;" text="+ Add Transaction" />
     </HBox>
 </VBox>

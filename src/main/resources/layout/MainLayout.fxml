@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="mainPane" prefHeight="768.0" prefWidth="1366.0" style="-fx-background-color: #F8FAFC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.smartspend.controller.MainLayoutController">
+    <left>
+        <VBox prefWidth="250.0" spacing="15.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #E2E8F0; -fx-border-width: 0 1 0 0;">
+            <padding>
+                <Insets bottom="30.0" left="25.0" right="25.0" top="30.0" />
+            </padding>
+            <children>
+                <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #0F172A;" text="SmartSpend" />
+                <Label style="-fx-font-size: 11px; -fx-text-fill: #64748B; -fx-font-weight: bold;" text="PREMIUM MANAGEMENT" />
+                <Region prefHeight="30.0" />
+
+                <Button maxWidth="Infinity" onAction="#showPortfolio" style="-fx-background-color: transparent; -fx-alignment: BASELINE_LEFT; -fx-font-weight: bold; -fx-text-fill: #0F172A;" text="🗂 Portfolio" />
+                <Button maxWidth="Infinity" onAction="#showTransactions" style="-fx-background-color: transparent; -fx-alignment: BASELINE_LEFT; -fx-font-weight: bold; -fx-text-fill: #64748B;" text="💳 Transactions" />
+                <Button maxWidth="Infinity" onAction="#showInsights" style="-fx-background-color: transparent; -fx-alignment: BASELINE_LEFT; -fx-font-weight: bold; -fx-text-fill: #64748B;" text="📊 Insights" />
+                <Button maxWidth="Infinity" onAction="#showBudgets" style="-fx-background-color: transparent; -fx-alignment: BASELINE_LEFT; -fx-font-weight: bold; -fx-text-fill: #64748B;" text="🎯 Budgets" />
+
+                <Region VBox.vgrow="ALWAYS" />
+                <Button onAction="#openAddTransaction" maxWidth="Infinity" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 12; -fx-background-radius: 8;" text="+ Add Transaction" />
+                <Region prefHeight="10.0" />
+                <Button maxWidth="Infinity" style="-fx-background-color: transparent; -fx-alignment: BASELINE_LEFT; -fx-text-fill: #64748B;" text="❓ Support" />
+
+                <Button maxWidth="Infinity" style="-fx-background-color: transparent; -fx-alignment: BASELINE_LEFT; -fx-text-fill: #64748B;" text="🚪 Sign Out" />
+            </children>
+        </VBox>
+    </left>
+    <center>
+    </center>
+</BorderPane>

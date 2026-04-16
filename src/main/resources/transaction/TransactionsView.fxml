@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane prefHeight="768.0" prefWidth="1116.0" style="-fx-background-color: #F8FAFC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #64748B;" text="Màn hình Transactions (Sẽ code sau)" />
+    </children>
+</StackPane>
