@@ -18,7 +18,6 @@ public class LoginController {
 
     @FXML private TextField emailField;
 
-    // --- Password Components ---
     @FXML private PasswordField passwordHidden;
     @FXML private TextField passwordText;
     @FXML private Label eyeIcon;
@@ -51,21 +50,16 @@ public class LoginController {
         String password = passwordHidden.getText();
 
         System.out.println("Attempting login for: " + email);
-        // Add your authentication logic here
     }
 
-    // --- Switch to Register Page ---
     @FXML
     private void goToRegister(ActionEvent event) {
         try {
-            // Load the RegisterView FXML
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/auth/RegisterView.fxml"));            Parent root = loader.load();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/auth/RegisterView.fxml"));
+            Parent root = loader.load();
 
-            // Get current Stage and set new Scene
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
+            Scene currentScene = ((Node) event.getSource()).getScene();
+            currentScene.setRoot(root);
         } catch (IOException e) {
             System.out.println("Error loading RegisterView.fxml");
             e.printStackTrace();

@@ -39,7 +39,6 @@ public class RegisterController {
         confirmPasswordField.textProperty().bindBidirectional(confirmPasswordTextField.textProperty());
     }
 
-    // Toggle visibility for Password
     @FXML
     private void togglePasswordVisibility(MouseEvent event) {
         isPasswordVisible = !isPasswordVisible;
@@ -48,7 +47,6 @@ public class RegisterController {
         eyeIcon1.setText(isPasswordVisible ? "🙈" : "👁");
     }
 
-    // Toggle visibility for Confirm Password
     @FXML
     private void toggleConfirmPasswordVisibility(MouseEvent event) {
         isConfirmPasswordVisible = !isConfirmPasswordVisible;
@@ -76,30 +74,21 @@ public class RegisterController {
 
         System.out.println("Registration successful for: " + name);
 
-        // GỌI HÀM CHUYỂN MÀN HÌNH SAU KHI ĐĂNG KÝ THÀNH CÔNG
         switchToLogin(event);
     }
 
     @FXML
     private void goToLogin(ActionEvent event) {
-        // GỌI HÀM CHUYỂN MÀN HÌNH KHI BẤM "SIGN IN"
         switchToLogin(event);
     }
 
-    // --- HÀM XỬ LÝ ĐỔI SCENE ---
     private void switchToLogin(ActionEvent event) {
         try {
-            // Đọc file FXML của trang Login
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/auth/LoginView.fxml"));
-            Parent root = loader.load();
+            Parent loginRoot = loader.load();
 
-            // Lấy ra cái Window (Stage) hiện tại
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-            // Thay đổi cảnh (Scene)
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
+            Scene currentScene = ((Node) event.getSource()).getScene();
+            currentScene.setRoot(loginRoot);
         } catch (IOException e) {
             System.out.println("Lỗi không thể tải được file LoginView.fxml");
             e.printStackTrace();

@@ -22,6 +22,8 @@ public class AddTransactionController {
     @FXML void handleAddIncome() { processTransaction(TransactionType.INCOME); }
     @FXML void handleAddExpense() { processTransaction(TransactionType.EXPENSE); }
 
+    
+
     private void processTransaction(TransactionType type) {
         try {
             double amount = Double.parseDouble(txtAmount.getText());
