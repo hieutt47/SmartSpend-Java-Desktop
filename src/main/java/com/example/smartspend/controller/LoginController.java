@@ -29,6 +29,10 @@ public class LoginController {
     public void initialize() {
         passwordHidden.textProperty().bindBidirectional(passwordText.textProperty());
     }
+    // --- THÊM MỚI: Navigation state ---
+    private static String loggedInUserEmail = "";
+
+    public static String getLoggedInUserEmail() { return loggedInUserEmail; }
 
     @FXML
     private void togglePasswordVisibility(MouseEvent event) {
@@ -44,12 +48,41 @@ public class LoginController {
         }
     }
 
+
     @FXML
     private void handleLogin(ActionEvent event) {
-        String email = emailField.getText();
-        String password = passwordHidden.getText();
+        String email = emailField.getText().trim();
+        String password = passwordHidden.getText().trim();
 
-        System.out.println("Attempting login for: " + email);
+        // Validate input
+        if (email.isEmpty() || password.isEmpty()) {
+            signInButton.setText("⚠ Vui lòng điền đầy đủ!");
+            signInButton.setStyle("-fx-background-color: #f59e0b; -fx-text-fill: white; -fx-background-radius: 8; -fx-font-weight: bold;");
+            return;
+        }
+
+        // TODO: Kết nối UserDAO khi có bảng users
+        // Tạm thời: accept any non-empty credentials
+        loggedInUserEmail = email;
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/layout/MainLayout.fxml"));
+            Parent root = loader.load();
+
+            Scene currentScene = ((Node) event.getSource()).getScene();
+
+            // Fade transition khi chuyển trang
+            javafx.animation.FadeTransition ft =
+                    new javafx.animation.FadeTransition(javafx.util.Duration.millis(350), root);
+            ft.setFromValue(0);
+            ft.setToValue(1);
+            ft.play();
+
+            currentScene.setRoot(root);
+        } catch (IOException e) {
+            signInButton.setText("❌ Lỗi kết nối!");
+            e.printStackTrace();
+        }
     }
 
     @FXML

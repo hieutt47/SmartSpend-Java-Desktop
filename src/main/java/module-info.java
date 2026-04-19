@@ -11,4 +11,7 @@ module com.example.smartspend {
     opens com.example.smartspend.controller to javafx.fxml;
     // --- THÊM MỚI ---
     opens com.example.smartspend.model to javafx.base;
+    // --- THÊM MỚI: Cho phép javafx.base dùng reflection trên Model ---
+
+    opens com.example.smartspend.model.enums to javafx.base;
 }

@@ -65,6 +65,9 @@ public class TransactionsController implements Initializable {
         setupTableColumns();
         setupComboBoxes();
         loadTransactions();
+        // --- THÊM vào cuối initialize() ---
+        setupSearch();
+        setupTypeFilter();
     }
 
     // ──────────────────────────────────────────────────────────────
@@ -162,6 +165,11 @@ public class TransactionsController implements Initializable {
             masterList = FXCollections.observableArrayList(transactions);
             tblTransactions.setItems(masterList);
 
+            // --- THÊM vào cuối loadTransactions(), sau setItems() ---
+            javafx.animation.FadeTransition ft =
+                    new javafx.animation.FadeTransition(javafx.util.Duration.millis(350), tblTransactions);
+            ft.setFromValue(0); ft.setToValue(1); ft.play();
+
             updateSummaryCards(transactions);
             updateRowCountLabel(transactions.size());
 
@@ -169,6 +177,47 @@ public class TransactionsController implements Initializable {
             AlertHelper.showAlert(Alert.AlertType.ERROR, "Lỗi tải dữ liệu",
                     "Không thể kết nối database: " + e.getMessage());
         }
+    }
+    // --- THÊM MỚI: Live search ---
+    private void setupSearch() {
+        txtSearch.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null || newVal.isBlank()) {
+                tblTransactions.setItems(masterList);
+                updateRowCountLabel(masterList.size());
+                return;
+            }
+            String keyword = newVal.toLowerCase().trim();
+            javafx.collections.ObservableList<Transaction> filtered =
+                    masterList.filtered(t ->
+                            (t.getNote()  != null && t.getNote().toLowerCase().contains(keyword)) ||
+                                    (t.getType()  != null && t.getType().name().toLowerCase().contains(keyword)) ||
+                                    (t.getDate()  != null && t.getDate().toString().contains(keyword))
+                    );
+            tblTransactions.setItems(filtered);
+            updateRowCountLabel(filtered.size());
+        });
+    }
+
+    // --- THÊM MỚI: Filter theo loại giao dịch ---
+    private void setupTypeFilter() {
+        cbFilterCategory.setOnAction(e -> {
+            String selected = cbFilterCategory.getValue();
+            if (selected == null || selected.equals("All Categories")) {
+                tblTransactions.setItems(masterList);
+                updateRowCountLabel(masterList.size());
+                return;
+            }
+            javafx.collections.ObservableList<Transaction> filtered;
+            if (selected.equals("Income")) {
+                filtered = masterList.filtered(t -> t.getType() == TransactionType.INCOME);
+            } else if (selected.equals("Expense")) {
+                filtered = masterList.filtered(t -> t.getType() == TransactionType.EXPENSE);
+            } else {
+                filtered = masterList;
+            }
+            tblTransactions.setItems(filtered);
+            updateRowCountLabel(filtered.size());
+        });
     }
 
     private void updateSummaryCards(List<Transaction> transactions) {

@@ -17,10 +17,10 @@
                 <Label style="-fx-font-size: 11px; -fx-text-fill: #64748B; -fx-font-weight: bold;" text="PREMIUM MANAGEMENT" />
                 <Region prefHeight="30.0" />
 
-                <Button maxWidth="Infinity" onAction="#showPortfolio" style="-fx-background-color: transparent; -fx-alignment: BASELINE_LEFT; -fx-font-weight: bold; -fx-text-fill: #0F172A;" text="🗂 Portfolio" />
-                <Button maxWidth="Infinity" onAction="#showTransactions" style="-fx-background-color: transparent; -fx-alignment: BASELINE_LEFT; -fx-font-weight: bold; -fx-text-fill: #64748B;" text="💳 Transactions" />
-                <Button maxWidth="Infinity" onAction="#showInsights" style="-fx-background-color: transparent; -fx-alignment: BASELINE_LEFT; -fx-font-weight: bold; -fx-text-fill: #64748B;" text="📊 Insights" />
-                <Button maxWidth="Infinity" onAction="#showBudgets" style="-fx-background-color: transparent; -fx-alignment: BASELINE_LEFT; -fx-font-weight: bold; -fx-text-fill: #64748B;" text="🎯 Budgets" />
+                <Button fx:id="btnPortfolio" maxWidth="Infinity" onAction="#showPortfolio" style="-fx-background-color: transparent; -fx-alignment: BASELINE_LEFT; -fx-font-weight: bold; -fx-text-fill: #0F172A;" text="🗂 Portfolio" />
+                <Button fx:id="btnTransactions" maxWidth="Infinity" onAction="#showTransactions" style="-fx-background-color: transparent; -fx-alignment: BASELINE_LEFT; -fx-font-weight: bold; -fx-text-fill: #64748B;" text="💳 Transactions" />
+                <Button fx:id="btnInsights" maxWidth="Infinity" onAction="#showInsights" style="-fx-background-color: transparent; -fx-alignment: BASELINE_LEFT; -fx-font-weight: bold; -fx-text-fill: #64748B;" text="📊 Insights" />
+                <Button fx:id="btnBudgets"  maxWidth="Infinity" onAction="#showBudgets" style="-fx-background-color: transparent; -fx-alignment: BASELINE_LEFT; -fx-font-weight: bold; -fx-text-fill: #64748B;" text="🎯 Budgets" />
 
                 <Region VBox.vgrow="ALWAYS" />
                 <Button onAction="#openAddTransaction" maxWidth="Infinity" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 12; -fx-background-radius: 8;" text="+ Add Transaction" />

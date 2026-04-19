@@ -14,36 +14,38 @@ public class MainLayoutController {
 
     @FXML
     private BorderPane mainPane;
+    // --- THÊM MỚI: Tracking sidebar active state ---
+    @FXML private javafx.scene.control.Button btnPortfolio;
+    @FXML private javafx.scene.control.Button btnTransactions;
+    @FXML private javafx.scene.control.Button btnInsights;
+    @FXML private javafx.scene.control.Button btnBudgets;
+
+    private javafx.scene.control.Button currentActiveBtn = null;
+
+    private static final String STYLE_ACTIVE =
+            "-fx-background-color: #eff6ff; -fx-text-fill: #2563eb; " +
+                    "-fx-font-weight: bold; -fx-alignment: BASELINE_LEFT; -fx-background-radius: 8;";
+
+    private static final String STYLE_INACTIVE =
+            "-fx-background-color: transparent; -fx-text-fill: #64748b; " +
+                    "-fx-font-weight: bold; -fx-alignment: BASELINE_LEFT; -fx-background-radius: 8;";
 
     @FXML
     public void initialize() {
         System.out.println("MainLayout khởi tạo thành công!");
         showPortfolio(); // Mặc định hiển thị Portfolio
+        if (btnPortfolio != null) {
+            btnPortfolio.setStyle(STYLE_ACTIVE);
+            currentActiveBtn = btnPortfolio;
+        }
     }
 
     // --- CÁC HÀM CHUYỂN TRANG CHÍNH ---
-    @FXML
-    public void showPortfolio() {
-        System.out.println("-> Đang bốc file Portfolio...");
-        loadView("/auth/PortfolioView.fxml");
-    }
-
-    @FXML
-    public void showTransactions() {
-        System.out.println("-> Đang bốc file Transactions...");
-        loadView("/transaction/TransactionsView.fxml");
-    }
-
-    // --- CÁC HÀM DỰ PHÒNG (TRÁNH LỖI THIẾU HÀM) ---
-    @FXML
-    public void showInsights() {
-        System.out.println("-> Bấm nút Insights (Tính năng này các bạn khác sẽ code sau)");
-    }
-
-    @FXML
-    public void showBudgets() {
-        System.out.println("-> Bấm nút Budgets (Tính năng này các bạn khác sẽ code sau)");
-    }
+    // --- THAY THẾ (additive override) ---
+    @FXML public void showPortfolio()     { navigateTo("/auth/PortfolioView.fxml",        btnPortfolio); }
+    @FXML public void showTransactions()  { navigateTo("/transaction/TransactionsView.fxml", btnTransactions); }
+    @FXML public void showInsights()      { navigateTo("/layout/InsightsView.fxml",        btnInsights); }
+    @FXML public void showBudgets()       { System.out.println("BudgetsView — teammate đang làm."); }
 
     @FXML
     public void showTaxCentral() {
@@ -65,6 +67,45 @@ public class MainLayoutController {
             mainPane.setCenter(view);
         } catch (IOException e) {
             System.err.println("Lỗi khi nạp file FXML: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    // --- THÊM MỚI: Chuyển view với fade animation + active state ---
+    private void navigateTo(String fxmlPath, javafx.scene.control.Button activeBtn) {
+        try {
+            java.net.URL xmlUrl = getClass().getResource(fxmlPath);
+            if (xmlUrl == null) {
+                System.err.println("Không tìm thấy: " + fxmlPath);
+                return;
+            }
+            javafx.scene.Parent view = javafx.fxml.FXMLLoader.load(xmlUrl);
+
+            // Fade out → swap → fade in
+            if (mainPane.getCenter() != null) {
+                javafx.animation.FadeTransition fadeOut =
+                        new javafx.animation.FadeTransition(javafx.util.Duration.millis(120), mainPane.getCenter());
+                fadeOut.setFromValue(1);
+                fadeOut.setToValue(0);
+                fadeOut.setOnFinished(e -> {
+                    mainPane.setCenter(view);
+                    javafx.animation.FadeTransition fadeIn =
+                            new javafx.animation.FadeTransition(javafx.util.Duration.millis(200), view);
+                    fadeIn.setFromValue(0);
+                    fadeIn.setToValue(1);
+                    fadeIn.play();
+                });
+                fadeOut.play();
+            } else {
+                mainPane.setCenter(view);
+            }
+
+            // Update sidebar active state
+            if (currentActiveBtn != null) currentActiveBtn.setStyle(STYLE_INACTIVE);
+            if (activeBtn != null) {
+                activeBtn.setStyle(STYLE_ACTIVE);
+                currentActiveBtn = activeBtn;
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
