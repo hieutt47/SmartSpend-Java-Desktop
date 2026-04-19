@@ -1,0 +1,282 @@
+/* ============================================================
+   SMART SPEND — transactions.css
+   Mở rộng từ PortfolioView.css, KHÔNG ghi đè class cũ
+   ============================================================ */
+
+/* --- PAGE LAYOUT ------------------------------------------ */
+.page-content {
+    -fx-background-color: #f8fafc;
+}
+
+.page-title {
+    -fx-font-size: 30px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #0f172a;
+}
+
+.page-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #64748b;
+    -fx-padding: 2 0 0 0;
+}
+
+/* --- EXPORT BUTTONS --------------------------------------- */
+.btn-export {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-padding: 9 16 9 16;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.04), 4, 0, 0, 1);
+}
+.btn-export:hover { -fx-background-color: #f1f5f9; }
+
+/* --- SUMMARY CARDS ---------------------------------------- */
+.summary-card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 12;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-padding: 20 22 20 22;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.04), 8, 0, 0, 2);
+}
+
+.summary-label {
+    -fx-font-size: 10px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #94a3b8;
+}
+
+.summary-value {
+    -fx-font-size: 24px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #0f172a;
+}
+
+.summary-badge-up {
+    -fx-background-color: #dcfce7;
+    -fx-text-fill: #16a34a;
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+    -fx-padding: 3 8 3 8;
+    -fx-background-radius: 20;
+}
+
+.summary-badge-cat {
+    -fx-background-color: #eff6ff;
+    -fx-text-fill: #2563eb;
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+    -fx-padding: 4 10 4 10;
+    -fx-background-radius: 6;
+}
+
+/* --- FILTER BAR ------------------------------------------- */
+.filter-container {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 10;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-padding: 12 16 12 16;
+}
+
+.filter-dropdown {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 1;
+    -fx-border-radius: 7;
+    -fx-background-radius: 7;
+    -fx-font-size: 13px;
+    -fx-text-fill: #334155;
+}
+
+.btn-filter-icon {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-font-size: 14px;
+    -fx-padding: 8 12 8 12;
+    -fx-cursor: hand;
+}
+
+/* --- FILTER TAGS ------------------------------------------ */
+.tag-chip {
+    -fx-background-color: #eff6ff;
+    -fx-text-fill: #2563eb;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-padding: 5 12 5 12;
+    -fx-background-radius: 20;
+    -fx-cursor: hand;
+}
+.tag-chip:hover { -fx-background-color: #dbeafe; }
+
+.tag-clear-all {
+    -fx-background-color: transparent;
+    -fx-text-fill: #94a3b8;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
+    -fx-padding: 5 0 5 0;
+}
+.tag-clear-all:hover { -fx-text-fill: #ef4444; }
+
+/* --- TABLE CARD WRAPPER ----------------------------------- */
+.table-card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 12;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.04), 8, 0, 0, 2);
+}
+
+.table-action-bar {
+    -fx-padding: 14 20 14 20;
+    -fx-border-color: transparent transparent #f1f5f9 transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.table-selected-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #0f172a;
+}
+
+.btn-edit-tags {
+    -fx-background-color: #eff6ff;
+    -fx-text-fill: #2563eb;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+    -fx-padding: 5 12 5 12;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.btn-delete-sel {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #dc2626;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+    -fx-padding: 5 12 5 12;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.table-count-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #94a3b8;
+}
+
+/* --- TABLE VIEW ------------------------------------------- */
+.transactions-table {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-table-cell-border-color: #f1f5f9;
+    -fx-font-size: 13px;
+}
+
+.transactions-table .column-header-background {
+    -fx-background-color: #f8fafc;
+}
+
+.transactions-table .column-header .label {
+    -fx-font-size: 11px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #94a3b8;
+    -fx-padding: 10 16 10 16;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.transactions-table .table-row-cell {
+    -fx-background-color: #ffffff;
+    -fx-border-color: transparent transparent #f8fafc transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-cell-size: 58px;
+}
+
+.transactions-table .table-row-cell:hover {
+    -fx-background-color: #f8fafc;
+}
+
+.transactions-table .table-row-cell:selected {
+    -fx-background-color: #eff6ff;
+}
+
+.transactions-table .table-cell {
+    -fx-padding: 0 16 0 16;
+    -fx-alignment: CENTER_LEFT;
+}
+
+/* --- AMOUNT COLORS ---------------------------------------- */
+.amount-income {
+    -fx-text-fill: #16a34a;
+    -fx-font-weight: 700;
+    -fx-font-size: 14px;
+}
+
+.amount-expense {
+    -fx-text-fill: #dc2626;
+    -fx-font-weight: 700;
+    -fx-font-size: 14px;
+}
+
+/* --- PAGINATION ------------------------------------------- */
+.pagination-bar {
+    -fx-padding: 16 20 16 20;
+    -fx-border-color: #f1f5f9 transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+}
+
+.page-btn {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 1;
+    -fx-border-radius: 7;
+    -fx-background-radius: 7;
+    -fx-text-fill: #334155;
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-padding: 6 12 6 12;
+    -fx-min-width: 34;
+    -fx-cursor: hand;
+}
+.page-btn:hover { -fx-background-color: #f1f5f9; }
+
+.page-btn-active {
+    -fx-background-color: #2563eb;
+    -fx-border-color: #2563eb;
+    -fx-border-width: 1;
+    -fx-border-radius: 7;
+    -fx-background-radius: 7;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+    -fx-padding: 6 12 6 12;
+    -fx-min-width: 34;
+}
+
+.page-btn-nav {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 1;
+    -fx-border-radius: 7;
+    -fx-background-radius: 7;
+    -fx-text-fill: #334155;
+    -fx-font-size: 13px;
+    -fx-padding: 6 14 6 14;
+    -fx-cursor: hand;
+}
+.page-btn-nav:hover { -fx-background-color: #f1f5f9; }
+
+.page-size-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #94a3b8;
+}

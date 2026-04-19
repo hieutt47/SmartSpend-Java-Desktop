@@ -9,4 +9,6 @@ module com.example.smartspend {
 
     exports com.example.smartspend.controller;
     opens com.example.smartspend.controller to javafx.fxml;
+    // --- THÊM MỚI ---
+    opens com.example.smartspend.model to javafx.base;
 }

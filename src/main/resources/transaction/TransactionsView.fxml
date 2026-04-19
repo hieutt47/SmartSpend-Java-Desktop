@@ -1,9 +1,213 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.StackPane?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="768.0" prefWidth="1116.0" style="-fx-background-color: #F8FAFC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
-    <children>
-        <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #64748B;" text="Màn hình Transactions (Sẽ code sau)" />
-    </children>
-</StackPane>
+<BorderPane
+        fx:controller="com.example.smartspend.controller.TransactionsController"
+        prefHeight="768.0" prefWidth="1116.0"
+        styleClass="root-pane"
+        xmlns="http://javafx.com/javafx/21"
+        xmlns:fx="http://javafx.com/fxml/1">
+
+    <stylesheets>
+        <URL value="@../css/PortfolioView.css"/>
+        <URL value="@../css/transactions.css"/>
+    </stylesheets>
+
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="main-scroll">
+            <content>
+                <VBox styleClass="page-content" spacing="22.0">
+                    <padding>
+                        <Insets top="28" right="40" bottom="40" left="40"/>
+                    </padding>
+
+                    <!-- ══════════════════════════════════════
+                         TOP BAR: Search + Icons
+                         ══════════════════════════════════════ -->
+                    <HBox alignment="CENTER_LEFT" spacing="16.0">
+                        <TextField fx:id="txtSearch"
+                                   promptText="🔍  Search records, categories..."
+                                   styleClass="search-bar"
+                                   prefWidth="320.0"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label text="🔔" style="-fx-font-size: 18px; -fx-text-fill: #64748b; -fx-cursor: hand;"/>
+                        <Label text="⚙️" style="-fx-font-size: 18px; -fx-text-fill: #64748b; -fx-cursor: hand;"/>
+                        <Circle fill="#2563eb" radius="17.0"/>
+                    </HBox>
+
+                    <!-- ══════════════════════════════════════
+                         PAGE HEADER: Title + Export Buttons
+                         ══════════════════════════════════════ -->
+                    <HBox alignment="BOTTOM_LEFT">
+                        <VBox spacing="4.0">
+                            <Label styleClass="page-title" text="Transactions"/>
+                            <Label styleClass="page-subtitle"
+                                   text="Review and manage your fiscal history with precision."/>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <HBox spacing="10.0" alignment="CENTER">
+                            <Button styleClass="btn-export" text="📤  Export CSV"/>
+                            <Button styleClass="btn-export" text="📥  Download Report"/>
+                        </HBox>
+                    </HBox>
+
+                    <!-- ══════════════════════════════════════
+                         SUMMARY CARDS ROW
+                         ══════════════════════════════════════ -->
+                    <HBox spacing="18.0">
+
+                        <!-- Card 1: Total Spent -->
+                        <VBox styleClass="summary-card" spacing="8.0" HBox.hgrow="ALWAYS">
+                            <Label styleClass="summary-label" text="TOTAL SPENT IN PERIOD"/>
+                            <Label fx:id="lblTotalSpent" styleClass="summary-value" text="0.00"/>
+                            <HBox alignment="CENTER_LEFT" spacing="8.0">
+                                <Label fx:id="lblSpentBadge" styleClass="summary-badge-up" text="↗ 0%"/>
+                                <Label styleClass="page-subtitle" text="vs last month"/>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Card 2: Top Category -->
+                        <VBox styleClass="summary-card" spacing="8.0" HBox.hgrow="ALWAYS">
+                            <Label styleClass="summary-label" text="TOP CATEGORY"/>
+                            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                <Label text="🍽️" style="-fx-font-size: 22px;"/>
+                                <VBox spacing="2.0">
+                                    <Label fx:id="lblTopCategory" style="-fx-font-weight: 800; -fx-font-size: 15px; -fx-text-fill: #0f172a;" text="—"/>
+                                    <Label fx:id="lblTopCategoryAmount" styleClass="page-subtitle" text="0.00"/>
+                                </VBox>
+                            </HBox>
+                            <Label fx:id="lblTopCategoryPct" styleClass="summary-badge-cat" text="0% of total" maxWidth="100"/>
+                        </VBox>
+
+                        <!-- ┌────────────────────────────────────────────┐
+                             │  PLACEHOLDER — BudgetsView Card            │
+                             │  Bạn sẽ tự thêm nội dung vào đây sau       │
+                             └────────────────────────────────────────────┘ -->
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <!-- END PLACEHOLDER -->
+
+                        <!-- Card 3: Active Accounts -->
+                        <VBox styleClass="summary-card" spacing="8.0" HBox.hgrow="ALWAYS">
+                            <Label styleClass="summary-label" text="ACTIVE ACCOUNTS"/>
+                            <HBox alignment="CENTER_LEFT" spacing="-8.0">
+                                <Circle fill="#0d52c6" radius="18.0"/>
+                                <Circle fill="#10b981" radius="18.0"/>
+                                <Circle fill="#f59e0b" radius="18.0"/>
+                            </HBox>
+                            <Label styleClass="page-subtitle" text="3 linked accounts"/>
+                        </VBox>
+
+                    </HBox>
+
+                    <!-- ══════════════════════════════════════
+                         FILTER BAR
+                         ══════════════════════════════════════ -->
+                    <HBox styleClass="filter-container" alignment="CENTER_LEFT" spacing="12.0">
+                        <Label text="📅" style="-fx-font-size: 14px; -fx-text-fill: #64748b;"/>
+                        <Label text="Oct 1, 2023 — Oct 31, 2023"
+                               style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #334155;"/>
+                        <Separator orientation="VERTICAL" style="-fx-background-color: #e2e8f0;"/>
+
+                        <ComboBox fx:id="cbFilterCategory"
+                                  promptText="All Categories"
+                                  styleClass="filter-dropdown"
+                                  prefWidth="155.0"/>
+
+                        <ComboBox fx:id="cbFilterAccount"
+                                  promptText="All Accounts"
+                                  styleClass="filter-dropdown"
+                                  prefWidth="145.0"/>
+
+                        <ComboBox fx:id="cbFilterStatus"
+                                  promptText="Status"
+                                  styleClass="filter-dropdown"
+                                  prefWidth="120.0"/>
+
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button styleClass="btn-filter-icon" text="⚡ Filters" onAction="#handleFilter"/>
+                    </HBox>
+
+                    <!-- ══════════════════════════════════════
+                         FILTER TAGS (Active Filters)
+                         ══════════════════════════════════════ -->
+                    <HBox alignment="CENTER_LEFT" spacing="8.0">
+                        <Button styleClass="tag-chip" text="High Amount > 500+  ×"/>
+                        <Button styleClass="tag-chip" text="Business  ×"/>
+                        <Button styleClass="tag-clear-all" text="Clear all filters" onAction="#handleClearFilters"/>
+                    </HBox>
+
+                    <!-- ══════════════════════════════════════
+                         TABLE CARD
+                         ══════════════════════════════════════ -->
+                    <VBox styleClass="table-card" VBox.vgrow="ALWAYS">
+
+                        <!-- Table Action Bar -->
+                        <HBox styleClass="table-action-bar" alignment="CENTER_LEFT" spacing="12.0">
+                            <CheckBox fx:id="chkSelectAll"/>
+                            <Label fx:id="lblSelectedCount" styleClass="table-selected-label" text="0 items selected"/>
+                            <Button styleClass="btn-edit-tags" text="🏷  Edit Tags"/>
+                            <Button styleClass="btn-delete-sel" text="🗑  Delete" onAction="#handleDeleteSelected"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="lblRowCount" styleClass="table-count-label" text="Showing 0 transactions"/>
+                        </HBox>
+
+                        <!-- TableView -->
+                        <TableView fx:id="tblTransactions"
+                                   styleClass="transactions-table"
+                                   VBox.vgrow="ALWAYS"
+                                   prefHeight="400.0">
+                            <columns>
+                                <TableColumn fx:id="colDate"
+                                             text="DATE"
+                                             prefWidth="120" minWidth="100"/>
+                                <TableColumn fx:id="colDescription"
+                                             text="DESCRIPTION"
+                                             prefWidth="220" minWidth="150"/>
+                                <TableColumn fx:id="colCategory"
+                                             text="CATEGORY"
+                                             prefWidth="140" minWidth="110"/>
+                                <TableColumn fx:id="colMethod"
+                                             text="PAYMENT METHOD"
+                                             prefWidth="160" minWidth="120"/>
+                                <TableColumn fx:id="colStatus"
+                                             text="STATUS"
+                                             prefWidth="120" minWidth="90"/>
+                                <TableColumn fx:id="colAmount"
+                                             text="AMOUNT"
+                                             prefWidth="130" minWidth="100"
+                                             style="-fx-alignment: CENTER_RIGHT;"/>
+                            </columns>
+                            <placeholder>
+                                <Label text="Không có giao dịch nào. Hãy bấm '+ Add Transaction' để bắt đầu."
+                                       style="-fx-text-fill: #94a3b8; -fx-font-size: 14px;"/>
+                            </placeholder>
+                        </TableView>
+
+                        <!-- Pagination Bar -->
+                        <HBox styleClass="pagination-bar" alignment="CENTER_LEFT" spacing="6.0">
+                            <Button styleClass="page-btn-nav" text="‹" onAction="#handlePrevPage"/>
+                            <Button fx:id="btnPage1" styleClass="page-btn-active" text="1" onAction="#handlePageChange"/>
+                            <Button styleClass="page-btn" text="2" onAction="#handlePageChange"/>
+                            <Button styleClass="page-btn" text="3" onAction="#handlePageChange"/>
+                            <Label text="..." styleClass="page-size-label" style="-fx-padding: 0 4;"/>
+                            <Button styleClass="page-btn" text="8" onAction="#handlePageChange"/>
+                            <Button styleClass="page-btn-nav" text="›" onAction="#handleNextPage"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label styleClass="page-size-label" text="Show"/>
+                            <ComboBox fx:id="cbPageSize" prefWidth="80.0" styleClass="filter-dropdown"/>
+                            <Label styleClass="page-size-label" text="per page"/>
+                        </HBox>
+
+                    </VBox>
+                    <!-- END TABLE CARD -->
+
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+</BorderPane>
