@@ -1,0 +1,140 @@
+/* =========================================
+   BASE STYLES
+   ========================================= */
+.root-pane {
+    -fx-background-color: #f4f7fc;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+.main-scroll {
+    -fx-background-color: transparent;
+    -fx-background: #f4f7fc;
+    -fx-border-color: transparent;
+}
+
+.search-bar {
+    -fx-background-color: #e2e8f0;
+    -fx-background-radius: 20;
+    -fx-padding: 8 15 8 15;
+    -fx-text-fill: #0f172a;
+}
+
+/* User Info Top Right */
+.user-name { -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #0f172a; }
+.user-role { -fx-font-size: 11px; -fx-text-fill: #64748b; }
+
+/* Buttons Base */
+.btn-primary {
+    -fx-background-color: #0d52c6;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 12 20 12 20;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+.btn-primary:hover { -fx-background-color: #0a42a0; }
+
+.btn-icon, .btn-icon-small {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+    -fx-text-fill: #64748b;
+}
+.btn-icon-small { -fx-font-size: 12px; }
+
+.btn-view-all {
+    -fx-background-color: transparent;
+    -fx-text-fill: #0d52c6;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+}
+
+/* Cards Base */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 10, 0, 0, 5);
+}
+.card-title { -fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0f172a; }
+.card-subtitle { -fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #64748b; -fx-letter-spacing: 1px; }
+
+/* Typography Standard */
+.section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+.metric-value { -fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #0f172a; }
+.text-muted { -fx-font-size: 12px; -fx-text-fill: #94a3b8; }
+.text-green { -fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #10b981; }
+.text-orange { -fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #f59e0b; }
+
+/* =========================================
+   BUDGETS SPECIFIC STYLES
+   ========================================= */
+
+/* Header & Date Selector */
+.page-title {
+    -fx-font-size: 32px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #0f172a;
+}
+.page-subtitle { -fx-font-size: 14px; -fx-text-fill: #64748b; }
+.date-selector {
+    -fx-background-color: #e2e8f0;
+    -fx-background-radius: 20;
+    -fx-padding: 5 15;
+}
+.date-text { -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #0f172a; }
+
+/* Hero Card (Khối xanh lớn) */
+.hero-card {
+    -fx-background-color: #0d52c6;
+    -fx-background-radius: 16;
+}
+.hero-subtitle { -fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #bfdbfe; -fx-letter-spacing: 1px;}
+.hero-title { -fx-font-size: 48px; -fx-font-weight: 900; -fx-text-fill: #ffffff; }
+.hero-text-muted { -fx-font-size: 13px; -fx-text-fill: #dbeafe; }
+
+/* Hero Glass Card (Khối nhỏ bên trong Hero) */
+.hero-glass-card {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-background-radius: 12;
+    -fx-padding: 20;
+    -fx-spacing: 10;
+}
+.hero-glass-value { -fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #ffffff; }
+.hero-glass-desc { -fx-font-size: 12px; -fx-text-fill: #e0f2fe; -fx-line-spacing: 3px; }
+
+/* Badges (Các nhãn dán % Spent, Next 7 days) */
+.badge-orange { -fx-background-color: #ffedd5; -fx-text-fill: #ea580c; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 4 8; -fx-background-radius: 6; }
+.badge-blue { -fx-background-color: #dbeafe; -fx-text-fill: #0d52c6; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 4 8; -fx-background-radius: 6; }
+.badge-gray { -fx-background-color: #f1f5f9; -fx-text-fill: #64748b; -fx-font-size: 10px; -fx-font-weight: bold; -fx-padding: 4 10; -fx-background-radius: 12; -fx-letter-spacing: 1px;}
+
+/* Custom Progress Bars */
+.hero-progress { -fx-pref-height: 8px; }
+.hero-progress .track { -fx-background-color: rgba(255, 255, 255, 0.2); -fx-background-radius: 4; }
+.hero-progress .bar { -fx-background-color: #10b981; -fx-background-radius: 4; }
+
+.progress-blue { -fx-pref-height: 6px; }
+.progress-blue .track { -fx-background-color: #f1f5f9; -fx-background-radius: 3; }
+.progress-blue .bar { -fx-background-color: #0d52c6; -fx-background-radius: 3; }
+
+.progress-orange { -fx-pref-height: 6px; }
+.progress-orange .track { -fx-background-color: #f1f5f9; -fx-background-radius: 3; }
+.progress-orange .bar { -fx-background-color: #f59e0b; -fx-background-radius: 3; }
+
+/* Transaction Icon (Dùng chung cho icon ngân sách) */
+.transaction-icon {
+    -fx-min-width: 44; -fx-min-height: 44;
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 12;
+    -fx-alignment: center;
+    -fx-font-size: 20px;
+}
+.transaction-item {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 12;
+}
