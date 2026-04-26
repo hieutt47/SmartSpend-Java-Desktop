@@ -6,30 +6,38 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DatabaseConnection {
-    private static final String URL = "jdbc:mysql://smart-spend-trantrunghieu30032006-cb3f.j.aivencloud.com:12126/defaultdb?sslMode=REQUIRED";
-    private static final String USER = "avnadmin";
 
-    private static final String PASSWORD = "";
+    // CẤU HÌNH LOCALHOST (Dùng cho quá trình phát triển trên máy)
+    private static final String URL = "jdbc:mysql://localhost:3306/smartspend";
+    private static final String USER = "root";
+    private static final String PASSWORD = "alexander1601";
 
     public static Connection getConnection() {
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (SQLException e) {
+            System.out.println("❌ Lỗi kết nối Database!");
             e.printStackTrace();
         }
-
         return connection;
     }
 
-
-    
     public static void initializeDatabase() {
+        String createUserTable = "CREATE TABLE IF NOT EXISTS users (" +
+                "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                "name VARCHAR(100) NOT NULL, " +
+                "email VARCHAR(100) NOT NULL UNIQUE, " +
+                "password VARCHAR(255) NOT NULL, " +
+                "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
+                ");";
+
         String createCategoryTable = "CREATE TABLE IF NOT EXISTS categories (" +
                 "category_id INT AUTO_INCREMENT PRIMARY KEY, " +
                 "name VARCHAR(100) NOT NULL, " +
                 "type VARCHAR(50) NOT NULL" +
                 ");";
+
         String createTransactionTable = "CREATE TABLE IF NOT EXISTS transactions (" +
                 "transaction_id INT AUTO_INCREMENT PRIMARY KEY, " +
                 "amount DECIMAL(15, 2) NOT NULL, " +
@@ -46,7 +54,6 @@ public class DatabaseConnection {
                 "year INT NOT NULL" +
                 ");";
 
-
         String createBillTable = "CREATE TABLE IF NOT EXISTS bills (" +
                 "bill_id INT AUTO_INCREMENT PRIMARY KEY, " +
                 "title VARCHAR(255) NOT NULL, " +
@@ -54,25 +61,23 @@ public class DatabaseConnection {
                 "due_date DATE NOT NULL, " +
                 "is_paid BOOLEAN DEFAULT FALSE" +
                 ");";
-        // Nhớ thêm stmt.execute(createBillTable); vào khối try-catch nhé!
 
         try (Connection conn = getConnection(); Statement stmt = conn.createStatement()) {
             if (conn != null) {
+                stmt.execute(createUserTable);
                 stmt.execute(createCategoryTable);
                 stmt.execute(createTransactionTable);
                 stmt.execute(createBudgetTable);
                 stmt.execute(createBillTable);
-                System.out.println("Tạo 3 Bảng (Categories, Transactions, Budgets) trên Aiven thành công!");
+                System.out.println("✅ Khởi tạo tất cả các bảng thành công!");
             }
         } catch (SQLException e) {
-            System.out.println("Lỗi khi tạo bảng!");
+            System.out.println("❌ Lỗi khi tạo bảng!");
             e.printStackTrace();
         }
-
     }
 
     public static void main(String[] args) {
-        // Gọi hàm tạo bảng
         initializeDatabase();
     }
 }

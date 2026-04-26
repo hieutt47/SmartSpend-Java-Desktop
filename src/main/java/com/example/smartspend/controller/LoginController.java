@@ -1,5 +1,6 @@
 package com.example.smartspend.controller;
 
+import com.example.smartspend.dao.UserDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -48,40 +49,44 @@ public class LoginController {
         }
     }
 
-
     @FXML
     private void handleLogin(ActionEvent event) {
         String email = emailField.getText().trim();
         String password = passwordHidden.getText().trim();
 
-        // Validate input
         if (email.isEmpty() || password.isEmpty()) {
             signInButton.setText("⚠ Vui lòng điền đầy đủ!");
             signInButton.setStyle("-fx-background-color: #f59e0b; -fx-text-fill: white; -fx-background-radius: 8; -fx-font-weight: bold;");
             return;
         }
 
-        // TODO: Kết nối UserDAO khi có bảng users
-        // Tạm thời: accept any non-empty credentials
-        loggedInUserEmail = email;
+        // Gọi DAO để kiểm tra trong MySQL
+        UserDAO userDAO = new UserDAO();
+        boolean isValidUser = userDAO.validateLogin(email, password);
 
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/layout/MainLayout.fxml"));
-            Parent root = loader.load();
+        if (isValidUser) {
+            loggedInUserEmail = email; // Lưu state như bạn đã code
+            System.out.println("Đăng nhập thành công với: " + email);
 
-            Scene currentScene = ((Node) event.getSource()).getScene();
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/layout/MainLayout.fxml"));
+                Parent root = loader.load();
+                Scene currentScene = ((Node) event.getSource()).getScene();
 
-            // Fade transition khi chuyển trang
-            javafx.animation.FadeTransition ft =
-                    new javafx.animation.FadeTransition(javafx.util.Duration.millis(350), root);
-            ft.setFromValue(0);
-            ft.setToValue(1);
-            ft.play();
+                javafx.animation.FadeTransition ft = new javafx.animation.FadeTransition(javafx.util.Duration.millis(350), root);
+                ft.setFromValue(0);
+                ft.setToValue(1);
+                ft.play();
 
-            currentScene.setRoot(root);
-        } catch (IOException e) {
-            signInButton.setText("❌ Lỗi kết nối!");
-            e.printStackTrace();
+                currentScene.setRoot(root);
+            } catch (IOException e) {
+                signInButton.setText("❌ Lỗi chuyển trang!");
+                e.printStackTrace();
+            }
+        } else {
+            // Sai email hoặc pass
+            signInButton.setText("❌ Sai Email hoặc Mật khẩu!");
+            signInButton.setStyle("-fx-background-color: #ef4444; -fx-text-fill: white; -fx-background-radius: 8; -fx-font-weight: bold;");
         }
     }
 
