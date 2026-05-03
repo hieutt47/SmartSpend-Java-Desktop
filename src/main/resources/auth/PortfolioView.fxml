@@ -49,16 +49,15 @@
                                         <HBox alignment="CENTER_LEFT" spacing="10.0">
                                             <children>
                                                 <Label styleClass="badge-green" text="↗ +12.5% THIS YEAR" />
-                                                <Label text="Last updated: 2 minutes ago" textFill="#94a3b8" />
-                                            </children>
+                                                <Label fx:id="lblLastUpdated" text="Last updated: Just now" textFill="#94a3b8" />                                            </children>
                                         </HBox>
                                     </children>
                                 </VBox>
                                 <Region HBox.hgrow="ALWAYS" />
                                 <HBox spacing="15.0">
                                     <children>
-                                        <Button styleClass="btn-secondary" text="📥 Add Income" />
-                                        <Button styleClass="btn-primary" text="📤 Add Expense" />
+                                        <Button fx:id="btnAddIncome" onAction="#handleAddIncome" styleClass="btn-secondary" text="📥 Add Income" />
+                                        <Button fx:id="btnAddExpense" onAction="#handleAddExpense" styleClass="btn-primary" text="📤 Add Expense" />
                                     </children>
                                 </HBox>
                             </children>
@@ -73,8 +72,14 @@
                                                 <Label styleClass="card-title" text="Portfolio Performance" />
                                                 <Label text="Asset growth over the last 12 months" textFill="#64748b" />
                                                 <Region VBox.vgrow="ALWAYS" />
-                                                <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="[ Khu vực hiển thị BarChart ]" textFill="#cbd5e1" />
-                                                <Region VBox.vgrow="ALWAYS" />
+                                                <javafx.scene.chart.BarChart fx:id="portfolioChart" legendVisible="false" animated="true" VBox.vgrow="ALWAYS">
+                                                    <xAxis>
+                                                        <javafx.scene.chart.CategoryAxis side="BOTTOM" tickLabelFill="#64748b" />
+                                                    </xAxis>
+                                                    <yAxis>
+                                                        <javafx.scene.chart.NumberAxis side="LEFT" tickLabelFill="#64748b" />
+                                                    </yAxis>
+                                                </javafx.scene.chart.BarChart>                                                <Region VBox.vgrow="ALWAYS" />
                                             </children>
                                         </VBox>
                                         <HBox spacing="20.0">
@@ -102,7 +107,7 @@
                                                 <children>
                                                     <Label styleClass="card-title" text="Recent Transactions" />
                                                     <Region HBox.hgrow="ALWAYS" />
-                                                    <Button styleClass="btn-view-all" text="View All" />
+                                                    <Button fx:id="btnViewAll" onAction="#handleViewAll" styleClass="btn-view-all" text="View All" />
                                                 </children>
                                             </HBox>
                                             <VBox fx:id="vboxRecentTransactions" spacing="10.0" VBox.vgrow="ALWAYS">
@@ -132,8 +137,7 @@
                                             <Label styleClass="card-subtitle" text="FINANCIAL HEALTH SCORE" />
                                             <Circle fill="WHITE" radius="60.0" stroke="#0d52c6" strokeWidth="12.0" />
                                             <Label text="Your debt-to-income ratio improved by 5% this month." textAlignment="CENTER" textFill="#64748b" wrapText="true" />
-                                            <Button maxWidth="1.7976931348623157E308" styleClass="btn-outline" text="Details" />
-                                        </children>
+                                            <Button fx:id="btnDetails" onAction="#handleDetails" maxWidth="1.7976931348623157E308" styleClass="btn-outline" text="Details" />                                        </children>
                                     </VBox>
                                 </VBox>
                             </children>

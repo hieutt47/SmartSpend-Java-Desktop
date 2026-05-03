@@ -7,33 +7,48 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
+
 import java.io.IOException;
+import java.util.prefs.Preferences; // Added to save local credentials
 
 public class LoginController {
 
     @FXML private TextField emailField;
-
     @FXML private PasswordField passwordHidden;
     @FXML private TextField passwordText;
     @FXML private Label eyeIcon;
-    private boolean isPasswordVisible = false;
-
     @FXML private Button signInButton;
+    @FXML private CheckBox keepLoggedInCheckBox; // Injected CheckBox
+
+    private boolean isPasswordVisible = false;
+    private Preferences prefs; // Preferences object
+
+    private static String loggedInUserEmail = "";
+
+    public static String getLoggedInUserEmail() { return loggedInUserEmail; }
 
     @FXML
     public void initialize() {
         passwordHidden.textProperty().bindBidirectional(passwordText.textProperty());
-    }
-    // --- THÊM MỚI: Navigation state ---
-    private static String loggedInUserEmail = "";
 
-    public static String getLoggedInUserEmail() { return loggedInUserEmail; }
+        prefs = Preferences.userNodeForPackage(LoginController.class);
+
+        String savedEmail = prefs.get("email", "");
+        String savedPassword = prefs.get("password", "");
+
+        if (!savedEmail.isEmpty() && !savedPassword.isEmpty()) {
+            emailField.setText(savedEmail);
+            passwordHidden.setText(savedPassword);
+            keepLoggedInCheckBox.setSelected(true);
+        }
+    }
 
     @FXML
     private void togglePasswordVisibility(MouseEvent event) {
@@ -60,13 +75,24 @@ public class LoginController {
             return;
         }
 
-        // Gọi DAO để kiểm tra trong MySQL
         UserDAO userDAO = new UserDAO();
-        boolean isValidUser = userDAO.validateLogin(email, password);
+        int loggedInUserId = userDAO.validateLogin(email, password);
 
-        if (isValidUser) {
-            loggedInUserEmail = email; // Lưu state như bạn đã code
-            System.out.println("Đăng nhập thành công với: " + email);
+        if (loggedInUserId > 0) {
+
+            // --- SAVE OR CLEAR CREDENTIALS ---
+            if (keepLoggedInCheckBox.isSelected()) {
+                prefs.put("email", email);
+                prefs.put("password", password);
+            } else {
+                prefs.remove("email");
+                prefs.remove("password");
+            }
+
+            com.example.smartspend.utils.SessionManager.setCurrentUserId(loggedInUserId);
+            loggedInUserEmail = email;
+
+            System.out.println("Đăng nhập thành công với ID: " + loggedInUserId);
 
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/layout/MainLayout.fxml"));
@@ -88,6 +114,15 @@ public class LoginController {
             signInButton.setText("❌ Sai Email hoặc Mật khẩu!");
             signInButton.setStyle("-fx-background-color: #ef4444; -fx-text-fill: white; -fx-background-radius: 8; -fx-font-weight: bold;");
         }
+    }
+
+    @FXML
+    private void handleForgotAccess(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Forgot Access");
+        alert.setHeaderText("Password Reset Requested");
+        alert.setContentText("Please contact the system administrator or check your registered email to reset your credentials.");
+        alert.showAndWait();
     }
 
     @FXML

@@ -106,9 +106,9 @@
 
                         <HBox alignment="CENTER_LEFT">
                             <children>
-                                <CheckBox minWidth="-Infinity" mnemonicParsing="false" style="-fx-font-size: 13;" text="Keep me logged in" textFill="#1a2b4c" />
+                                <CheckBox fx:id="keepLoggedInCheckBox" minWidth="-Infinity" mnemonicParsing="false" style="-fx-font-size: 13;" text="Keep me logged in" textFill="#1a2b4c" />
                                 <AnchorPane HBox.hgrow="ALWAYS" />
-                                <Hyperlink minWidth="-Infinity" style="-fx-font-size: 13; -fx-font-weight: bold;" text="Forgot Access?" textFill="#0052d4" />
+                                <Hyperlink minWidth="-Infinity" style="-fx-font-size: 13; -fx-font-weight: bold;" onAction="#handleForgotAccess" text="Forgot Access?" textFill="#0052d4" />
                             </children>
                         </HBox>
 

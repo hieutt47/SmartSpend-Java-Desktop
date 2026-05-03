@@ -5,6 +5,7 @@ import com.example.smartspend.model.Transaction;
 import com.example.smartspend.model.enums.TransactionType;
 import com.example.smartspend.service.TransactionService;
 import com.example.smartspend.utils.AlertHelper;
+import com.example.smartspend.utils.SessionManager; // THÊM IMPORT NÀY
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
@@ -27,16 +28,13 @@ public class AddTransactionController {
 
     @FXML
     public void initialize() {
-        // 1. Seed nếu bảng categories chưa có data
         categoryDAO.seedDefaultCategoriesIfEmpty();
 
-        // 2. Load danh mục từ DB lên ComboBox
         List<com.example.smartspend.model.Category> categories = categoryDAO.getAllCategories();
 
         cbCategory.getItems().clear();
         categoryMap.clear();
 
-        // NẾU MẤT KẾT NỐI DB THÌ BÁO LỖI LÊN GIAO DIỆN CHỨ KHÔNG VĂNG APP
         if (categories == null || categories.isEmpty()) {
             cbCategory.getItems().add("Lỗi kết nối DB");
             cbCategory.getSelectionModel().selectFirst();
@@ -65,12 +63,19 @@ public class AddTransactionController {
             LocalDate date = dpDate.getValue();
             if (date == null) throw new IllegalArgumentException("Vui lòng chọn ngày!");
 
-            // Kiểm tra xem có lấy được Category không
             if (categoryMap.isEmpty()) {
                 throw new IllegalArgumentException("Không có dữ liệu Danh mục. Vui lòng kiểm tra lại kết nối mạng/Database!");
             }
 
+            int currentUserId = SessionManager.getCurrentUserId();
+
+            if (currentUserId <= 0) {
+                throw new IllegalArgumentException("Lỗi: Không tìm thấy phiên đăng nhập. Vui lòng đăng xuất và đăng nhập lại!");
+            }
+
             Transaction newTrans = new Transaction();
+            newTrans.setUserId(currentUserId);
+
             newTrans.setAmount(amount);
             newTrans.setDate(date);
             newTrans.setNote(txtNote.getText());
@@ -82,7 +87,6 @@ public class AddTransactionController {
 
             AlertHelper.showAlert(Alert.AlertType.INFORMATION, "Thành công", "Giao dịch đã được ghi nhận!");
 
-            // Xóa form sau khi thêm
             txtAmount.clear();
             txtNote.clear();
             dpDate.setValue(null);

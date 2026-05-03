@@ -8,40 +8,54 @@ import java.sql.SQLException;
 
 public class UserDAO {
 
-    public boolean registerUser(String name, String email, String password) {
-        String sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
+    public boolean isEmailExists(String email) {
+        String sql = "SELECT id FROM users WHERE email = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = con.prepareStatement(sql)) {
-
-            pstmt.setString(1, name);
-            pstmt.setString(2, email);
-            pstmt.setString(3, password);
-
-            int rowsAffected = pstmt.executeUpdate();
-            return rowsAffected > 0;
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
 
         } catch (SQLException e) {
-            System.out.println("Lỗi đăng ký (Có thể do trùng Email): " + e.getMessage());
+            System.err.println("❌ Lỗi kiểm tra email: " + e.getMessage());
+        }
+        return true;
+    }
+
+    public boolean registerUser(String name, String email, String password) {
+        String sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, name);
+            ps.setString(2, email);
+            ps.setString(3, password);
+
+            int affectedRows = ps.executeUpdate();
+            return affectedRows > 0;
+
+        } catch (SQLException e) {
+            System.err.println("❌ Lỗi khi đăng ký user: " + e.getMessage());
             return false;
         }
     }
 
-    public boolean validateLogin(String email, String password) {
-        String sql = "SELECT * FROM users WHERE email = ? AND password = ?";
+    public int validateLogin(String email, String password) {
+        String sql = "SELECT id FROM users WHERE email = ? AND password = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = con.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
 
-            pstmt.setString(1, email);
-            pstmt.setString(2, password);
-
-            ResultSet rs = pstmt.executeQuery();
-            return rs.next();
-
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            System.err.println("❌ Lỗi validate login: " + e.getMessage());
         }
+        return -1;
     }
 }

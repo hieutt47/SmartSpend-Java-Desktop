@@ -9,7 +9,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 import java.io.IOException;
 
 public class RegisterController {
@@ -92,19 +91,24 @@ public class RegisterController {
             return;
         }
 
-        // Gọi DAO để lưu vào MySQL
         UserDAO userDAO = new UserDAO();
+
+        if (userDAO.isEmailExists(email)) {
+            showAlert(Alert.AlertType.WARNING, "Email đã tồn tại", "Email này đã được sử dụng. Vui lòng dùng email khác hoặc Đăng nhập!");
+            return; // Dừng lại, không cho đăng ký tiếp
+        }
+
+        // 2. Nếu email chưa ai dùng thì tiến hành lưu vào DB
         boolean isSuccess = userDAO.registerUser(name, email, pass);
 
         if (isSuccess) {
             showAlert(Alert.AlertType.INFORMATION, "Thành công", "Đăng ký thành công! Vui lòng đăng nhập.");
-            switchToLogin(event);
+            switchToLogin(event); // Tự động chuyển về trang Login
         } else {
-            showAlert(Alert.AlertType.ERROR, "Thất bại", "Đăng ký thất bại. Email này có thể đã tồn tại!");
+            showAlert(Alert.AlertType.ERROR, "Lỗi hệ thống", "Đã xảy ra sự cố máy chủ. Vui lòng thử lại sau.");
         }
     }
 
-    // Hàm tiện ích để hiển thị hộp thoại thông báo
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);

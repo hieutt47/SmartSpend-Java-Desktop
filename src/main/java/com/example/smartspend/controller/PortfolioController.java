@@ -19,12 +19,11 @@ public class PortfolioController {
     @FXML
     private URL location;
 
-    // Các ID đã được sửa lại khớp hoàn toàn với file FXML của bạn UI
     @FXML
     private Button btnDashboard;
 
     @FXML
-    private Button bthHistory; // Bạn UI gõ nhầm 'bth' thay vì 'btn', thầy giữ nguyên để code không sập
+    private Button bthHistory;
 
     @FXML
     private Button btnBudget;
@@ -38,7 +37,10 @@ public class PortfolioController {
     @FXML
     private Button btnAddTrans;
 
-    // --- THÊM MỚI ---
+    @FXML private Button btnAddIncome;
+    @FXML private Button btnAddExpense;
+    @FXML private Button btnDetails;
+
     @FXML private javafx.scene.control.Label lblNetBalance;
     @FXML private javafx.scene.control.Label lblMonthlyIncome;
     @FXML private javafx.scene.control.Label lblMonthlyExpense;
@@ -58,62 +60,34 @@ public class PortfolioController {
         loadDashboardData();
     }
 
-    // --- THÊM MỚI ---
     private void loadDashboardData() {
         try {
-            java.util.List<com.example.smartspend.model.Transaction> all =
-                    txService.getAllTransactions();
-
-            double totalIncome  = all.stream()
-                    .filter(t -> t.getType() == com.example.smartspend.model.enums.TransactionType.INCOME)
-                    .mapToDouble(com.example.smartspend.model.Transaction::getAmount).sum();
-            double totalExpense = all.stream()
-                    .filter(t -> t.getType() == com.example.smartspend.model.enums.TransactionType.EXPENSE)
-                    .mapToDouble(com.example.smartspend.model.Transaction::getAmount).sum();
-
-            if (lblNetBalance   != null) lblNetBalance.setText(CurrencyFormatter.format(totalIncome - totalExpense));
-            if (lblMonthlyIncome != null) lblMonthlyIncome.setText(CurrencyFormatter.format(totalIncome));
-            if (lblMonthlyExpense!= null) lblMonthlyExpense.setText(CurrencyFormatter.format(totalExpense));
-
-            // Recent 5 transactions
-            if (vboxRecentTransactions != null) {
-                vboxRecentTransactions.getChildren().clear();
-                all.stream().limit(5).forEach(t -> {
-                    boolean isIncome = t.getType() == com.example.smartspend.model.enums.TransactionType.INCOME;
-                    javafx.scene.layout.HBox row = new javafx.scene.layout.HBox(12);
-                    row.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-                    row.getStyleClass().add("transaction-item");
-                    row.setPadding(new javafx.geometry.Insets(10));
-
-                    javafx.scene.control.Label icon = new javafx.scene.control.Label(isIncome ? "💰" : "💸");
-                    icon.getStyleClass().add("transaction-icon");
-
-                    javafx.scene.layout.VBox info = new javafx.scene.layout.VBox(2);
-                    javafx.scene.control.Label name = new javafx.scene.control.Label(
-                            t.getNote() != null && !t.getNote().isEmpty() ? t.getNote() : "Giao dịch");
-                    name.setStyle("-fx-font-weight: bold; -fx-font-size: 13px;");
-                    javafx.scene.control.Label date = new javafx.scene.control.Label(
-                            t.getDate() != null ? t.getDate().toString() : "");
-                    date.setStyle("-fx-text-fill: #94a3b8; -fx-font-size: 11px;");
-                    info.getChildren().addAll(name, date);
-                    javafx.scene.layout.HBox.setHgrow(info, javafx.scene.layout.Priority.ALWAYS);
-
-                    javafx.scene.control.Label amount = new javafx.scene.control.Label(
-                            (isIncome ? "+" : "-") + CurrencyFormatter.format(t.getAmount()));
-                    amount.setStyle(isIncome
-                            ? "-fx-font-weight: bold; -fx-text-fill: #16a34a;"
-                            : "-fx-font-weight: bold; -fx-text-fill: #dc2626;");
-
-                    row.getChildren().addAll(icon, info, amount);
-                    vboxRecentTransactions.getChildren().add(row);
-                });
+            if (lblLastUpdated != null) {
+                java.time.format.DateTimeFormatter dtf = java.time.format.DateTimeFormatter.ofPattern("HH:mm a");
+                lblLastUpdated.setText("Last updated: Today at " + java.time.LocalTime.now().format(dtf));
             }
 
-            // Animate fade in
-            javafx.animation.FadeTransition ft =
-                    new javafx.animation.FadeTransition(javafx.util.Duration.millis(400),
-                            vboxRecentTransactions != null ? vboxRecentTransactions : new javafx.scene.layout.VBox());
-            ft.setFromValue(0); ft.setToValue(1); ft.play();
+            if (portfolioChart != null) {
+                portfolioChart.getData().clear();
+
+                javafx.scene.chart.XYChart.Series<String, Number> series = new javafx.scene.chart.XYChart.Series<>();
+                series.setName("Asset Growth");
+
+                series.getData().add(new javafx.scene.chart.XYChart.Data<>("Dec", 15000));
+                series.getData().add(new javafx.scene.chart.XYChart.Data<>("Jan", 22000));
+                series.getData().add(new javafx.scene.chart.XYChart.Data<>("Feb", 18500));
+                series.getData().add(new javafx.scene.chart.XYChart.Data<>("Mar", 28000));
+                series.getData().add(new javafx.scene.chart.XYChart.Data<>("Apr", 35000));
+                series.getData().add(new javafx.scene.chart.XYChart.Data<>("May", 42000));
+
+                portfolioChart.getData().add(series);
+
+                for (javafx.scene.chart.XYChart.Series<String, Number> s : portfolioChart.getData()) {
+                    for (javafx.scene.chart.XYChart.Data<String, Number> data : s.getData()) {
+                        data.getNode().setStyle("-fx-bar-fill: #0d52c6;");
+                    }
+                }
+            }
 
         } catch (Exception e) {
             System.err.println("Portfolio: không load được data — " + e.getMessage());
@@ -123,21 +97,62 @@ public class PortfolioController {
     @FXML
     void openAddTransactionPopup() {
         try {
-            // Gọi đường dẫn đến file FXML sếp vừa tạo ban nãy
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/transaction/AddTransaction.fxml"));
             Parent root = fxmlLoader.load();
 
-            // Tạo một cửa sổ (Stage) mới để hiển thị nó lên
             Stage stage = new Stage();
             stage.setTitle("Thêm Giao Dịch - SmartSpend");
             stage.setScene(new Scene(root));
 
-            // Dùng showAndWait() để người dùng phải xử lý xong form này mới bấm được vùng khác
             stage.showAndWait();
 
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Lỗi không mở được form Thêm giao dịch: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    void handleAddIncome(javafx.event.ActionEvent event) {
+        openAddTransactionPopup();
+    }
+
+    @FXML
+    void handleAddExpense(javafx.event.ActionEvent event) {
+        openAddTransactionPopup();
+    }
+
+    @FXML
+    void handleDetails(javafx.event.ActionEvent event) {
+        javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+        alert.setTitle("Financial Health Details");
+        alert.setHeaderText("Phân tích Sức khỏe Tài chính");
+        alert.setContentText("Tính năng phân tích chuyên sâu đang được phát triển. Sẽ sớm ra mắt!");
+        alert.showAndWait();
+    }
+
+    @FXML private Button btnViewAll;
+    @FXML private javafx.scene.control.Label lblLastUpdated;
+    @FXML private javafx.scene.chart.BarChart<String, Number> portfolioChart;
+
+    @FXML
+    void handleViewAll(javafx.event.ActionEvent event) {
+        try {
+            javafx.scene.Node source = (javafx.scene.Node) event.getSource();
+            javafx.scene.Scene scene = source.getScene();
+
+            javafx.scene.layout.BorderPane mainPane = (javafx.scene.layout.BorderPane) scene.getRoot();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/transaction/TransactionsView.fxml"));
+            Parent transactionsView = loader.load();
+
+            mainPane.setCenter(transactionsView);
+
+            System.out.println("Đã điều hướng sang trang Transactions!");
+
+        } catch (java.io.IOException e) {
+            System.err.println("Lỗi chuyển trang: Không tìm thấy file TransactionsView.fxml");
+            e.printStackTrace();
         }
     }
 }

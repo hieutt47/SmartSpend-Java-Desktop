@@ -25,9 +25,9 @@
                 <Region VBox.vgrow="ALWAYS" />
                 <Button onAction="#openAddTransaction" maxWidth="Infinity" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 12; -fx-background-radius: 8;" text="+ Add Transaction" />
                 <Region prefHeight="10.0" />
-                <Button maxWidth="Infinity" style="-fx-background-color: transparent; -fx-alignment: BASELINE_LEFT; -fx-text-fill: #64748B;" text="❓ Support" />
 
-                <Button maxWidth="Infinity" style="-fx-background-color: transparent; -fx-alignment: BASELINE_LEFT; -fx-text-fill: #64748B;" text="🚪 Sign Out" />
+                <Button onAction="#handleSupport" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-alignment: BASELINE_LEFT; -fx-text-fill: #64748B;" text="❓ Support" />
+                <Button onAction="#handleSignOut" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-alignment: BASELINE_LEFT; -fx-text-fill: #64748B;" text="🚪 Sign Out" />
             </children>
         </VBox>
     </left>

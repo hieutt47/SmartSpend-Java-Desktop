@@ -12,9 +12,7 @@ import java.net.URL;
 
 public class MainLayoutController {
 
-    @FXML
-    private BorderPane mainPane;
-    // --- THÊM MỚI: Tracking sidebar active state ---
+    @FXML private BorderPane mainPane;
     @FXML private javafx.scene.control.Button btnPortfolio;
     @FXML private javafx.scene.control.Button btnTransactions;
     @FXML private javafx.scene.control.Button btnInsights;
@@ -40,8 +38,6 @@ public class MainLayoutController {
         }
     }
 
-    // --- CÁC HÀM CHUYỂN TRANG CHÍNH ---
-    // --- THAY THẾ (additive override) ---
     @FXML public void showPortfolio()     { navigateTo("/auth/PortfolioView.fxml",        btnPortfolio); }
     @FXML public void showTransactions()  { navigateTo("/transaction/TransactionsView.fxml", btnTransactions); }
     @FXML public void showInsights()      { navigateTo("/layout/InsightsView.fxml",        btnInsights); }
@@ -52,10 +48,6 @@ public class MainLayoutController {
         System.out.println("-> Bấm nút Tax Central (Tính năng này các bạn khác sẽ code sau)");
     }
 
-    // --- HÀM MỞ POPUP ADD TRANSACTION ---
-
-
-    // --- LÕI ĐỔI RUỘT (DYNAMIC ROUTING) ---
     private void loadView(String fxmlPath) {
         try {
             URL xmlUrl = getClass().getResource(fxmlPath);
@@ -70,7 +62,7 @@ public class MainLayoutController {
             e.printStackTrace();
         }
     }
-    // --- THÊM MỚI: Chuyển view với fade animation + active state ---
+
     private void navigateTo(String fxmlPath, javafx.scene.control.Button activeBtn) {
         try {
             java.net.URL xmlUrl = getClass().getResource(fxmlPath);
@@ -99,7 +91,6 @@ public class MainLayoutController {
                 mainPane.setCenter(view);
             }
 
-            // Update sidebar active state
             if (currentActiveBtn != null) currentActiveBtn.setStyle(STYLE_INACTIVE);
             if (activeBtn != null) {
                 activeBtn.setStyle(STYLE_ACTIVE);
@@ -113,20 +104,16 @@ public class MainLayoutController {
     public void openAddTransaction() {
         System.out.println("-> Đang mở cửa sổ Thêm giao dịch...");
         try {
-            // 1. Tìm đường dẫn đến file FXML của cái Popup
-            // Lưu ý: Đường dẫn này phải trùng khớp 100% với cây thư mục của sếp
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/transaction/AddTransaction.fxml"));
             Parent root = loader.load();
 
-            // 2. Tạo một cái "Sân khấu" (Stage) mới cho Popup
             Stage stage = new Stage();
             stage.setTitle("Add New Transaction");
             stage.setScene(new Scene(root));
 
-            // 3. Khóa màn hình chính lại (Phải xong Popup mới được bấm tiếp màn chính)
             stage.initModality(Modality.APPLICATION_MODAL);
 
-            // 4. Bật đèn lên!
             stage.show();
             System.out.println("=> Popup đã hiện hình!");
 
@@ -137,5 +124,33 @@ public class MainLayoutController {
             System.err.println("Lỗi không xác định khi mở Popup: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    void handleSignOut(javafx.event.ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/auth/LoginView.fxml"));
+            Parent root = loader.load();
+
+            // Lấy Scene hiện tại thay vì tạo Scene mới
+            javafx.scene.Scene currentScene = ((javafx.scene.Node) event.getSource()).getScene();
+
+            currentScene.setRoot(root);
+
+            System.out.println("Đã đăng xuất thành công và giữ nguyên kích thước màn hình!");
+
+        } catch (java.io.IOException e) {
+            System.err.println("Lỗi chuyển trang Đăng xuất: Không tìm thấy file /auth/LoginView.fxml");
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void handleSupport(javafx.event.ActionEvent event) {
+        javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+        alert.setTitle("Support");
+        alert.setHeaderText("SmartSpend Support Center");
+        alert.setContentText("Vui lòng liên hệ qua email: support@atelier.com để được hỗ trợ.");
+        alert.showAndWait();
     }
 }

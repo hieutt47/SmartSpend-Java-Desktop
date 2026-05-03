@@ -44,6 +44,7 @@ public class DatabaseConnection {
                 "date DATE NOT NULL, " +
                 "note VARCHAR(255), " +
                 "category_id INT, " +
+                "type VARCHAR(20) NOT NULL, " + // Thêm cột này để lưu INCOME/EXPENSE
                 "FOREIGN KEY (category_id) REFERENCES categories(category_id)" +
                 ");";
 
