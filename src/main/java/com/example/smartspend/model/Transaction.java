@@ -52,7 +52,7 @@ public class Transaction {
     public void setType(TransactionType type)  { this.type = type; }
 
     public int getCategoryId()                 { return categoryId; }
-    public void setCategoryId(int id)          { this.categoryId = id; }
+    public void setId(int id)          { this.categoryId = id; }
 
     public String getCategoryName()            { return categoryName == null ? "" : categoryName; }
     public void setCategoryName(String name)   { this.categoryName = name; }

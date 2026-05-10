@@ -44,7 +44,7 @@ public class AddTransactionController {
 
         for (com.example.smartspend.model.Category cat : categories) {
             cbCategory.getItems().add(cat.getName());
-            categoryMap.put(cat.getName(), cat.getCategoryId());
+            categoryMap.put(cat.getName(), cat.getId());
         }
 
         if (!cbCategory.getItems().isEmpty()) {
@@ -80,7 +80,7 @@ public class AddTransactionController {
             newTrans.setDate(date);
             newTrans.setNote(txtNote.getText());
             int selectedCategoryId = categoryMap.getOrDefault(cbCategory.getValue(), 1);
-            newTrans.setCategoryId(selectedCategoryId);
+            newTrans.setId(selectedCategoryId);
             newTrans.setType(type);
 
             transactionService.addTransaction(newTrans);

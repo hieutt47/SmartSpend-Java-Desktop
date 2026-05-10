@@ -61,9 +61,9 @@
                                 <Region HBox.hgrow="ALWAYS" />
                                 <HBox alignment="CENTER" spacing="15.0" styleClass="date-selector">
                                     <children>
-                                        <Button styleClass="btn-icon" text="&lt;" />
-                                        <Label styleClass="date-text" text="October 2023" />
-                                        <Button styleClass="btn-icon" text="&gt;" />
+                                        <Button styleClass="btn-icon" text="&lt;" onAction="#handlePrevMonth"/>
+                                        <Label fx:id="lblMonthLabel" styleClass="date-text" text="October 2023" />
+                                        <Button styleClass="btn-icon" text="&gt;" onAction="#handleNextMonth"/>
                                     </children>
                                 </HBox>
                             </children>
@@ -81,19 +81,19 @@
                                                         <VBox spacing="5.0">
                                                             <children>
                                                                 <Label styleClass="hero-subtitle" text="TOTAL MONTHLY ALLOCATION" />
-                                                                <Label styleClass="hero-title" text="\$8,450.00" />
+                                                                <Label fx:id="lblTotalBudget" styleClass="hero-title" text="\$8,450.00" />
                                                             </children>
                                                         </VBox>
                                                         <VBox spacing="8.0">
                                                             <children>
                                                                 <HBox>
                                                                     <children>
-                                                                        <Label styleClass="hero-text-muted" text="Budget Progress (72%)" />
+                                                                        <Label fx:id="lblBudgetProgressText" styleClass="hero-text-muted" text="Budget Progress (72%)" />
                                                                         <Region HBox.hgrow="ALWAYS" />
-                                                                        <Label styleClass="hero-text-muted" text="\$6,084.00 Spent" />
+                                                                        <Label fx:id="lblSpent" styleClass="hero-text-muted" text="\$6,084.00 Spent" />
                                                                     </children>
                                                                 </HBox>
-                                                                <ProgressBar maxWidth="Infinity" progress="0.72" styleClass="hero-progress" />
+                                                                <ProgressBar fx:id="heroProgressBar" maxWidth="Infinity" progress="0.72" styleClass="hero-progress" />
                                                             </children>
                                                         </VBox>
                                                     </children>
@@ -102,7 +102,7 @@
                                                 <VBox prefWidth="240.0" styleClass="hero-glass-card">
                                                     <children>
                                                         <Label styleClass="hero-subtitle" text="REMAINING FLUIDITY ↗" />
-                                                        <Label styleClass="hero-glass-value" text="\$2,366.00" />
+                                                        <Label fx:id="lblRemaining" styleClass="hero-glass-value" text="\$2,366.00" />
                                                         <Label styleClass="hero-glass-desc" text="You are currently pacing 12% better than last month." wrapText="true" />
                                                     </children>
                                                 </VBox>
@@ -126,7 +126,7 @@
                                         <VBox spacing="20.0" styleClass="card">
                                             <children>
                                                 <Label styleClass="card-title" text="Budget Planning" />
-                                                <Button maxWidth="Infinity" styleClass="btn-primary" text="⊕ Create New Category" />
+                                                <Button maxWidth="Infinity" styleClass="btn-primary" text="⊕ Create New Category" onAction="#handleCreateCategory"/>
                                                 <VBox spacing="15.0">
                                                     <children>
                                                         <Label styleClass="card-subtitle" text="TOP BUDGET BURNERS" />
@@ -143,7 +143,7 @@
                                         <VBox spacing="15.0" styleClass="card-dark">
                                             <children>
                                                 <Label text="✨ SMARTSPEND INSIGHT" style="-fx-text-fill: #94a3b8; -fx-font-weight: bold; -fx-font-size: 11px;"/>
-                                                <Label text="Your Entertainment spending is 60% lower than average. Consider moving $380 to savings." textFill="WHITE" wrapText="true" />
+                                                <Label fx:id="lblInsightText" text="Your Entertainment spending is 60% lower than average. Consider moving $380 to savings." textFill="WHITE" wrapText="true" />
                                                 <Button styleClass="btn-dark-outline" text="Adjust My Goal" />
                                             </children>
                                         </VBox>

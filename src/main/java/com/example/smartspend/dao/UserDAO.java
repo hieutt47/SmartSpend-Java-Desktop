@@ -19,24 +19,29 @@ public class UserDAO {
 
         } catch (SQLException e) {
             System.err.println("❌ Lỗi kiểm tra email: " + e.getMessage());
+            e.printStackTrace();
+            return true; // an toàn
         }
-        return true;
     }
 
-    public boolean registerUser(String name, String email, String password) {
-        String sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
+    public boolean registerUser(String fullName, String email, String password) {
+        String sql = "INSERT INTO users (username, full_name, email, password) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, name);
-            ps.setString(2, email);
-            ps.setString(3, password);
+            String username = email.split("@")[0];
 
-            int affectedRows = ps.executeUpdate();
-            return affectedRows > 0;
+            ps.setString(1, username);
+            ps.setString(2, fullName);
+            ps.setString(3, email);
+            ps.setString(4, password);
+
+            int rows = ps.executeUpdate();
+            return rows > 0;
 
         } catch (SQLException e) {
             System.err.println("❌ Lỗi khi đăng ký user: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
@@ -55,6 +60,7 @@ public class UserDAO {
             }
         } catch (SQLException e) {
             System.err.println("❌ Lỗi validate login: " + e.getMessage());
+            e.printStackTrace();
         }
         return -1;
     }

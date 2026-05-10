@@ -41,7 +41,7 @@ public class MainLayoutController {
     @FXML public void showPortfolio()     { navigateTo("/auth/PortfolioView.fxml",        btnPortfolio); }
     @FXML public void showTransactions()  { navigateTo("/transaction/TransactionsView.fxml", btnTransactions); }
     @FXML public void showInsights()      { navigateTo("/layout/InsightsView.fxml",        btnInsights); }
-    @FXML public void showBudgets()       { System.out.println("BudgetsView — teammate đang làm."); }
+    @FXML public void showBudgets()       { navigateTo("/layout/BudgetsView.fxml", btnBudgets); }
 
     @FXML
     public void showTaxCentral() {
