@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="mainPane" prefHeight="820.0" prefWidth="1440.0" styleClass="shell-root" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.smartspend.controller.MainLayoutController">
+    <stylesheets>
+        <URL value="@../css/AppShell.css" />
+    </stylesheets>
+    <left>
+        <VBox prefWidth="278.0" styleClass="sidebar-shell">
+            <children>
+                <VBox styleClass="brand-panel">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" spacing="12.0">
+                            <children>
+                                <StackPane styleClass="brand-badge">
+                                    <children>
+                                        <Label styleClass="brand-badge-text" text="SS" />
+                                    </children>
+                                </StackPane>
+                                <VBox spacing="2.0">
+                                    <children>
+                                        <Label styleClass="brand-title" text="SmartSpend" />
+                                        <Label styleClass="brand-subtitle" text="Personal finance workspace" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+
+                <Label styleClass="nav-caption" text="WORKSPACE" />
+                <Button fx:id="btnPortfolio" maxWidth="Infinity" onAction="#showPortfolio" text="Dashboard" />
+                <Button fx:id="btnTransactions" maxWidth="Infinity" onAction="#showTransactions" text="Transactions" />
+                <Button fx:id="btnInsights" maxWidth="Infinity" onAction="#showInsights" text="Insights" />
+                <Button fx:id="btnBudgets" maxWidth="Infinity" onAction="#showBudgets" text="Budgets" />
+                <Button fx:id="btnCoach" maxWidth="Infinity" onAction="#showCoach" text="Smart Coach" />
+
+                <Region prefHeight="6.0" />
+                <Button onAction="#openAddTransaction" maxWidth="Infinity" styleClass="sidebar-cta" text="New Transaction" />
+
+                <VBox styleClass="sidebar-card">
+                    <children>
+                        <Label styleClass="sidebar-card-title" text="Stay in control" />
+                        <Label styleClass="sidebar-card-body" text="Track spending, review cash flow, and monitor budgets from one polished workspace." />
+                        <Label styleClass="sidebar-card-body" text="Host: Trần Trung Hiếu · trantrunghieu30032006@gmail.com" />
+                    </children>
+                </VBox>
+
+                <Region VBox.vgrow="ALWAYS" />
+
+                <Label styleClass="nav-caption" text="ACCOUNT" />
+                <Button onAction="#openEmailSettings" maxWidth="Infinity" styleClass="side-action-btn" text="Email notifications" />
+                <Button onAction="#handleSupport" maxWidth="Infinity" styleClass="side-action-btn" text="Support" />
+                <Button onAction="#handleSignOut" maxWidth="Infinity" styleClass="side-action-btn" text="Sign out" />
+            </children>
+            <padding>
+                <Insets bottom="24.0" left="22.0" right="22.0" top="26.0" />
+            </padding>
+        </VBox>
+    </left>
+    <center>
+    </center>
+</BorderPane>

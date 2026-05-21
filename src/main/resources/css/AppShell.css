@@ -1,0 +1,100 @@
+
+.shell-root {
+    -fx-background-color: linear-gradient(to bottom right, #f8fbff, #eef4ff);
+    -fx-font-family: "Segoe UI", "Inter", Arial, sans-serif;
+}
+
+.sidebar-shell {
+    -fx-background-color: linear-gradient(to bottom, #0f172a, #111827);
+    -fx-border-color: transparent;
+    -fx-padding: 28 22 24 22;
+    -fx-spacing: 14;
+}
+
+.brand-panel {
+    -fx-background-color: rgba(255,255,255,0.06);
+    -fx-background-radius: 20;
+    -fx-padding: 16 16 18 16;
+}
+
+.brand-badge {
+    -fx-min-width: 46;
+    -fx-min-height: 46;
+    -fx-max-width: 46;
+    -fx-max-height: 46;
+    -fx-background-color: linear-gradient(to bottom right, #60a5fa, #2563eb);
+    -fx-background-radius: 14;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.35), 14, 0, 0, 4);
+}
+
+.brand-badge-text {
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: 900;
+}
+
+.brand-title {
+    -fx-text-fill: white;
+    -fx-font-size: 23px;
+    -fx-font-weight: 800;
+}
+
+.brand-subtitle {
+    -fx-text-fill: #94a3b8;
+    -fx-font-size: 12px;
+}
+
+.nav-caption {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 10px;
+    -fx-font-weight: 800;
+    -fx-letter-spacing: 1.4px;
+}
+
+.sidebar-card {
+    -fx-background-color: rgba(255,255,255,0.06);
+    -fx-background-radius: 18;
+    -fx-padding: 16 16 16 16;
+    -fx-spacing: 8;
+}
+
+.sidebar-card-title {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: 800;
+}
+
+.sidebar-card-body {
+    -fx-text-fill: #cbd5e1;
+    -fx-font-size: 12px;
+    -fx-wrap-text: true;
+    -fx-line-spacing: 2px;
+}
+
+.sidebar-cta {
+    -fx-background-color: linear-gradient(to right, #3b82f6, #2563eb);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: 800;
+    -fx-padding: 14 18 14 18;
+    -fx-background-radius: 14;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.28), 14, 0, 0, 4);
+}
+.sidebar-cta:hover { -fx-background-color: linear-gradient(to right, #2563eb, #1d4ed8); }
+
+.side-action-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #cbd5e1;
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 11 16 11 16;
+    -fx-background-radius: 12;
+    -fx-cursor: hand;
+}
+.side-action-btn:hover {
+    -fx-background-color: rgba(255,255,255,0.06);
+    -fx-text-fill: white;
+}

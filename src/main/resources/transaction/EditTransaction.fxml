@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="0" prefWidth="500.0" prefHeight="540.0"
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.smartspend.controller.EditTransactionController"
+      styleClass="dialog-root">
+    <stylesheets>
+        <URL value="@../css/dialogs.css" />
+    </stylesheets>
+
+    <VBox styleClass="dialog-header">
+        <children>
+            <Label text="Edit Transaction" styleClass="dialog-title" />
+            <Label text="Update the details below and keep your records accurate." styleClass="dialog-subtitle" />
+        </children>
+    </VBox>
+
+    <VBox spacing="16.0" styleClass="dialog-body" VBox.vgrow="ALWAYS">
+        <children>
+            <VBox spacing="6">
+                <Label text="DATE" styleClass="field-label"/>
+                <DatePicker fx:id="dpDate" prefWidth="424.0" styleClass="field-input"/>
+            </VBox>
+            <VBox spacing="6">
+                <Label text="DESCRIPTION" styleClass="field-label"/>
+                <TextArea fx:id="txtDescription" prefRowCount="3" prefWidth="424.0" promptText="Describe this transaction" styleClass="field-input"/>
+            </VBox>
+            <VBox spacing="6">
+                <Label text="CATEGORY" styleClass="field-label"/>
+                <ComboBox fx:id="cbCategory" prefWidth="424.0" styleClass="field-input"/>
+            </VBox>
+            <VBox spacing="6">
+                <Label text="AMOUNT" styleClass="field-label"/>
+                <TextField fx:id="txtAmount" prefWidth="424.0" promptText="e.g. 1299000" styleClass="field-input"/>
+            </VBox>
+        </children>
+    </VBox>
+
+    <VBox styleClass="dialog-footer">
+        <children>
+            <Button text="Update Transaction" maxWidth="Infinity" onAction="#handleUpdateTransaction" styleClass="dialog-btn-primary"/>
+        </children>
+    </VBox>
+</VBox>

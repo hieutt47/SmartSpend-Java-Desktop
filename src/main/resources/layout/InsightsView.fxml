@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.shape.Circle?>
+
+<BorderPane
+        fx:controller="com.example.smartspend.controller.InsightsController"
+        prefHeight="768.0" prefWidth="1116.0"
+        styleClass="insights-root"
+        xmlns="http://javafx.com/javafx/21"
+        xmlns:fx="http://javafx.com/fxml/1">
+
+    <stylesheets>
+        <URL value="@../css/PortfolioView.css"/>
+        <URL value="@../css/insights.css"/>
+    </stylesheets>
+
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="main-scroll">
+            <content>
+                <VBox spacing="24.0" styleClass="insights-root">
+                    <padding><Insets top="28" right="36" bottom="40" left="36"/></padding>
+
+                    <HBox alignment="CENTER_LEFT" spacing="16.0">
+                        <TextField promptText="Search insights, categories, or periods"
+                                   styleClass="search-bar" prefWidth="300.0"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label text="Host" style="-fx-font-size: 18px; -fx-text-fill: #64748b; -fx-cursor: hand;"/>
+                        <Label text="Trần Trung Hiếu" style="-fx-font-size: 18px; -fx-text-fill: #64748b; -fx-cursor: hand;"/>
+                        <Label styleClass="avatar-label" text="TH" />
+                    </HBox>
+
+                    <HBox alignment="BOTTOM_LEFT">
+                        <VBox spacing="4.0">
+                            <Label styleClass="insights-overtitle" text="MONTHLY OVERVIEW"/>
+                            <Label styleClass="insights-title" text="Financial Insights"/>
+                            <HBox spacing="32.0" alignment="CENTER_LEFT" style="-fx-padding: 8 0 0 0;">
+                                <VBox spacing="2.0">
+                                    <Label styleClass="insights-kpi-label" text="NET SAVINGS RATE"/>
+                                    <Label fx:id="lblSavingsRate"
+                                           styleClass="insights-kpi-value" text="0.0%"/>
+                                </VBox>
+                                <VBox spacing="2.0">
+                                    <Label styleClass="insights-kpi-label" text="TOTAL LIQUIDITY"/>
+                                    <Label fx:id="lblLiquidity"
+                                           styleClass="insights-liquidity-value" text="0.00"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="lblSyncTime"
+                               text="Data synchronized: —"
+                               style="-fx-font-size: 11px; -fx-text-fill: #94a3b8;"/>
+                    </HBox>
+
+                    <HBox spacing="20.0" VBox.vgrow="ALWAYS">
+
+                        <VBox spacing="20.0" HBox.hgrow="ALWAYS">
+
+                            <VBox styleClass="chart-card" spacing="12.0">
+                                <HBox alignment="CENTER_LEFT">
+                                    <VBox spacing="2.0">
+                                        <Label styleClass="chart-card-title" text="Income vs Expenses"/>
+                                        <Label styleClass="chart-card-sub" text="Last 6 months performance"/>
+                                    </VBox>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <HBox spacing="12.0" alignment="CENTER">
+                                        <Label text="● Income"
+                                               style="-fx-font-size: 12px; -fx-font-weight: 700; -fx-text-fill: #2563eb;"/>
+                                        <Label text="● Expenses"
+                                               style="-fx-font-size: 12px; -fx-font-weight: 700; -fx-text-fill: #ef4444;"/>
+                                    </HBox>
+                                </HBox>
+                                <BarChart fx:id="barChartIncomeExpense"
+                                          prefHeight="240.0" animated="true"
+                                          style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                                    <xAxis>
+                                        <CategoryAxis side="BOTTOM"
+                                                      style="-fx-tick-label-fill: #94a3b8; -fx-font-size: 11px;"/>
+                                    </xAxis>
+                                    <yAxis>
+                                        <NumberAxis side="LEFT"
+                                                    style="-fx-tick-label-fill: #94a3b8; -fx-font-size: 11px;"/>
+                                    </yAxis>
+                                </BarChart>
+                            </VBox>
+
+                            <Label text="Top Spending Categories"
+                                   style="-fx-font-size: 18px; -fx-font-weight: 900; -fx-text-fill: #0f172a;"/>
+
+                            <GridPane fx:id="gridCategories" hgap="16.0" vgap="16.0">
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="ALWAYS" percentWidth="33.3"/>
+                                    <ColumnConstraints hgrow="ALWAYS" percentWidth="33.3"/>
+                                    <ColumnConstraints hgrow="ALWAYS" percentWidth="33.3"/>
+                                </columnConstraints>
+                            </GridPane>
+
+                        </VBox>
+
+                        <VBox prefWidth="280.0" spacing="16.0">
+
+                            <VBox styleClass="snapshot-card" spacing="14.0">
+                                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                    <Label text="Snapshot"
+                                           style="-fx-font-size: 14px; -fx-font-weight: 800; -fx-text-fill: #0f172a;"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Label fx:id="lblSnapshotBadge"
+                                           styleClass="snapshot-badge-surplus" text="SURPLUS"/>
+                                </HBox>
+                                <VBox spacing="10.0">
+                                    <HBox alignment="CENTER_LEFT">
+                                        <Label text="Income Forecast" styleClass="snapshot-row-label"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label fx:id="lblIncomeForecast"
+                                               styleClass="snapshot-row-green" text="+0"/>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT">
+                                        <Label text="Projected Burn" styleClass="snapshot-row-label"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label fx:id="lblProjectedBurn"
+                                               styleClass="snapshot-row-red" text="-0"/>
+                                    </HBox>
+                                    <Separator/>
+                                    <HBox alignment="CENTER_LEFT">
+                                        <Label text="Safe to Spend" styleClass="snapshot-row-label"
+                                               style="-fx-font-weight: 700;"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label fx:id="lblSafeToSpend"
+                                               styleClass="snapshot-row-green"
+                                               style="-fx-font-size: 16px; -fx-font-weight: 900;"/>
+                                    </HBox>
+                                </VBox>
+                            </VBox>
+
+                            <VBox styleClass="reco-card" spacing="12.0">
+                                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                    <Label text="AI"
+                                           style="-fx-font-size: 20px; -fx-background-color: rgba(255,255,255,0.15); -fx-background-radius: 8; -fx-padding: 6;"/>
+                                    <Label text="Smart Recommendation" styleClass="reco-title"/>
+                                </HBox>
+                                <Label fx:id="lblRecoBody" styleClass="reco-body"
+                                       text="Phân tích dữ liệu giao dịch của bạn để đưa ra gợi ý tối ưu..."
+                                       wrapText="true"/>
+                                <Button text="View Opportunities" styleClass="reco-btn" maxWidth="Infinity"/>
+                            </VBox>
+
+                            <VBox styleClass="snapshot-card" spacing="12.0">
+                                <Label text="Spending Split"
+                                       style="-fx-font-size: 14px; -fx-font-weight: 800; -fx-text-fill: #0f172a;"/>
+                                <HBox spacing="2.0">
+                                    <Region fx:id="splitIncome" prefHeight="8.0"
+                                            style="-fx-background-color: #2563eb; -fx-background-radius: 4 0 0 4;"
+                                            HBox.hgrow="ALWAYS"/>
+                                    <Region fx:id="splitExpense" prefHeight="8.0"
+                                            style="-fx-background-color: #ef4444; -fx-background-radius: 0 4 4 0;"
+                                            HBox.hgrow="ALWAYS"/>
+                                </HBox>
+                                <HBox>
+                                    <Label text="■ " style="-fx-text-fill: #2563eb; -fx-font-size: 11px;"/>
+                                    <Label text="Income  " style="-fx-text-fill: #64748b; -fx-font-size: 11px;"/>
+                                    <Label text="■ " style="-fx-text-fill: #ef4444; -fx-font-size: 11px;"/>
+                                    <Label text="Expense" style="-fx-text-fill: #64748b; -fx-font-size: 11px;"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Label fx:id="lblSplitPct"
+                                           style="-fx-font-size: 11px; -fx-font-weight: 700; -fx-text-fill: #64748b;"/>
+                                </HBox>
+                            </VBox>
+
+                        </VBox>
+                    </HBox>
+                    <HBox>
+                        <Label fx:id="lblFooterSync" styleClass="footer-label"
+                               text="Data synchronized: —"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label text="TAX REPORT  ·  PRIVACY POLICY  ·  SECURITY CERT"
+                               styleClass="footer-label"/>
+                    </HBox>
+
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+</BorderPane>

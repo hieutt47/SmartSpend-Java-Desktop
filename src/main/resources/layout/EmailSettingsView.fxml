@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="0" prefWidth="560" prefHeight="640"
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.smartspend.controller.EmailSettingsController"
+      styleClass="dialog-root">
+    <stylesheets>
+        <URL value="@../css/dialogs.css" />
+    </stylesheets>
+
+    <VBox styleClass="dialog-header">
+        <children>
+            <Label text="Email Notification Setup" styleClass="dialog-title" />
+            <Label text="Configure SMTP so SmartSpend can send reset codes, welcome emails, and login alerts." styleClass="dialog-subtitle" wrapText="true" />
+        </children>
+    </VBox>
+
+    <VBox styleClass="dialog-body" spacing="14">
+        <children>
+            <Label fx:id="statusLabel" text="SMTP status" />
+
+            <GridPane hgap="12" vgap="12">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="50" />
+                    <ColumnConstraints percentWidth="50" />
+                </columnConstraints>
+                <children>
+                    <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <Label text="SMTP HOST" styleClass="field-label" />
+                        <TextField fx:id="hostField" promptText="smtp.gmail.com" styleClass="field-input" />
+                    </VBox>
+                    <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <Label text="SMTP PORT" styleClass="field-label" />
+                        <TextField fx:id="portField" promptText="465" styleClass="field-input" />
+                    </VBox>
+                    <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                        <Label text="FROM EMAIL" styleClass="field-label" />
+                        <TextField fx:id="fromField" promptText="your_email@gmail.com" styleClass="field-input" />
+                    </VBox>
+                    <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label text="USERNAME" styleClass="field-label" />
+                        <TextField fx:id="userField" promptText="your_email@gmail.com" styleClass="field-input" />
+                    </VBox>
+                </children>
+            </GridPane>
+
+            <VBox spacing="6">
+                <Label text="GMAIL APP PASSWORD / SMTP PASSWORD" styleClass="field-label" />
+                <PasswordField fx:id="passwordField" promptText="Paste Gmail App Password here" styleClass="field-input" />
+            </VBox>
+
+            <CheckBox fx:id="sslCheckBox" text="Use SSL/TLS connection. Gmail should use SSL port 465." selected="true" />
+
+            <VBox spacing="6">
+                <Label text="SEND TEST TO" styleClass="field-label" />
+                <TextField fx:id="testEmailField" promptText="recipient@example.com" styleClass="field-input" />
+            </VBox>
+
+            <VBox spacing="6" style="-fx-background-color: #f8fafc; -fx-background-radius: 14; -fx-padding: 14;">
+                <Label text="Gmail setup note" style="-fx-font-weight: 900; -fx-text-fill: #0f172a;" />
+                <Label wrapText="true" text="For Gmail, turn on 2-Step Verification, create an App Password, then use that 16-character App Password here. Do not use your normal Gmail password." style="-fx-text-fill: #64748b;" />
+            </VBox>
+        </children>
+    </VBox>
+
+    <HBox alignment="CENTER_RIGHT" spacing="12" styleClass="dialog-footer">
+        <children>
+            <Button text="Close" onAction="#handleClose" style="-fx-background-color: #f1f5f9; -fx-text-fill: #334155; -fx-font-weight: 800; -fx-padding: 12 18; -fx-background-radius: 12;" />
+            <Button text="Save" onAction="#handleSave" styleClass="dialog-btn-primary" />
+            <Button text="Send Test Email" onAction="#handleTestEmail" styleClass="dialog-btn-success" />
+        </children>
+    </HBox>
+</VBox>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<BorderPane fx:controller="com.example.smartspend.controller.PortfolioController" prefHeight="820.0" prefWidth="1080.0" styleClass="root-pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+    <stylesheets><URL value="@../css/PortfolioView.css" /></stylesheets>
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="main-scroll">
+            <content>
+                <VBox spacing="24.0" styleClass="main-content">
+                    <padding><Insets bottom="36.0" left="36.0" right="36.0" top="28.0" /></padding>
+                    <children>
+                        <HBox alignment="CENTER_LEFT" spacing="16.0" styleClass="topbar">
+                            <children>
+                                <TextField prefWidth="320.0" promptText="Search dashboard or recent activity" styleClass="search-bar" />
+                                <Label styleClass="pill-badge" text="Live Data" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="profile-chip">
+                                    <children>
+                                        <VBox spacing="1.0">
+                                            <children>
+                                                <Label styleClass="profile-name" text="Trần Trung Hiếu" />
+                                                <Label styleClass="profile-role" text="Host / Developer" />
+                                            </children>
+                                        </VBox>
+                                        <Label styleClass="avatar-badge" text="TH" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </HBox>
+
+                        <HBox spacing="24.0" styleClass="hero-panel">
+                            <children>
+                                <VBox spacing="10.0" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <Label styleClass="hero-eyebrow" text="FINANCIAL COMMAND CENTER" />
+                                        <Label fx:id="lblNetBalance" styleClass="hero-balance" text="\$0.00" />
+                                        <Label fx:id="lblHeroSummary" styleClass="hero-subtext" text="A concise view of your money movement, saving efficiency, and financial health." wrapText="true" />
+                                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                            <children>
+                                                <Label fx:id="lblCashFlowBadge" styleClass="hero-badge" text="Ready" />
+                                                <Label fx:id="lblLastUpdated" styleClass="hero-meta" text="Last updated: Just now" />
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                                <VBox spacing="14.0" prefWidth="340.0">
+                                    <children>
+                                        <HBox spacing="14.0">
+                                            <children>
+                                                <VBox styleClass="mini-stat-card" HBox.hgrow="ALWAYS">
+                                                    <children>
+                                                        <Label styleClass="mini-stat-label" text="Savings rate" />
+                                                        <Label fx:id="lblSavingsRate" styleClass="mini-stat-value" text="0%" />
+                                                        <Label fx:id="lblSavingsDelta" styleClass="mini-stat-delta-positive" text="Based on current data" />
+                                                    </children>
+                                                </VBox>
+                                                <VBox styleClass="mini-stat-card" HBox.hgrow="ALWAYS">
+                                                    <children>
+                                                        <Label styleClass="mini-stat-label" text="Monthly runway" />
+                                                        <Label fx:id="lblRunway" styleClass="mini-stat-value" text="—" />
+                                                        <Label styleClass="mini-stat-delta-neutral" text="Reserve estimate" />
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                        </HBox>
+                                        <HBox spacing="12.0">
+                                            <children>
+                                                <Button fx:id="btnAddIncome" onAction="#handleAddIncome" styleClass="btn-secondary" text="Add Income" HBox.hgrow="ALWAYS" />
+                                                <Button fx:id="btnAddExpense" onAction="#handleAddExpense" styleClass="btn-primary" text="Add Expense" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+
+                        <HBox spacing="18.0">
+                            <children>
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS" spacing="6.0">
+                                    <Label styleClass="metric-card-label" text="Projected income" />
+                                    <Label fx:id="lblProjectedIncome" styleClass="metric-card-value" text="\$0.00" />
+                                    <Label styleClass="metric-card-caption" text="Income this month" />
+                                </VBox>
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS" spacing="6.0">
+                                    <Label styleClass="metric-card-label" text="Committed expenses" />
+                                    <Label fx:id="lblCommittedExpenses" styleClass="metric-card-value" text="\$0.00" />
+                                    <Label styleClass="metric-card-caption" text="Expenses this month" />
+                                </VBox>
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS" spacing="6.0">
+                                    <Label styleClass="metric-card-label" text="Safe to spend" />
+                                    <Label fx:id="lblSafeToSpend" styleClass="metric-card-value" text="\$0.00" />
+                                    <Label styleClass="metric-card-caption" text="Recommended flexible budget" />
+                                </VBox>
+                            </children>
+                        </HBox>
+
+                        <HBox spacing="20.0">
+                            <children>
+                                <VBox spacing="18.0" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <VBox prefHeight="340.0" styleClass="chart-card" VBox.vgrow="ALWAYS">
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT">
+                                                    <children>
+                                                        <VBox spacing="4.0">
+                                                            <children>
+                                                                <Label styleClass="card-title" text="Cash flow trend" />
+                                                                <Label styleClass="card-description" text="Income, expense, and net cash flow across the latest 6 months." />
+                                                            </children>
+                                                        </VBox>
+                                                        <Region HBox.hgrow="ALWAYS" />
+                                                        <Label styleClass="pill-badge-muted" text="Auto-updated" />
+                                                    </children>
+                                                </HBox>
+                                                <javafx.scene.chart.BarChart fx:id="portfolioChart" legendVisible="true" animated="false" VBox.vgrow="ALWAYS">
+                                                    <xAxis><javafx.scene.chart.CategoryAxis side="BOTTOM" tickLabelFill="#64748b" /></xAxis>
+                                                    <yAxis><javafx.scene.chart.NumberAxis side="LEFT" tickLabelFill="#64748b" /></yAxis>
+                                                </javafx.scene.chart.BarChart>
+                                            </children>
+                                        </VBox>
+                                        <HBox spacing="18.0">
+                                            <children>
+                                                <VBox styleClass="card" HBox.hgrow="ALWAYS" spacing="8.0">
+                                                    <children>
+                                                        <Label styleClass="card-subtitle" text="SAVINGS DISCIPLINE" />
+                                                        <Label fx:id="lblSavingsDiscipline" styleClass="metric-value" text="—" />
+                                                        <Label fx:id="lblSavingsComment" styleClass="text-green" text="Add transactions to analyze." />
+                                                    </children>
+                                                </VBox>
+                                                <VBox styleClass="card" HBox.hgrow="ALWAYS" spacing="8.0">
+                                                    <children>
+                                                        <Label styleClass="card-subtitle" text="NEXT PRIORITY" />
+                                                        <Label fx:id="lblNextPriority" styleClass="metric-value" text="Add data" />
+                                                        <Label fx:id="lblPriorityDesc" styleClass="card-description" text="SmartSpend will recommend a priority after reading your cash flow." wrapText="true" />
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+
+                                <VBox prefWidth="330.0" spacing="18.0">
+                                    <VBox spacing="15.0" styleClass="recent-card" VBox.vgrow="ALWAYS">
+                                        <children>
+                                            <HBox alignment="CENTER_LEFT">
+                                                <children>
+                                                    <Label styleClass="card-title" text="Recent transactions" />
+                                                    <Region HBox.hgrow="ALWAYS" />
+                                                    <Button fx:id="btnViewAll" onAction="#handleViewAll" styleClass="btn-view-all" text="View all" />
+                                                </children>
+                                            </HBox>
+                                            <VBox fx:id="vboxRecentTransactions" spacing="10.0" VBox.vgrow="ALWAYS" />
+                                        </children>
+                                    </VBox>
+
+                                    <VBox alignment="CENTER" spacing="14.0" styleClass="health-card">
+                                        <children>
+                                            <Label styleClass="card-subtitle" text="FINANCIAL HEALTH SCORE" />
+                                            <StackPane>
+                                                <children>
+                                                    <Circle fill="WHITE" radius="56.0" stroke="#dbeafe" strokeWidth="14.0" />
+                                                    <Circle fill="TRANSPARENT" radius="56.0" stroke="#2563eb" strokeWidth="14.0" strokeLineCap="ROUND" />
+                                                    <VBox alignment="CENTER" spacing="2.0">
+                                                        <children>
+                                                            <Label fx:id="lblHealthScore" styleClass="score-value" text="0" />
+                                                            <Label styleClass="score-label" text="out of 100" />
+                                                        </children>
+                                                    </VBox>
+                                                </children>
+                                            </StackPane>
+                                            <Label fx:id="lblHealthComment" text="Add transactions to calculate your score." textAlignment="CENTER" textFill="#64748b" wrapText="true" />
+                                            <Button fx:id="btnDetails" onAction="#handleDetails" maxWidth="1.7976931348623157E308" styleClass="btn-outline" text="See details" />
+                                        </children>
+                                    </VBox>
+                                </VBox>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+</BorderPane>
