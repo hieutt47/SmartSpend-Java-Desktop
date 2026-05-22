@@ -77,9 +77,9 @@ public class RegisterController {
     @FXML
     private void handleGoogleLogin(ActionEvent event) {
         TextInputDialog dialog = new TextInputDialog(emailField.getText() == null ? "" : emailField.getText().trim());
-        dialog.setTitle("Google Registration");
-        dialog.setHeaderText("Google Sign-In demo mode");
-        dialog.setContentText("Nhập Gmail để tạo/mở tài khoản demo.");
+        dialog.setTitle("Gmail quick access");
+        dialog.setHeaderText("Gmail quick access (local)");
+        dialog.setContentText("Nhập Gmail để tạo/mở tài khoản local.");
 
         Optional<String> result = dialog.showAndWait();
         if (result.isEmpty()) return;
@@ -93,17 +93,12 @@ public class RegisterController {
         String name = email.contains("@") ? email.substring(0, email.indexOf('@')).replace('.', ' ') : "Google User";
         int userId = new UserDAO().getOrCreateExternalUser(name, email, "GOOGLE");
         if (userId <= 0) {
-            showAlert(Alert.AlertType.ERROR, "Google Registration", "Không thể tạo tài khoản Google demo.");
+            showAlert(Alert.AlertType.ERROR, "Gmail quick access", "Không thể tạo tài khoản Gmail local.");
             return;
         }
         new EmailService().sendWelcomeEmail(email, name);
-        showAlert(Alert.AlertType.INFORMATION, "Thành công", "Đã tạo/mở tài khoản Google demo. Nếu SMTP đã cấu hình, SmartSpend cũng đã gửi email chào mừng.");
+        showAlert(Alert.AlertType.INFORMATION, "Thành công", "Đã tạo/mở tài khoản Gmail local. Nếu SMTP đã cấu hình, SmartSpend cũng đã gửi email chào mừng.");
         switchToLogin(event);
-    }
-
-    @FXML
-    private void handleAppleLogin(ActionEvent event) {
-        showAlert(Alert.AlertType.INFORMATION, "Apple ID", "Apple ID đang ở trạng thái demo. Dùng Google hoặc email/password để tiếp tục.");
     }
 
     @FXML

@@ -173,90 +173,68 @@ public class InsightsController implements Initializable {
     // ────────────────────────────────────────────
     //  CATEGORY CARDS (3-column grid)
     // ────────────────────────────────────────────
-    private static final String[][] CAT_DEFS = {
-            {"Ăn uống",          "Food", "#16a34a", "progress-bar-green"},
-            {"Mua sắm",          "Shopping", "#2563eb", "progress-bar-blue"},
-            {"Nhà ở & Hóa đơn",  "Housing", "#dc2626", "progress-bar-red"},
-            {"Di chuyển",        "Transport", "#d97706", "progress-bar-amber"},
-            {"Sức khỏe",         "Health", "#16a34a", "progress-bar-green"},
-            {"Giải trí",         "Entertainment", "#2563eb", "progress-bar-blue"},
-    };
-
     private void buildCategoryCards(List<Transaction> all) {
         gridCategories.getChildren().clear();
-
-        double totalExpense = all.stream()
+        Map<String, Double> expenses = all.stream()
                 .filter(t -> t.getType() == TransactionType.EXPENSE)
-                .mapToDouble(Transaction::getAmount).sum();
-        if (totalExpense == 0) totalExpense = 1; // avoid /0
+                .collect(Collectors.groupingBy(
+                        t -> t.getCategoryName() == null || t.getCategoryName().isBlank() ? "Khác" : t.getCategoryName(),
+                        Collectors.summingDouble(Transaction::getAmount)));
+        if (expenses.isEmpty()) {
+            Label empty = new Label("Chưa có dữ liệu chi tiêu để hiển thị phân tích theo danh mục.");
+            empty.setStyle("-fx-text-fill: #64748b; -fx-font-size: 13px; -fx-padding: 18;");
+            gridCategories.add(empty, 0, 0, 3, 1);
+            return;
+        }
 
-        // Group expense by note (proxy for category since CategoryDAO not linked yet)
-        // We'll show the pre-defined categories with calculated amounts
-        double expPerCat = totalExpense / CAT_DEFS.length;
-
-        int col = 0, row = 0;
-        for (String[] cat : CAT_DEFS) {
-            String catName   = cat[0];
-            String tag       = cat[1];
-            String color     = cat[2];
-            String barStyle  = cat[3];
-
-            double amount = expPerCat * (0.8 + Math.random() * 0.4);
-            double budget = amount * 1.3;
-            double pct    = Math.min(amount / budget, 1.0);
-
-            VBox card = buildCategoryCard(tag, catName, amount, budget, pct, color, barStyle);
+        double totalExpense = expenses.values().stream().mapToDouble(Double::doubleValue).sum();
+        List<Map.Entry<String, Double>> topCategories = expenses.entrySet().stream()
+                .sorted(Map.Entry.<String, Double>comparingByValue(Comparator.reverseOrder()))
+                .limit(6)
+                .toList();
+        String[] colors = {"#16a34a", "#2563eb", "#dc2626", "#d97706", "#7c3aed", "#0891b2"};
+        String[] progressStyles = {"progress-bar-green", "progress-bar-blue", "progress-bar-red", "progress-bar-amber", "progress-bar-blue", "progress-bar-green"};
+        int col = 0, row = 0, index = 0;
+        for (Map.Entry<String, Double> entry : topCategories) {
+            double amount = entry.getValue();
+            double share = totalExpense <= 0 ? 0 : amount / totalExpense;
+            VBox card = buildCategoryCard(entry.getKey(), amount, totalExpense, share, colors[index], progressStyles[index]);
             gridCategories.add(card, col, row);
-
             col++;
             if (col == 3) { col = 0; row++; }
+            index++;
         }
     }
 
-    private VBox buildCategoryCard(String tag, String name, double amount,
-                                   double budget, double pct,
+    private VBox buildCategoryCard(String name, double amount, double totalExpense, double share,
                                    String color, String barStyle) {
         VBox card = new VBox(10);
         card.getStyleClass().add("cat-card");
 
-        HBox header = new HBox(8);
-        header.setAlignment(Pos.CENTER_LEFT);
-        Label tagLbl = new Label(tag.toUpperCase(Locale.ROOT));
-        tagLbl.setStyle("-fx-font-size: 10px; -fx-font-weight: 900; -fx-text-fill: " + color + "; " +
-                "-fx-background-color: #f8fafc; -fx-background-radius: 8; -fx-padding: 6 8;");
         Label nameLbl = new Label(name);
         nameLbl.getStyleClass().add("cat-name");
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-        header.getChildren().addAll(tagLbl, nameLbl);
-        card.getChildren().add(header);
+        card.getChildren().add(nameLbl);
 
-        // Amount
         Label amtLbl = new Label(CurrencyFormatter.format(amount));
         amtLbl.getStyleClass().add("cat-amount");
         card.getChildren().add(amtLbl);
 
-        // Progress bar
-        ProgressBar pb = new ProgressBar(pct);
+        ProgressBar pb = new ProgressBar(share);
         pb.setMaxWidth(Double.MAX_VALUE);
         pb.setPrefHeight(8);
         pb.getStyleClass().addAll("progress-bar", barStyle);
         card.getChildren().add(pb);
 
-        // Limit + delta row
         HBox bottom = new HBox(6);
         bottom.setAlignment(Pos.CENTER_LEFT);
-        Label limitLbl = new Label(
-                (int)(pct * 100) + "% of " + CurrencyFormatter.format(budget) + " limit");
-        limitLbl.getStyleClass().add("cat-limit");
-        Region sp2 = new Region(); HBox.setHgrow(sp2, Priority.ALWAYS);
-        double delta = amount - budget * 0.75;
-        Label deltaLbl = new Label((delta > 0 ? "↑ +" : "↓ ") +
-                CurrencyFormatter.format(Math.abs(delta)));
-        deltaLbl.getStyleClass().add(delta > 0 ? "cat-delta-up" : "cat-delta-down");
-        bottom.getChildren().addAll(limitLbl, sp2, deltaLbl);
+        Label shareLbl = new Label(String.format(Locale.US, "%.1f%% tổng chi tiêu", share * 100));
+        shareLbl.getStyleClass().add("cat-limit");
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        Label totalLbl = new Label("/ " + CurrencyFormatter.format(totalExpense));
+        totalLbl.setStyle("-fx-font-size: 11px; -fx-font-weight: 700; -fx-text-fill: " + color + ";");
+        bottom.getChildren().addAll(shareLbl, spacer, totalLbl);
         card.getChildren().add(bottom);
-
         return card;
     }
 
@@ -298,15 +276,26 @@ public class InsightsController implements Initializable {
         if (all.isEmpty()) {
             msg = "Chưa có dữ liệu. Hãy thêm giao dịch đầu tiên để nhận gợi ý cá nhân hóa!";
         } else if (totalExp > totalInc * 0.8) {
-            msg = "⚠️ Chi tiêu đang chiếm hơn 80% thu nhập. Xem xét cắt giảm các khoản không thiết yếu để tăng tỷ lệ tiết kiệm.";
+            msg = "Chi tiêu đang chiếm hơn 80% thu nhập. Hãy xem lại các khoản không thiết yếu để bảo vệ tỷ lệ tiết kiệm.";
         } else if (totalInc - totalExp > 0) {
             double saved = totalInc - totalExp;
-            msg = "✅ Bạn đang tiết kiệm được " + CurrencyFormatter.format(saved) +
-                    ". Cân nhắc đầu tư phần dư vào quỹ khẩn cấp hoặc danh mục ETF để tối ưu dòng tiền.";
+            msg = "Bạn đang giữ lại được " + CurrencyFormatter.format(saved) +
+                    ". Hãy ưu tiên quỹ dự phòng hoặc mục tiêu tài chính đã đặt ra.";
         } else {
             msg = "Phân tích dữ liệu của bạn và đề xuất các cơ hội tiết kiệm thông minh hơn.";
         }
         lblRecoBody.setText(msg);
+    }
+
+    @FXML
+    private void handleOpenCoach() {
+        try {
+            javafx.scene.Parent coach = javafx.fxml.FXMLLoader.load(getClass().getResource("/layout/SmartCoachView.fxml"));
+            javafx.scene.layout.BorderPane mainPane = (javafx.scene.layout.BorderPane) lblRecoBody.getScene().getRoot();
+            mainPane.setCenter(coach);
+        } catch (Exception e) {
+            System.err.println("Không mở được Smart Coach: " + e.getMessage());
+        }
     }
 
     // ────────────────────────────────────────────

@@ -1,153 +1,334 @@
 package com.example.smartspend.service;
 
 import com.example.smartspend.model.Transaction;
+import com.example.smartspend.model.enums.AdvisorMode;
 import com.example.smartspend.model.enums.TransactionType;
 import com.example.smartspend.utils.CurrencyFormatter;
 import com.example.smartspend.utils.HostInfo;
 
+import java.io.File;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Offline-first financial coach.
+ * Offline-first financial intelligence engine.
  *
- * SmartSpend always has a built-in rule-based advisor so the coaching screen
- * remains usable without internet or API keys. When Ollama is available locally,
- * the service can ask a local model for richer explanations and still falls back
- * safely to deterministic advice when anything goes wrong.
+ * <p>The deterministic analysis is always available. When an Ollama model is
+ * installed locally, SmartSpend automatically upgrades conversational answers
+ * through Ollama without sending personal transactions to a cloud service.</p>
  */
 public class FinancialAdvisorService {
-    private static volatile boolean attemptedOllamaStart = false;
-    private static final int OLLAMA_TIMEOUT_SECONDS = 10;
-    private static final String DEFAULT_OLLAMA_ENDPOINT = "http://localhost:11434/api/generate";
-    private static final String DEFAULT_OLLAMA_TAGS_ENDPOINT = "http://localhost:11434/api/tags";
+    private static final String OLLAMA_BASE = "http://localhost:11434/api";
+    private static final int DISCOVERY_TIMEOUT_SECONDS = 2;
+    private static final int CHAT_TIMEOUT_SECONDS = 45;
     private static final List<String> MODEL_PRIORITY = List.of(
-            "llama3.2", "llama3.1", "llama3", "mistral", "gemma3", "gemma2", "phi3", "qwen2.5"
+            "llama3.2", "llama3.1", "qwen2.5", "gemma3", "gemma2", "mistral", "phi3"
     );
+    private static volatile boolean attemptedOllamaStart;
+
+    private final HttpClient httpClient = HttpClient.newBuilder()
+            .connectTimeout(Duration.ofSeconds(DISCOVERY_TIMEOUT_SECONDS))
+            .build();
+    private final AiPreferencesService preferences = new AiPreferencesService();
 
     public Snapshot buildSnapshot(List<Transaction> transactions) {
         List<Transaction> safe = transactions == null ? List.of() : transactions;
-        double income = safe.stream().filter(t -> t.getType() == TransactionType.INCOME).mapToDouble(Transaction::getAmount).sum();
-        double expense = safe.stream().filter(t -> t.getType() == TransactionType.EXPENSE).mapToDouble(Transaction::getAmount).sum();
+        double income = total(safe, TransactionType.INCOME);
+        double expense = total(safe, TransactionType.EXPENSE);
         double net = income - expense;
-        double savingsRate = income <= 0 ? 0 : Math.max(0, net) * 100.0 / income;
+        double savingsRate = income <= 0 ? 0 : net * 100.0 / income;
         Map<String, Double> expenseByCategory = expenseByCategory(safe);
         String topCategory = expenseByCategory.entrySet().stream()
                 .max(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey)
                 .orElse("Chưa có dữ liệu");
         double topCategoryAmount = expenseByCategory.getOrDefault(topCategory, 0.0);
-        return new Snapshot(income, expense, net, savingsRate, topCategory, topCategoryAmount, expenseByCategory, safe.size());
+        return new Snapshot(income, expense, net, savingsRate, topCategory, topCategoryAmount,
+                expenseByCategory, safe.size());
     }
 
     public String buildSummary(List<Transaction> transactions) {
         Snapshot s = buildSnapshot(transactions);
-        if (s.transactionCount == 0) {
-            return "Bạn chưa có đủ dữ liệu. Hãy thêm vài giao dịch thu/chi để Smart Coach bắt đầu phân tích chính xác hơn.";
+        if (s.transactionCount() == 0) {
+            return "Bạn chưa có dữ liệu giao dịch. Hãy thêm khoản thu và một vài khoản chi để Smart Coach phân tích chính xác hơn.";
         }
-        if (s.net < 0) {
-            return "Dòng tiền đang âm " + CurrencyFormatter.format(Math.abs(s.net)) + ". Ưu tiên giảm nhóm chi lớn nhất và tạm dừng các khoản mua sắm không bắt buộc.";
+        if (s.income() <= 0 && s.expense() > 0) {
+            return "Hiện chưa ghi nhận thu nhập nhưng đã có chi tiêu " + CurrencyFormatter.format(s.expense())
+                    + ". Hãy bổ sung nguồn thu hoặc siết lại khoản chi chưa cần thiết.";
         }
-        return "Dòng tiền đang dương " + CurrencyFormatter.format(s.net) + ". Tỷ lệ tiết kiệm hiện khoảng "
-                + String.format(Locale.US, "%.1f", s.savingsRate) + "% — đây là nền tảng tốt để tăng quỹ dự phòng.";
+        if (s.net() < 0) {
+            return "Dòng tiền đang âm " + CurrencyFormatter.format(Math.abs(s.net()))
+                    + ". Rủi ro chính đến từ " + s.topCategory() + "; nên ưu tiên đưa ngân sách về mức hòa vốn.";
+        }
+        return "Dòng tiền đang dương " + CurrencyFormatter.format(s.net()) + " với tỷ lệ tiết kiệm "
+                + pct(s.savingsRate()) + ". Danh mục chi lớn nhất hiện là " + s.topCategory() + ".";
     }
 
     public List<String> buildActionPlan(List<Transaction> transactions) {
         Snapshot s = buildSnapshot(transactions);
-        List<String> advice = new ArrayList<>();
-        if (s.transactionCount == 0) {
-            advice.add("Thêm ít nhất 1 khoản thu nhập và 3 khoản chi để dashboard, budgets và coach có dữ liệu thực tế.");
-            advice.add("Bắt đầu với 3 budget cơ bản: Ăn uống, Di chuyển, Nhà ở & Hóa đơn.");
-            advice.add("Dùng Export Report sau mỗi tuần để lưu lại dữ liệu demo hoặc nộp bài.");
-            return advice;
+        List<String> plan = new ArrayList<>();
+        if (s.transactionCount() == 0) {
+            plan.add("Nhập khoản thu nhập đầu tiên và ít nhất ba giao dịch chi tiêu để bắt đầu phân tích.");
+            plan.add("Tạo ngân sách cho Ăn uống, Di chuyển và Nhà ở & Hóa đơn.");
+            plan.add("Quay lại Smart Coach sau một tuần để nhận đánh giá dòng tiền thực tế.");
+            return plan;
         }
-
-        if (s.net < 0) {
-            advice.add("Cần cắt tối thiểu " + CurrencyFormatter.format(Math.abs(s.net)) + " để đưa dòng tiền về hòa vốn.");
+        if (s.net() < 0) {
+            plan.add("Cắt tối thiểu " + CurrencyFormatter.format(Math.abs(s.net())) + " để đưa dòng tiền về hòa vốn.");
         } else {
-            advice.add("Tự động chuyển khoảng " + CurrencyFormatter.format(s.net * 0.5) + " vào quỹ dự phòng hoặc tiết kiệm ngay sau khi nhận thu nhập.");
+            double emergencyFund = Math.max(0, s.net() * 0.5);
+            plan.add("Chuyển " + CurrencyFormatter.format(emergencyFund) + " vào quỹ dự phòng hoặc mục tiêu tiết kiệm ngay trong tháng này.");
         }
-
-        if (s.savingsRate < 10) {
-            advice.add("Tỷ lệ tiết kiệm thấp. Mục tiêu ngắn hạn: đạt 15% bằng cách giảm chi tiêu linh hoạt trước.");
-        } else if (s.savingsRate < 30) {
-            advice.add("Tỷ lệ tiết kiệm ổn. Mục tiêu tiếp theo: nâng lên 30% trong 2–3 tháng tới.");
+        if (s.savingsRate() < 15) {
+            plan.add("Đặt mục tiêu tỷ lệ tiết kiệm 15% trước; ưu tiên giảm các khoản mua sắm linh hoạt.");
+        } else if (s.savingsRate() < 30) {
+            plan.add("Tỷ lệ tiết kiệm ổn; thử nâng lên 30% trong ba tháng bằng ngân sách theo danh mục.");
         } else {
-            advice.add("Tỷ lệ tiết kiệm rất tốt. Có thể chia phần dư thành quỹ dự phòng, học tập và đầu tư dài hạn.");
+            plan.add("Tỷ lệ tiết kiệm tốt; phân bổ phần dư cho quỹ khẩn cấp, học tập và mục tiêu dài hạn.");
         }
+        if (s.topCategoryAmount() > 0 && s.expense() > 0) {
+            double share = s.topCategoryAmount() * 100 / s.expense();
+            plan.add("Theo dõi " + s.topCategory() + " vì đang chiếm " + pct(share) + " tổng chi tiêu; đặt giới hạn cảnh báo ở mức 80% budget.");
+        }
+        return plan;
+    }
 
-        if (s.topCategoryAmount > 0) {
-            double share = s.expense == 0 ? 0 : s.topCategoryAmount * 100 / s.expense;
-            advice.add("Danh mục chi lớn nhất là " + s.topCategory + " (" + String.format(Locale.US, "%.1f", share) + "% chi tiêu). Đặt cảnh báo khi danh mục này vượt 80% ngân sách.");
+    public String answerQuestion(AdvisorMode mode, String question, List<Transaction> transactions) {
+        AdvisorMode safeMode = mode == null ? AdvisorMode.COACH : mode;
+        String normalized = question == null ? "" : question.trim();
+        if (normalized.isBlank()) normalized = safeMode.getDefaultQuestion();
+        if (preferences.isLocalAiEnabled()) {
+            Optional<String> generated = queryOllama(safeMode, normalized, transactions);
+            if (generated.isPresent()) return generated.get();
         }
-
-        if (s.expense > s.income * 0.75 && s.income > 0) {
-            advice.add("Chi tiêu đang vượt 75% thu nhập. Hãy rà lại subscription, hóa đơn định kỳ và các khoản mua sắm nhỏ lặp lại.");
-        } else {
-            advice.add("Cấu trúc chi tiêu hiện khá an toàn. Duy trì review dữ liệu mỗi cuối tuần.");
-        }
-        return advice;
+        return offlineAnswer(safeMode, normalized, transactions);
     }
 
     public String answerQuestion(String question, List<Transaction> transactions) {
-        String normalizedQuestion = question == null ? "" : question.trim();
-        if (normalizedQuestion.isBlank()) {
-            return "Bạn có thể hỏi: 'Tháng này tôi nên tiết kiệm bao nhiêu?', 'Danh mục nào nguy hiểm?', hoặc 'Lập kế hoạch tiết kiệm 3 tháng cho tôi'.";
-        }
-
-        String ollamaAnswer = tryOllama(normalizedQuestion, transactions);
-        if (ollamaAnswer != null && !ollamaAnswer.isBlank()) return ollamaAnswer.trim();
-
-        Snapshot s = buildSnapshot(transactions);
-        String lower = normalizedQuestion.toLowerCase(Locale.ROOT);
-        if (lower.contains("tiết kiệm") || lower.contains("save") || lower.contains("saving")) {
-            double target = Math.max(0, s.net * 0.5);
-            return "Theo dữ liệu hiện tại, bạn nên đặt mục tiêu tiết kiệm tối thiểu " + CurrencyFormatter.format(target)
-                    + ". Nếu muốn an toàn hơn, hãy ưu tiên quỹ dự phòng trước khi tăng chi tiêu giải trí.";
-        }
-        if (lower.contains("nguy") || lower.contains("rủi ro") || lower.contains("risk") || lower.contains("vượt")) {
-            return s.topCategoryAmount > 0
-                    ? "Rủi ro lớn nhất hiện nằm ở danh mục " + s.topCategory + " với tổng chi " + CurrencyFormatter.format(s.topCategoryAmount) + ". Hãy đặt trần ngân sách và bật cảnh báo budget."
-                    : "Chưa có đủ dữ liệu chi tiêu để xác định rủi ro. Hãy thêm giao dịch expense trước.";
-        }
-        if (lower.contains("budget") || lower.contains("ngân sách")) {
-            return buildBudgetSuggestion(transactions);
-        }
-        return buildSummary(transactions) + "\n\nKế hoạch đề xuất:\n- " + String.join("\n- ", buildActionPlan(transactions));
+        return answerQuestion(AdvisorMode.COACH, question, transactions);
     }
 
     public String buildBudgetSuggestion(List<Transaction> transactions) {
         Snapshot s = buildSnapshot(transactions);
-        if (s.expenseByCategory.isEmpty()) return "Chưa có dữ liệu chi tiêu. Hãy thêm expense để Smart Coach đề xuất ngân sách.";
-        StringBuilder sb = new StringBuilder("Ngân sách tháng sau nên dựa trên mức chi hiện tại, giảm nhẹ 10% ở nhóm linh hoạt:\n");
-        s.expenseByCategory.entrySet().stream()
+        if (s.expenseByCategory().isEmpty()) {
+            return "Chưa đủ dữ liệu chi tiêu để lập ngân sách. Hãy thêm các khoản expense trước.";
+        }
+        StringBuilder sb = new StringBuilder("Ngân sách đề xuất cho tháng tới:\n");
+        s.expenseByCategory().entrySet().stream()
                 .sorted(Map.Entry.<String, Double>comparingByValue(Comparator.reverseOrder()))
-                .limit(6)
-                .forEach(e -> sb.append("- ").append(e.getKey()).append(": ")
-                        .append(CurrencyFormatter.format(Math.max(50, e.getValue() * 0.9))).append("\n"));
-        return sb.toString().trim();
+                .limit(8)
+                .forEach(entry -> {
+                    double suggested = Math.max(50, entry.getValue() * 0.95);
+                    sb.append("- ").append(entry.getKey()).append(": ")
+                            .append(CurrencyFormatter.format(suggested)).append("\n");
+                });
+        return sb.append("\nMục tiêu: giữ tổng chi thấp hơn thu nhập và bảo vệ khoản tiết kiệm.").toString().trim();
     }
 
     public String buildEmailReport(List<Transaction> transactions) {
         Snapshot s = buildSnapshot(transactions);
-        return "SmartSpend AI Coach Report\n"
+        return "SmartSpend Financial Coach Report\n"
                 + "Host: " + HostInfo.HOST_NAME + " <" + HostInfo.HOST_EMAIL + ">\n\n"
-                + "Income: " + CurrencyFormatter.format(s.income) + "\n"
-                + "Expense: " + CurrencyFormatter.format(s.expense) + "\n"
-                + "Net: " + CurrencyFormatter.format(s.net) + "\n"
-                + "Savings rate: " + String.format(Locale.US, "%.1f%%", s.savingsRate) + "\n"
-                + "Top expense category: " + s.topCategory + " (" + CurrencyFormatter.format(s.topCategoryAmount) + ")\n\n"
-                + buildSummary(transactions) + "\n\nAction plan:\n- " + String.join("\n- ", buildActionPlan(transactions));
+                + "Tổng thu: " + CurrencyFormatter.format(s.income()) + "\n"
+                + "Tổng chi: " + CurrencyFormatter.format(s.expense()) + "\n"
+                + "Số dư ròng: " + CurrencyFormatter.format(s.net()) + "\n"
+                + "Tỷ lệ tiết kiệm: " + pct(s.savingsRate()) + "\n"
+                + "Chi tiêu lớn nhất: " + s.topCategory() + " (" + CurrencyFormatter.format(s.topCategoryAmount()) + ")\n\n"
+                + buildSummary(transactions) + "\n\nKế hoạch hành động:\n- " + String.join("\n- ", buildActionPlan(transactions));
+    }
+
+    public RuntimeInfo discoverRuntime() {
+        if (!preferences.isLocalAiEnabled()) {
+            return new RuntimeInfo(false, "", List.of(), "Smart Coach offline đang bật · AI local đã tắt trong cài đặt.");
+        }
+        List<String> models = queryInstalledModels();
+        if (models.isEmpty()) {
+            tryStartOllama();
+            models = queryInstalledModels();
+        }
+        if (models.isEmpty()) {
+            return new RuntimeInfo(false, "", List.of(), "Smart Coach offline đang bật · Cài Ollama + model để có phản hồi AI tự nhiên hơn.");
+        }
+        String selected = resolveSelectedModel(models);
+        return new RuntimeInfo(true, selected, models, "Ollama local đang hoạt động · Model: " + selected);
+    }
+
+    public String providerStatus() {
+        return discoverRuntime().statusText();
+    }
+
+    public List<String> availableModels() {
+        return discoverRuntime().models();
+    }
+
+    public void chooseModel(String model) {
+        preferences.setPreferredModel(model);
+    }
+
+    public boolean isLocalAiEnabled() {
+        return preferences.isLocalAiEnabled();
+    }
+
+    public void setLocalAiEnabled(boolean enabled) {
+        preferences.setLocalAiEnabled(enabled);
+    }
+
+    private String offlineAnswer(AdvisorMode mode, String question, List<Transaction> transactions) {
+        Snapshot s = buildSnapshot(transactions);
+        return switch (mode) {
+            case ANALYST -> buildSummary(transactions) + "\n\nPhân tích chi tiêu:\n- "
+                    + categoryHighlights(s) + "\n- Tổng số giao dịch đã phân tích: " + s.transactionCount() + ".";
+            case BUDGET_PLANNER -> buildBudgetSuggestion(transactions);
+            case RISK_GUARD -> riskAssessment(s);
+            case SAVINGS_PLANNER -> savingsPlan(s);
+            case COACH -> contextualOfflineAnswer(question, transactions, s);
+        };
+    }
+
+    private String contextualOfflineAnswer(String question, List<Transaction> transactions, Snapshot s) {
+        String lower = question.toLowerCase(Locale.ROOT);
+        if (lower.contains("ngân sách") || lower.contains("budget")) return buildBudgetSuggestion(transactions);
+        if (lower.contains("rủi ro") || lower.contains("nguy") || lower.contains("vượt")) return riskAssessment(s);
+        if (lower.contains("tiết kiệm") || lower.contains("save")) return savingsPlan(s);
+        return buildSummary(transactions) + "\n\nƯu tiên đề xuất:\n- " + String.join("\n- ", buildActionPlan(transactions));
+    }
+
+    private String riskAssessment(Snapshot s) {
+        if (s.transactionCount() == 0) return "Chưa đủ dữ liệu để đánh giá rủi ro.";
+        if (s.net() < 0) {
+            return "Mức rủi ro: CAO. Dòng tiền đang âm " + CurrencyFormatter.format(Math.abs(s.net()))
+                    + ". Hãy giảm " + s.topCategory() + " và hoãn chi tiêu không thiết yếu.";
+        }
+        double share = s.expense() <= 0 ? 0 : s.topCategoryAmount() * 100 / s.expense();
+        if (share >= 45) {
+            return "Mức rủi ro: CẦN THEO DÕI. " + s.topCategory() + " chiếm " + pct(share)
+                    + " tổng chi. Hãy đặt budget và cảnh báo trước khi vượt mức.";
+        }
+        return "Mức rủi ro: THẤP. Dòng tiền vẫn dương; tiếp tục kiểm tra budget và quỹ dự phòng định kỳ.";
+    }
+
+    private String savingsPlan(Snapshot s) {
+        if (s.income() <= 0) return "Chưa có dữ liệu thu nhập để lập kế hoạch tiết kiệm.";
+        double conservative = Math.max(0, s.net() * 0.4);
+        double target = Math.max(0, s.net() * 0.6);
+        return "Kế hoạch tiết kiệm gợi ý:\n- Mức tối thiểu an toàn: " + CurrencyFormatter.format(conservative)
+                + "/tháng.\n- Mục tiêu tốt: " + CurrencyFormatter.format(target)
+                + "/tháng.\n- Ưu tiên hoàn thiện quỹ khẩn cấp trước khi tăng chi tiêu linh hoạt.";
+    }
+
+    private String categoryHighlights(Snapshot s) {
+        if (s.expenseByCategory().isEmpty()) return "chưa có danh mục chi tiêu";
+        return s.expenseByCategory().entrySet().stream()
+                .sorted(Map.Entry.<String, Double>comparingByValue(Comparator.reverseOrder()))
+                .limit(3)
+                .map(entry -> entry.getKey() + " " + CurrencyFormatter.format(entry.getValue()))
+                .collect(Collectors.joining(", "));
+    }
+
+    private Optional<String> queryOllama(AdvisorMode mode, String question, List<Transaction> transactions) {
+        RuntimeInfo runtime = discoverRuntime();
+        if (!runtime.aiAvailable()) return Optional.empty();
+        Snapshot s = buildSnapshot(transactions);
+        String system = "Bạn là SmartSpend AI, trợ lý tài chính cá nhân. Trả lời bằng tiếng Việt, rõ ràng, ngắn gọn, "
+                + "dùng số liệu được cung cấp, không bịa dữ liệu, không đưa lời khuyên đầu tư rủi ro. "
+                + "Vai trò hiện tại: " + mode.getLabel() + ".";
+        String user = "Dữ liệu tài chính: tổng thu=" + CurrencyFormatter.format(s.income())
+                + ", tổng chi=" + CurrencyFormatter.format(s.expense())
+                + ", số dư=" + CurrencyFormatter.format(s.net())
+                + ", tỷ lệ tiết kiệm=" + pct(s.savingsRate())
+                + ", nhóm chi lớn nhất=" + s.topCategory() + " (" + CurrencyFormatter.format(s.topCategoryAmount()) + ").\n"
+                + "Top categories: " + categoryHighlights(s) + ".\nCâu hỏi: " + question;
+        String json = "{\"model\":\"" + escapeJson(runtime.selectedModel()) + "\",\"stream\":false,\"messages\":["
+                + "{\"role\":\"system\",\"content\":\"" + escapeJson(system) + "\"},"
+                + "{\"role\":\"user\",\"content\":\"" + escapeJson(user) + "\"}]}";
+        try {
+            HttpRequest request = HttpRequest.newBuilder(URI.create(OLLAMA_BASE + "/chat"))
+                    .timeout(Duration.ofSeconds(CHAT_TIMEOUT_SECONDS))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(json, StandardCharsets.UTF_8))
+                    .build();
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+            if (response.statusCode() < 200 || response.statusCode() >= 300) return Optional.empty();
+            String content = extractJsonString(response.body(), "content");
+            return content == null || content.isBlank() ? Optional.empty() : Optional.of(content.trim());
+        } catch (Exception ignored) {
+            return Optional.empty();
+        }
+    }
+
+    private List<String> queryInstalledModels() {
+        try {
+            HttpRequest request = HttpRequest.newBuilder(URI.create(OLLAMA_BASE + "/tags"))
+                    .timeout(Duration.ofSeconds(DISCOVERY_TIMEOUT_SECONDS))
+                    .GET().build();
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+            if (response.statusCode() < 200 || response.statusCode() >= 300) return List.of();
+            return extractModelNames(response.body());
+        } catch (Exception ignored) {
+            return List.of();
+        }
+    }
+
+    private String resolveSelectedModel(List<String> installed) {
+        String preferred = preferences.getPreferredModel();
+        if (!preferred.isBlank() && installed.contains(preferred)) return preferred;
+        for (String candidate : MODEL_PRIORITY) {
+            for (String installedModel : installed) {
+                if (installedModel.equalsIgnoreCase(candidate) || installedModel.toLowerCase(Locale.ROOT).startsWith(candidate + ":")) {
+                    return installedModel;
+                }
+            }
+        }
+        return installed.get(0);
+    }
+
+    private void tryStartOllama() {
+        if (attemptedOllamaStart) return;
+        attemptedOllamaStart = true;
+        String executable = locateOllamaExecutable();
+        if (executable == null) return;
+        try {
+            new ProcessBuilder(executable, "serve")
+                    .redirectOutput(ProcessBuilder.Redirect.DISCARD)
+                    .redirectError(ProcessBuilder.Redirect.DISCARD)
+                    .start();
+            Thread.sleep(1200);
+        } catch (Exception ignored) {
+            // Ollama is optional. Offline coach stays functional.
+        }
+    }
+
+    private String locateOllamaExecutable() {
+        String localAppData = System.getenv("LOCALAPPDATA");
+        List<String> candidates = new ArrayList<>();
+        if (localAppData != null) candidates.add(localAppData + "\\Programs\\Ollama\\ollama.exe");
+        candidates.add("C:\\Program Files\\Ollama\\ollama.exe");
+        candidates.add("C:\\Program Files (x86)\\Ollama\\ollama.exe");
+        String path = System.getenv("PATH");
+        if (path != null) {
+            for (String directory : path.split(File.pathSeparator)) {
+                candidates.add(new File(directory, "ollama.exe").getAbsolutePath());
+            }
+        }
+        return candidates.stream().filter(candidate -> new File(candidate).isFile()).findFirst().orElse(null);
+    }
+
+    private double total(List<Transaction> transactions, TransactionType type) {
+        return transactions.stream().filter(t -> t.getType() == type).mapToDouble(Transaction::getAmount).sum();
     }
 
     private Map<String, Double> expenseByCategory(List<Transaction> transactions) {
@@ -160,129 +341,8 @@ public class FinancialAdvisorService {
         return value == null || value.isBlank() ? "Khác" : value;
     }
 
-    public String providerStatus() {
-        String mode = System.getenv().getOrDefault("SMARTSPEND_USE_OLLAMA", "auto").trim().toLowerCase(Locale.ROOT);
-        if ("false".equals(mode) || "0".equals(mode) || "off".equals(mode)) {
-            return "Offline coach active · Ollama disabled by SMARTSPEND_USE_OLLAMA=false";
-        }
-        String model = resolveOllamaModel();
-        if (model == null) {
-            return "Offline coach active · Ollama not ready. Optional: install Ollama and pull llama3.2.";
-        }
-        return "Ollama local AI active · Model: " + model;
-    }
-
-    private String tryOllama(String question, List<Transaction> transactions) {
-        String mode = System.getenv().getOrDefault("SMARTSPEND_USE_OLLAMA", "auto").trim().toLowerCase(Locale.ROOT);
-        if ("false".equals(mode) || "0".equals(mode) || "off".equals(mode)) return null;
-        try {
-            String model = resolveOllamaModel();
-            if (model == null || model.isBlank()) return null;
-
-            Snapshot s = buildSnapshot(transactions);
-            String prompt = "Bạn là tư vấn viên tài chính cá nhân trong app SmartSpend. "
-                    + "Trả lời tiếng Việt, ngắn gọn, thực tế, không phán xét. "
-                    + "Hãy dùng dữ liệu thật sau: income=" + s.income + ", expense=" + s.expense + ", net=" + s.net
-                    + ", savingsRate=" + String.format(Locale.US, "%.1f", s.savingsRate)
-                    + ", topCategory=" + s.topCategory + ", topCategoryAmount=" + s.topCategoryAmount
-                    + ". Câu hỏi của người dùng: " + question;
-            String endpoint = System.getenv().getOrDefault("SMARTSPEND_OLLAMA_URL", DEFAULT_OLLAMA_ENDPOINT);
-            String json = "{\"model\":\"" + escapeJson(model) + "\",\"prompt\":\"" + escapeJson(prompt)
-                    + "\",\"stream\":false}";
-            HttpRequest request = HttpRequest.newBuilder(URI.create(endpoint))
-                    .timeout(java.time.Duration.ofSeconds(OLLAMA_TIMEOUT_SECONDS))
-                    .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(json, StandardCharsets.UTF_8))
-                    .build();
-            HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
-            if (response.statusCode() < 200 || response.statusCode() >= 300) return null;
-            return extractJsonString(response.body(), "response");
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    private String resolveOllamaModel() {
-        String configured = System.getenv().getOrDefault("SMARTSPEND_OLLAMA_MODEL", "").trim();
-        if (!configured.isBlank()) return configured;
-        List<String> installed = listInstalledOllamaModels();
-        if (installed.isEmpty()) return null;
-        for (String preferred : MODEL_PRIORITY) {
-            for (String model : installed) {
-                if (model.equalsIgnoreCase(preferred) || model.toLowerCase(Locale.ROOT).startsWith(preferred.toLowerCase(Locale.ROOT) + ":")) {
-                    return model;
-                }
-            }
-        }
-        return installed.get(0);
-    }
-
-    private List<String> listInstalledOllamaModels() {
-        List<String> firstAttempt = queryOllamaTags();
-        if (!firstAttempt.isEmpty()) return firstAttempt;
-        startOllamaServerIfPossible();
-        return queryOllamaTags();
-    }
-
-    private List<String> queryOllamaTags() {
-        String tagsEndpoint = System.getenv().getOrDefault("SMARTSPEND_OLLAMA_TAGS_URL", DEFAULT_OLLAMA_TAGS_ENDPOINT);
-        try {
-            HttpRequest request = HttpRequest.newBuilder(URI.create(tagsEndpoint))
-                    .timeout(java.time.Duration.ofSeconds(3))
-                    .GET()
-                    .build();
-            HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
-            if (response.statusCode() < 200 || response.statusCode() >= 300) return List.of();
-            return extractModelNames(response.body());
-        } catch (Exception e) {
-            return List.of();
-        }
-    }
-
-    private void startOllamaServerIfPossible() {
-        if (attemptedOllamaStart) return;
-        attemptedOllamaStart = true;
-        String executable = findOllamaExecutable();
-        if (executable == null || executable.isBlank()) return;
-        try {
-            new ProcessBuilder(executable, "serve")
-                    .redirectOutput(ProcessBuilder.Redirect.DISCARD)
-                    .redirectError(ProcessBuilder.Redirect.DISCARD)
-                    .start();
-            Thread.sleep(1200);
-        } catch (Exception ignored) {
-            // Keep SmartSpend reliable: Ollama is optional, so any launch failure falls back to offline coach.
-        }
-    }
-
-    private String findOllamaExecutable() {
-        String configured = System.getenv().getOrDefault("SMARTSPEND_OLLAMA_EXE", "").trim();
-        if (!configured.isBlank() && new java.io.File(configured).isFile()) return configured;
-
-        List<String> candidates = new ArrayList<>();
-        String localAppData = System.getenv("LOCALAPPDATA");
-        if (localAppData != null && !localAppData.isBlank()) {
-            candidates.add(localAppData + "\\Programs\\Ollama\\ollama.exe");
-        }
-        candidates.add("C:\\Program Files\\Ollama\\ollama.exe");
-        candidates.add("C:\\Program Files (x86)\\Ollama\\ollama.exe");
-
-        for (String candidate : candidates) {
-            if (new java.io.File(candidate).isFile()) return candidate;
-        }
-        return findExecutableOnPath();
-    }
-
-    private String findExecutableOnPath() {
-        String path = System.getenv("PATH");
-        if (path == null || path.isBlank()) return null;
-        String exe = System.getProperty("os.name", "").toLowerCase(Locale.ROOT).contains("win") ? "ollama.exe" : "ollama";
-        for (String dir : path.split(java.io.File.pathSeparator)) {
-            if (dir == null || dir.isBlank()) continue;
-            java.io.File candidate = new java.io.File(dir, exe);
-            if (candidate.isFile()) return candidate.getAbsolutePath();
-        }
-        return null;
+    private String pct(double value) {
+        return String.format(Locale.US, "%.1f%%", value);
     }
 
     private List<String> extractModelNames(String json) {
@@ -291,24 +351,11 @@ public class FinancialAdvisorService {
         String marker = "\"name\":\"";
         int index = 0;
         while ((index = json.indexOf(marker, index)) >= 0) {
-            index += marker.length();
-            StringBuilder sb = new StringBuilder();
-            boolean escape = false;
-            for (int i = index; i < json.length(); i++) {
-                char c = json.charAt(i);
-                if (escape) {
-                    sb.append(c);
-                    escape = false;
-                } else if (c == '\\') {
-                    escape = true;
-                } else if (c == '"') {
-                    break;
-                } else {
-                    sb.append(c);
-                }
-            }
-            String name = sb.toString().trim();
-            if (!name.isBlank()) names.add(name);
+            int start = index + marker.length();
+            int end = json.indexOf('"', start);
+            if (end < 0) break;
+            names.add(json.substring(start, end));
+            index = end + 1;
         }
         return names;
     }
@@ -318,31 +365,31 @@ public class FinancialAdvisorService {
         int start = json.indexOf(marker);
         if (start < 0) return null;
         start += marker.length();
-        StringBuilder sb = new StringBuilder();
-        boolean escape = false;
+        StringBuilder value = new StringBuilder();
+        boolean escaped = false;
         for (int i = start; i < json.length(); i++) {
-            char c = json.charAt(i);
-            if (escape) {
-                if (c == 'n') sb.append('\n');
-                else if (c == 't') sb.append('\t');
-                else sb.append(c);
-                escape = false;
-            } else if (c == '\\') {
-                escape = true;
-            } else if (c == '"') {
-                break;
+            char ch = json.charAt(i);
+            if (escaped) {
+                value.append(switch (ch) { case 'n' -> '\n'; case 'r' -> '\r'; case 't' -> '\t'; default -> ch; });
+                escaped = false;
+            } else if (ch == '\\') {
+                escaped = true;
+            } else if (ch == '"') {
+                return value.toString();
             } else {
-                sb.append(c);
+                value.append(ch);
             }
         }
-        return sb.toString();
+        return null;
     }
 
-    private String escapeJson(String value) {
-        return value.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n");
+    private String escapeJson(String text) {
+        return text.replace("\\", "\\\\").replace("\"", "\\\"").replace("\r", "").replace("\n", "\\n");
     }
 
     public record Snapshot(double income, double expense, double net, double savingsRate,
                            String topCategory, double topCategoryAmount,
-                           Map<String, Double> expenseByCategory, int transactionCount) {}
+                           Map<String, Double> expenseByCategory, int transactionCount) { }
+
+    public record RuntimeInfo(boolean aiAvailable, String selectedModel, List<String> models, String statusText) { }
 }

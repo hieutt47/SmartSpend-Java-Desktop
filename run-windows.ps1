@@ -1,60 +1,65 @@
 $ErrorActionPreference = "Stop"
 Set-Location $PSScriptRoot
 
-function Get-JavaMajorVersion($javaExe) {
+function Get-JavaMajorVersion([string]$javaExe) {
     try {
-        $output = & $javaExe -version 2>&1
-        $line = ($output | Select-Object -First 1).ToString()
-        if ($line -match 'version "([0-9]+)') { return [int]$Matches[1] }
+        $line = (& $javaExe -version 2>&1 | Select-Object -First 1).ToString()
+        if ($line -match 'version\s+"?([0-9]+)') { return [int]$Matches[1] }
     } catch { }
     return 0
 }
 
+function Add-Candidate([System.Collections.Generic.List[string]]$list, [string]$value) {
+    if ($value -and -not $list.Contains($value)) { $list.Add($value) }
+}
+
 function Find-JdkHome {
-    $candidates = @()
+    $candidates = [System.Collections.Generic.List[string]]::new()
+    Add-Candidate $candidates $env:JAVA_HOME
 
-    if ($env:JAVA_HOME) { $candidates += $env:JAVA_HOME }
-
-    $javaCmd = Get-Command java -ErrorAction SilentlyContinue
-    if ($javaCmd) {
-        $binDir = Split-Path $javaCmd.Source -Parent
-        $candidates += (Split-Path $binDir -Parent)
+    $javaCommand = Get-Command java -ErrorAction SilentlyContinue
+    if ($javaCommand) {
+        Add-Candidate $candidates (Split-Path (Split-Path $javaCommand.Source -Parent) -Parent)
     }
 
-    $searchRoots = @(
+    $roots = @(
         "$env:USERPROFILE\.jdks",
+        "$env:USERPROFILE\.jdks\openjdk-25",
+        "$env:USERPROFILE\.jdks\openjdk-21",
+        "$env:LOCALAPPDATA\Programs\Eclipse Adoptium",
         "C:\Program Files\Java",
         "C:\Program Files\Eclipse Adoptium",
         "C:\Program Files\Microsoft",
         "C:\Program Files\BellSoft"
-    ) | Where-Object { $_ -and (Test-Path $_) }
+    )
 
-    foreach ($root in $searchRoots) {
-        Get-ChildItem $root -Directory -Recurse -ErrorAction SilentlyContinue |
-            Where-Object { Test-Path (Join-Path $_.FullName "bin\java.exe") } |
-            ForEach-Object { $candidates += $_.FullName }
+    foreach ($root in $roots) {
+        if (-not $root -or -not (Test-Path $root)) { continue }
+        if (Test-Path (Join-Path $root "bin\java.exe")) { Add-Candidate $candidates $root }
+        Get-ChildItem -Path $root -Directory -Force -ErrorAction SilentlyContinue |
+            ForEach-Object { Add-Candidate $candidates $_.FullName }
     }
 
-    foreach ($home in ($candidates | Select-Object -Unique)) {
-        $javaExe = Join-Path $home "bin\java.exe"
-        $javacExe = Join-Path $home "bin\javac.exe"
-        if ((Test-Path $javaExe) -and (Test-Path $javacExe)) {
-            if ((Get-JavaMajorVersion $javaExe) -ge 21) { return $home }
+    foreach ($jdkHomeCandidate in $candidates) {
+        $javaExe = Join-Path $jdkHomeCandidate "bin\java.exe"
+        $javacExe = Join-Path $jdkHomeCandidate "bin\javac.exe"
+        if ((Test-Path $javaExe) -and (Test-Path $javacExe) -and (Get-JavaMajorVersion $javaExe) -ge 21) {
+            return $jdkHomeCandidate
         }
     }
     return $null
 }
 
-$jdk = Find-JdkHome
-if (-not $jdk) {
-    Write-Host "SmartSpend could not find JDK 21 or newer." -ForegroundColor Red
-    Write-Host "Install JDK 21+, then run this file again. In IntelliJ, you can use Project Structure -> SDK -> Download JDK."
+$jdkHome = Find-JdkHome
+if (-not $jdkHome) {
+    Write-Host "SmartSpend requires JDK 21 or newer, but no compatible JDK was found." -ForegroundColor Red
+    Write-Host "In IntelliJ: File -> Project Structure -> SDK -> Download JDK -> choose version 21."
+    Write-Host "Then reopen this terminal and run .\run-windows.cmd again."
     exit 1
 }
 
-$env:JAVA_HOME = $jdk
+$env:JAVA_HOME = $jdkHome
 $env:Path = "$env:JAVA_HOME\bin;$env:Path"
-
 Write-Host "Using JAVA_HOME=$env:JAVA_HOME" -ForegroundColor Green
 Write-Host "Starting SmartSpend..." -ForegroundColor Cyan
 & "$PSScriptRoot\mvnw.cmd" clean javafx:run

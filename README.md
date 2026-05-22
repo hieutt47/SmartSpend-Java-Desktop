@@ -1,196 +1,175 @@
-# SmartSpend Java Desktop
+# SmartSpend — Personal Finance Manager
 
-SmartSpend là ứng dụng quản lý tài chính cá nhân viết bằng JavaFX. Ứng dụng giúp người dùng ghi lại thu nhập, chi tiêu, theo dõi dòng tiền, xem thống kê theo tháng, quản lý ngân sách và nhận gợi ý tài chính thông qua Smart Coach.
+**SmartSpend** là ứng dụng desktop hỗ trợ quản lý tài chính cá nhân: ghi lại thu nhập và chi tiêu, lập ngân sách theo danh mục, theo dõi dòng tiền và nhận gợi ý tài chính từ Smart Coach.
 
-Dự án phù hợp với nhu cầu học tập, thực hành Java desktop app và xây dựng một sản phẩm quản lý chi tiêu có đầy đủ các phần thường gặp: đăng nhập, đăng ký, database, dashboard, CRUD, xuất báo cáo, gửi email và trợ lý tư vấn.
+Ứng dụng được xây dựng bằng **JavaFX** với giao diện dashboard trực quan, phù hợp cho việc theo dõi thói quen chi tiêu hằng ngày và lập kế hoạch sử dụng tiền hợp lý hơn.
 
-## Chức năng chính
+**Host / Developer:** Trần Trung Hiếu  
+**Email:** trantrunghieu30032006@gmail.com
 
-### Tài khoản
+## Những gì SmartSpend làm được
+
+### Quản lý tài khoản
 
 - Đăng ký tài khoản bằng họ tên, email và mật khẩu.
 - Đăng nhập bằng email và mật khẩu.
-- Google Sign-In ở chế độ demo/local để tạo nhanh tài khoản theo email Google.
-- Quên mật khẩu bằng mã reset 6 số.
-- Gửi email chào mừng, email mã reset và cảnh báo đăng nhập nếu đã cấu hình SMTP.
-
-### Quản lý giao dịch
-
-- Thêm giao dịch thu nhập hoặc chi tiêu.
-- Chọn ngày, danh mục, số tiền và ghi chú.
-- Sửa giao dịch bằng cách double-click trong bảng giao dịch.
-- Xóa giao dịch đã chọn.
-- Tìm kiếm và lọc giao dịch theo loại thu/chi.
-- Xuất danh sách giao dịch ra file CSV.
-- Xuất báo cáo tổng hợp ra file CSV.
+- Ghi nhớ email đăng nhập trên máy cá nhân.
+- Quên mật khẩu bằng mã xác nhận 6 số.
+- Gửi email chào mừng, mã đặt lại mật khẩu và cảnh báo đăng nhập khi người dùng đã cấu hình email notifications.
+- **Gmail quick access (local):** tạo/mở nhanh tài khoản theo email để trình diễn ứng dụng; đây không phải Google OAuth chính thức.
 
 ### Dashboard
 
-- Hiển thị số dư ròng.
-- Hiển thị thu nhập, chi tiêu và khoản tiền nên giữ lại trong tháng.
-- Biểu đồ dòng tiền 6 tháng gần nhất.
-- Danh sách giao dịch gần đây.
-- Điểm sức khỏe tài chính dựa trên dòng tiền và tỷ lệ tiết kiệm.
-- Gợi ý ưu tiên tiếp theo dựa trên dữ liệu hiện tại.
+- Xem nhanh số dư ròng, thu nhập, chi tiêu và số tiền có thể dành cho mục tiêu tiếp theo.
+- Biểu đồ dòng tiền của 6 tháng gần nhất với dữ liệu thật đã nhập.
+- Theo dõi giao dịch gần đây.
+- Điểm sức khỏe tài chính và gợi ý ưu tiên theo tình hình dòng tiền.
 
-### Budgets
+### Transactions
 
-- Xem ngân sách theo các nhóm chi tiêu.
-- Theo dõi số tiền đã chi và phần còn lại.
-- Cảnh báo trực quan khi một danh mục gần vượt ngân sách.
+- Thêm khoản thu hoặc khoản chi.
+- Ghi ngày giao dịch, danh mục và nội dung ghi chú.
+- Sửa giao dịch bằng cách double-click vào một dòng trong bảng.
+- Xóa giao dịch đã chọn.
+- Tìm kiếm và lọc theo loại giao dịch.
+- Xuất danh sách giao dịch hoặc báo cáo tổng hợp dưới dạng CSV.
+
+### Monthly Budgets
+
+- Thiết lập ngân sách cho từng danh mục chi tiêu trong tháng hiện tại.
+- Xem tổng ngân sách, số tiền đã dùng và số tiền còn lại.
+- Theo dõi mức sử dụng của từng danh mục bằng progress bar.
+- Nhận cảnh báo trực quan khi chi tiêu gần hoặc vượt giới hạn.
 
 ### Insights
 
-- So sánh thu nhập và chi tiêu.
-- Xem tỷ lệ tiết kiệm.
-- Xem nhóm chi tiêu nổi bật.
-- Đọc snapshot tài chính trong tháng.
+- So sánh thu nhập và chi tiêu theo thời gian.
+- Xem tỷ lệ tiết kiệm và dòng tiền khả dụng.
+- Phân tích các nhóm chi tiêu cao nhất dựa trên giao dịch thật.
+- Mở Smart Coach từ phần recommendation để nhận phân tích sâu hơn.
 
-### Smart Coach
+### Smart Coach AI Center
 
-Smart Coach là phần tư vấn tài chính trong app. Chức năng này đọc dữ liệu giao dịch của người dùng và đưa ra nhận xét như:
+Smart Coach là khu vực tư vấn tài chính của SmartSpend. Người dùng có thể chọn nhiều chế độ phân tích:
 
-- Tháng này dòng tiền đang ổn hay đang âm.
-- Nên tiết kiệm khoảng bao nhiêu.
-- Danh mục nào đang chi nhiều nhất.
-- Nên đặt ngân sách tháng sau như thế nào.
-- Các hành động nên làm để cải thiện tình hình tài chính.
+- **Tư vấn tổng quan:** tóm tắt tình hình tài chính và hành động nên ưu tiên.
+- **Phân tích dòng tiền:** xem thu, chi, số dư và nhóm chi tiêu nổi bật.
+- **Lập ngân sách:** đề xuất giới hạn chi tiêu cho tháng kế tiếp.
+- **Cảnh báo rủi ro:** tìm dấu hiệu chi tiêu vượt khả năng tài chính.
+- **Kế hoạch tiết kiệm:** đề xuất mức tiết kiệm phù hợp theo dữ liệu hiện có.
 
-Smart Coach luôn có chế độ tư vấn offline tích hợp sẵn nên vẫn chạy được khi không có internet hoặc chưa cài AI local. Nếu máy có cài Ollama và đã tải model, app sẽ tự nhận Ollama để trả lời tự nhiên hơn.
+Smart Coach luôn có chế độ phân tích offline nên vẫn sử dụng được ngay cả khi chưa cài AI local. Khi máy có **Ollama** và model đã tải, ứng dụng sẽ tự phát hiện và dùng mô hình AI local để trả lời tự nhiên hơn. Dữ liệu giao dịch khi dùng Ollama local chỉ được gửi tới dịch vụ chạy trên chính máy người dùng.
 
-## Yêu cầu để chạy
+## Yêu cầu để chạy ứng dụng
 
-- Windows 10/11.
-- JDK 21 hoặc mới hơn.
-- Internet ở lần chạy đầu tiên để Maven tải thư viện.
-- Không cần cài MySQL.
+- Windows 10 hoặc Windows 11.
+- JDK 21 trở lên.
+- Internet ở lần chạy đầu tiên để Maven tải các thư viện cần thiết.
 
-Database được tạo tự động bằng H2 embedded database và lưu trong thư mục `data/` của project.
+SmartSpend dùng cơ sở dữ liệu local và tự tạo dữ liệu cần thiết trong lần chạy đầu tiên. Người dùng không cần tạo database thủ công.
 
-## Cách chạy trên Windows
+## Chạy SmartSpend trên Windows
 
-Mở terminal tại thư mục chứa file `pom.xml`, sau đó chạy:
+### Cách nhanh nhất
+
+1. Giải nén project.
+2. Mở terminal tại thư mục có file `pom.xml`.
+3. Chạy:
 
 ```powershell
 .\run-windows.cmd
 ```
 
-File này sẽ tự tìm JDK 21+ trên máy và chạy project bằng Maven Wrapper.
+Script sẽ tìm JDK phù hợp trên máy và khởi động ứng dụng.
 
-Nếu muốn chạy thủ công:
+### Chạy trực tiếp bằng Maven Wrapper
+
+Khi máy đã cấu hình Java sẵn, có thể chạy:
 
 ```powershell
 .\mvnw.cmd clean javafx:run
 ```
 
-Nếu PowerShell/CMD báo chưa tìm thấy Java, hãy cài JDK 21 hoặc chọn JDK 21 trong IntelliJ IDEA.
+### Mở project bằng IntelliJ IDEA
 
-## Cách mở bằng IntelliJ IDEA
-
-1. Mở IntelliJ IDEA.
-2. Chọn **File → Open**.
-3. Chọn thư mục chứa `pom.xml`.
-4. Bấm **Trust Project** nếu IntelliJ hỏi.
-5. Vào **File → Project Structure → Project** và chọn SDK là JDK 21 hoặc mới hơn.
-6. Mở tab Maven bên phải và bấm **Reload All Maven Projects**.
-7. Mở Terminal trong IntelliJ và chạy:
+1. Mở IntelliJ IDEA → **File → Open**.
+2. Chọn thư mục chứa `pom.xml`.
+3. Khi IntelliJ hỏi, chọn **Trust Project**.
+4. Vào **File → Project Structure → Project**, chọn SDK là JDK 21 trở lên.
+5. Mở tab **Maven** và chọn **Reload All Maven Projects**.
+6. Mở Terminal trong IntelliJ và chạy:
 
 ```powershell
 .\run-windows.cmd
 ```
 
-## Tài khoản demo
+## Tài khoản dùng thử
 
 ```text
 Email: demo@smartspend.test
 Password: demo123
 ```
 
-Bạn cũng có thể tự đăng ký tài khoản mới trong màn hình Register.
+Bạn cũng có thể đăng ký tài khoản mới trực tiếp tại màn hình đăng ký.
 
-## Cấu hình gửi email
+## Bật tính năng gửi email
 
-Trong app, mở mục **Email notifications** ở sidebar.
+Email notifications giúp SmartSpend gửi mã quên mật khẩu, email chào mừng, cảnh báo đăng nhập và báo cáo từ Smart Coach.
 
-Nếu dùng Gmail, điền như sau:
+Trong ứng dụng, mở mục **Email notifications** rồi điền thông tin SMTP. Với Gmail:
 
 ```text
 SMTP Host: smtp.gmail.com
 SMTP Port: 465
-From Email: email Gmail của bạn
-Username: email Gmail của bạn
+From Email: địa chỉ Gmail dùng để gửi
+Username: địa chỉ Gmail dùng để gửi
 Password: Gmail App Password
 Use SSL/TLS: bật
 ```
 
-Sau đó bấm **Save** và **Send Test Email**.
+Sau khi lưu, bấm **Send Test Email** để kiểm tra.
 
-Lưu ý: Gmail không cho dùng mật khẩu Gmail thường để gửi SMTP. Bạn cần bật xác minh 2 bước trong tài khoản Google và tạo **App Password**. App Password thường là mã 16 ký tự.
+Lưu ý: Gmail yêu cầu dùng **App Password**, không dùng mật khẩu đăng nhập Gmail thông thường. Nếu chưa cấu hình email, các chức năng còn lại vẫn hoạt động; phần quên mật khẩu có thể hiển thị mã kiểm thử ngay trong ứng dụng.
 
-Khi SMTP hoạt động, SmartSpend có thể gửi:
+## Sử dụng AI local với Ollama
 
-- Mã quên mật khẩu.
-- Email chào mừng khi đăng ký.
-- Email cảnh báo đăng nhập.
-- Báo cáo từ Smart Coach.
+Ollama là phần mở rộng tùy chọn dành cho Smart Coach. Ứng dụng vẫn dùng được khi không cài Ollama.
 
-Nếu chưa cấu hình SMTP, app vẫn hoạt động bình thường. Riêng chức năng quên mật khẩu sẽ hiện mã reset demo trong popup để có thể kiểm thử offline.
-
-## Smart Coach và Ollama
-
-Ollama là tùy chọn, không bắt buộc.
-
-Nếu muốn Smart Coach trả lời tự nhiên hơn bằng AI local, cài Ollama và tải model:
+Để cài nhanh trên Windows và tải model mặc định:
 
 ```powershell
 .\setup-ollama-windows.ps1
 ```
 
-Hoặc chạy thủ công:
+Hoặc nếu đã cài Ollama, chạy:
 
 ```powershell
 ollama pull llama3.2
 ```
 
-Sau khi Ollama chạy được, mở SmartSpend và vào **Smart Coach**. App sẽ tự phát hiện Ollama ở máy local, không cần nhập API key và không cần cấu hình biến môi trường.
+Sau đó mở SmartSpend → **Smart Coach**. Ứng dụng tự kiểm tra Ollama local, hiển thị các model đã cài và cho phép chọn model trực tiếp trong giao diện.
 
-Nếu Ollama chưa có hoặc chưa sẵn sàng, Smart Coach tự dùng chế độ offline tích hợp sẵn.
+## Dữ liệu cá nhân
 
-## Dữ liệu ứng dụng
-
-Dữ liệu local nằm trong:
+Dữ liệu của ứng dụng được lưu trên máy trong thư mục:
 
 ```text
-./data/smartspend.mv.db
+./data/
 ```
 
-Muốn reset dữ liệu demo:
+Muốn tạo lại dữ liệu từ đầu:
 
-1. Đóng app.
+1. Đóng ứng dụng.
 2. Xóa thư mục `data/`.
-3. Chạy lại app.
+3. Chạy lại SmartSpend.
 
-App sẽ tự tạo lại database, danh mục mặc định và tài khoản demo.
+## Lưu ý khi đưa source code lên GitHub
 
-## Thông tin host
-
-```text
-Trần Trung Hiếu
-trantrunghieu30032006@gmail.com
-```
-
-Thông tin này được dùng trong phần Support, chữ ký email và báo cáo xuất từ app.
-
-## Ghi chú bảo mật
-
-Không đưa các thông tin sau lên GitHub:
+Không đưa các nội dung riêng tư hoặc cấu hình bí mật lên repository, đặc biệt là:
 
 ```text
 Gmail App Password
-API keys
-data/
-*.mv.db
-*.trace.db
+API key
+Thư mục data/
+File database local
 ```
-
-Repo nên chỉ chứa source code, file cấu hình mẫu và hướng dẫn chạy.

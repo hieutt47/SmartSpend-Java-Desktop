@@ -102,3 +102,39 @@
     -fx-font-size: 12px;
     -fx-font-weight: 900;
 }
+.btn-outline {
+    -fx-background-color: white;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 14;
+    -fx-background-radius: 14;
+    -fx-text-fill: #0f172a;
+    -fx-font-weight: 800;
+    -fx-padding: 12 16;
+    -fx-cursor: hand;
+}
+.budget-card {
+    -fx-background-color: white;
+    -fx-background-radius: 18;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 18;
+    -fx-padding: 18;
+    -fx-effect: dropshadow(three-pass-box, rgba(15,23,42,0.04), 9, 0, 0, 2);
+}
+.budget-category-name { -fx-font-weight: 800; -fx-font-size: 14px; -fx-text-fill: #0f172a; }
+.budget-spent { -fx-font-size: 20px; -fx-font-weight: 900; -fx-text-fill: #0f172a; }
+.budget-pct-safe { -fx-text-fill: #2563eb; -fx-font-weight: 900; }
+.budget-pct-danger { -fx-text-fill: #dc2626; -fx-font-weight: 900; }
+.budget-remaining { -fx-text-fill: #64748b; -fx-font-size: 12px; }
+.budget-remaining-danger { -fx-text-fill: #dc2626; -fx-font-size: 12px; -fx-font-weight: 700; }
+.budget-bar-safe .track, .budget-bar-danger .track { -fx-background-color: #e2e8f0; -fx-background-radius: 999; }
+.budget-bar-safe .bar { -fx-background-color: #2563eb; -fx-background-radius: 999; }
+.budget-bar-danger .bar { -fx-background-color: #ef4444; -fx-background-radius: 999; }
+.empty-state {
+    -fx-background-color: white;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 16;
+    -fx-background-radius: 16;
+    -fx-padding: 24;
+    -fx-text-fill: #64748b;
+    -fx-font-size: 14px;
+}

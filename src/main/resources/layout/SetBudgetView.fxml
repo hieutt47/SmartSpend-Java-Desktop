@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefWidth="450" prefHeight="350" styleClass="dialog-root" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.smartspend.controller.SetBudgetController">
+    <stylesheets><URL value="@../css/dialogs.css" /></stylesheets>
+    <children>
+        <VBox styleClass="dialog-header">
+            <children>
+                <Label styleClass="dialog-title" text="Set Monthly Budget" />
+                <Label styleClass="dialog-subtitle" text="Thiết lập giới hạn chi tiêu cho tháng hiện tại." />
+            </children>
+        </VBox>
+        <VBox styleClass="dialog-body" spacing="16" VBox.vgrow="ALWAYS">
+            <children>
+                <VBox spacing="6">
+                    <Label styleClass="field-label" text="EXPENSE CATEGORY" />
+                    <ComboBox fx:id="cbCategory" maxWidth="Infinity" styleClass="field-input" promptText="Chọn danh mục" />
+                </VBox>
+                <VBox spacing="6">
+                    <Label styleClass="field-label" text="MONTHLY LIMIT" />
+                    <TextField fx:id="txtAmount" styleClass="field-input" promptText="Ví dụ: 2500000" />
+                </VBox>
+            </children>
+        </VBox>
+        <HBox styleClass="dialog-footer" alignment="CENTER_RIGHT">
+            <children><Button onAction="#handleSave" styleClass="dialog-btn-primary" text="Save Budget" /></children>
+        </HBox>
+    </children>
+</VBox>

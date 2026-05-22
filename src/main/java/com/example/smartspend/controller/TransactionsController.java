@@ -43,6 +43,7 @@ public class TransactionsController implements Initializable {
     @FXML private Label lblTopCategory;
     @FXML private Label lblTopCategoryAmount;
     @FXML private Label lblTopCategoryPct;
+    @FXML private Label lblRecordCount;
     @FXML private ComboBox<String> cbFilterCategory;
     @FXML private ComboBox<String> cbFilterAccount;
     @FXML private ComboBox<String> cbFilterStatus;
@@ -117,21 +118,23 @@ public class TransactionsController implements Initializable {
     }
 
     private void setupComboBoxes() {
-        cbFilterCategory.getItems().setAll("All Categories", "Income", "Expense");
-        cbFilterCategory.setValue("All Categories");
+        cbFilterCategory.getItems().setAll("All Types", "Income", "Expense");
+        cbFilterCategory.setValue("All Types");
         if (cbFilterAccount != null) {
             cbFilterAccount.getItems().setAll("All Accounts", "Cash", "Bank");
             cbFilterAccount.setValue("All Accounts");
         }
-        cbFilterStatus.getItems().setAll("All Status", "Completed");
-        cbFilterStatus.setValue("All Status");
+        if (cbFilterStatus != null) {
+            cbFilterStatus.getItems().setAll("All Status", "Completed");
+            cbFilterStatus.setValue("All Status");
+        }
     }
 
     private void setupListeners() {
         txtSearch.textProperty().addListener((obs, oldVal, newVal) -> applyFilters());
         cbFilterCategory.setOnAction(e -> applyFilters());
         tblTransactions.getSelectionModel().selectedItemProperty().addListener((obs, old, selected) -> {
-            if (lblSelectedCount != null) lblSelectedCount.setText(selected == null ? "0 selected" : "1 selected");
+            if (lblSelectedCount != null) lblSelectedCount.setText(selected == null ? "No transaction selected" : "1 transaction selected");
         });
     }
 
@@ -153,7 +156,7 @@ public class TransactionsController implements Initializable {
                     || category.contains(keyword)
                     || t.getType().name().toLowerCase().contains(keyword)
                     || (t.getDate() != null && t.getDate().toString().contains(keyword));
-            boolean matchesType = filter == null || filter.equals("All Categories")
+            boolean matchesType = filter == null || filter.equals("All Types")
                     || (filter.equals("Income") && t.getType() == TransactionType.INCOME)
                     || (filter.equals("Expense") && t.getType() == TransactionType.EXPENSE);
             return matchesKeyword && matchesType;
@@ -167,10 +170,18 @@ public class TransactionsController implements Initializable {
         double totalIncome = transactions.stream().filter(t -> t.getType() == TransactionType.INCOME).mapToDouble(Transaction::getAmount).sum();
         lblTotalSpent.setText(CurrencyFormatter.format(totalExpense));
         if (lblSpentBadge != null) lblSpentBadge.setText("Net: " + CurrencyFormatter.format(totalIncome - totalExpense));
-        lblTopCategory.setText(totalIncome >= totalExpense ? "Income" : "Expense");
-        lblTopCategoryAmount.setText(CurrencyFormatter.format(Math.max(totalIncome, totalExpense)));
-        int pct = (totalIncome + totalExpense) == 0 ? 0 : (int) Math.round(Math.max(totalIncome, totalExpense) * 100 / (totalIncome + totalExpense));
-        lblTopCategoryPct.setText(pct + "% of cash flow");
+        java.util.Map<String, Double> categoryTotals = transactions.stream()
+                .filter(t -> t.getType() == TransactionType.EXPENSE)
+                .collect(java.util.stream.Collectors.groupingBy(
+                        t -> t.getCategoryName() == null || t.getCategoryName().isBlank() ? "Khác" : t.getCategoryName(),
+                        java.util.stream.Collectors.summingDouble(Transaction::getAmount)));
+        java.util.Map.Entry<String, Double> top = categoryTotals.entrySet().stream()
+                .max(java.util.Map.Entry.comparingByValue()).orElse(null);
+        lblTopCategory.setText(top == null ? "No expenses" : top.getKey());
+        lblTopCategoryAmount.setText(top == null ? CurrencyFormatter.format(0) : CurrencyFormatter.format(top.getValue()));
+        int pct = top == null || totalExpense <= 0 ? 0 : (int) Math.round(top.getValue() * 100 / totalExpense);
+        lblTopCategoryPct.setText(pct + "% of expenses");
+        if (lblRecordCount != null) lblRecordCount.setText(String.valueOf(transactions.size()));
     }
 
     private void updateRowCountLabel(int count) {
@@ -181,8 +192,8 @@ public class TransactionsController implements Initializable {
 
     @FXML private void handleClearFilters() {
         txtSearch.clear();
-        cbFilterCategory.setValue("All Categories");
-        cbFilterStatus.setValue("All Status");
+        cbFilterCategory.setValue("All Types");
+        if (cbFilterStatus != null) cbFilterStatus.setValue("All Status");
         applyFilters();
     }
 

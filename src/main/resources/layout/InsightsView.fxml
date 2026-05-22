@@ -146,7 +146,7 @@
                                 <Label fx:id="lblRecoBody" styleClass="reco-body"
                                        text="Phân tích dữ liệu giao dịch của bạn để đưa ra gợi ý tối ưu..."
                                        wrapText="true"/>
-                                <Button text="View Opportunities" styleClass="reco-btn" maxWidth="Infinity"/>
+                                <Button text="Open Smart Coach" onAction="#handleOpenCoach" styleClass="reco-btn" maxWidth="Infinity"/>
                             </VBox>
 
                             <VBox styleClass="snapshot-card" spacing="12.0">

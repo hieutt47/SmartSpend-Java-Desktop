@@ -123,8 +123,7 @@
 
                         <HBox spacing="15.0">
                             <children>
-                                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="40.0" onAction="#handleGoogleLogin" styleClass="social-button" text="Google" HBox.hgrow="ALWAYS" />
-                                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="40.0" onAction="#handleAppleLogin" styleClass="social-button" text="Apple ID" HBox.hgrow="ALWAYS" />
+                                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="40.0" onAction="#handleGoogleLogin" styleClass="social-button" text="Gmail quick access" HBox.hgrow="ALWAYS" />
                             </children>
                         </HBox>
 

@@ -91,15 +91,10 @@
                         <Region HBox.hgrow="ALWAYS"/>
                         <!-- END PLACEHOLDER -->
 
-                        <!-- Card 3: Active Accounts -->
                         <VBox styleClass="summary-card" spacing="8.0" HBox.hgrow="ALWAYS">
-                            <Label styleClass="summary-label" text="ACTIVE ACCOUNTS"/>
-                            <HBox alignment="CENTER_LEFT" spacing="-8.0">
-                                <Circle fill="#0d52c6" radius="18.0"/>
-                                <Circle fill="#10b981" radius="18.0"/>
-                                <Circle fill="#f59e0b" radius="18.0"/>
-                            </HBox>
-                            <Label styleClass="page-subtitle" text="3 linked accounts"/>
+                            <Label styleClass="summary-label" text="RECORDED TRANSACTIONS"/>
+                            <Label fx:id="lblRecordCount" styleClass="summary-value" text="0"/>
+                            <Label styleClass="page-subtitle" text="entries in your ledger"/>
                         </VBox>
 
                     </HBox>
@@ -109,36 +104,21 @@
                          ══════════════════════════════════════ -->
                     <HBox styleClass="filter-container" alignment="CENTER_LEFT" spacing="12.0">
                         <Label text="Date" style="-fx-font-size: 14px; -fx-text-fill: #64748b;"/>
-                        <Label text="Oct 1, 2023 — Oct 31, 2023"
+                        <Label text="All recorded activity"
                                style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #334155;"/>
                         <Separator orientation="VERTICAL" style="-fx-background-color: #e2e8f0;"/>
 
                         <ComboBox fx:id="cbFilterCategory"
-                                  promptText="All Categories"
+                                  promptText="All Types"
                                   styleClass="filter-dropdown"
                                   prefWidth="155.0"/>
-
-                        <ComboBox fx:id="cbFilterAccount"
-                                  promptText="All Accounts"
-                                  styleClass="filter-dropdown"
-                                  prefWidth="145.0"/>
-
-                        <ComboBox fx:id="cbFilterStatus"
-                                  promptText="Status"
-                                  styleClass="filter-dropdown"
-                                  prefWidth="120.0"/>
 
                         <Region HBox.hgrow="ALWAYS"/>
                         <Button styleClass="btn-filter-icon" text="Filters" onAction="#handleFilter"/>
                     </HBox>
 
-                    <!-- ══════════════════════════════════════
-                         FILTER TAGS (Active Filters)
-                         ══════════════════════════════════════ -->
                     <HBox alignment="CENTER_LEFT" spacing="8.0">
-                        <Button styleClass="tag-chip" text="High Amount > 500+  ×"/>
-                        <Button styleClass="tag-chip" text="Business  ×"/>
-                        <Button styleClass="tag-clear-all" text="Clear all filters" onAction="#handleClearFilters"/>
+                        <Button styleClass="tag-clear-all" text="Clear search and filters" onAction="#handleClearFilters"/>
                     </HBox>
 
                     <!-- ══════════════════════════════════════
@@ -148,10 +128,8 @@
 
                         <!-- Table Action Bar -->
                         <HBox styleClass="table-action-bar" alignment="CENTER_LEFT" spacing="12.0">
-                            <CheckBox fx:id="chkSelectAll"/>
-                            <Label fx:id="lblSelectedCount" styleClass="table-selected-label" text="0 items selected"/>
-                            <Button styleClass="btn-edit-tags" text="Edit Tags"/>
-                            <Button styleClass="btn-delete-sel" text="Delete" onAction="#handleDeleteSelected"/>
+                            <Label fx:id="lblSelectedCount" styleClass="table-selected-label" text="No transaction selected"/>
+                            <Button styleClass="btn-delete-sel" text="Delete selected" onAction="#handleDeleteSelected"/>
                             <Region HBox.hgrow="ALWAYS"/>
                             <Label fx:id="lblRowCount" styleClass="table-count-label" text="Showing 0 transactions"/>
                         </HBox>
@@ -187,21 +165,6 @@
                                        style="-fx-text-fill: #94a3b8; -fx-font-size: 14px;"/>
                             </placeholder>
                         </TableView>
-
-                        <!-- Pagination Bar -->
-                        <HBox styleClass="pagination-bar" alignment="CENTER_LEFT" spacing="6.0">
-                            <Button styleClass="page-btn-nav" text="‹" onAction="#handlePrevPage"/>
-                            <Button fx:id="btnPage1" styleClass="page-btn-active" text="1" onAction="#handlePageChange"/>
-                            <Button styleClass="page-btn" text="2" onAction="#handlePageChange"/>
-                            <Button styleClass="page-btn" text="3" onAction="#handlePageChange"/>
-                            <Label text="..." styleClass="page-size-label" style="-fx-padding: 0 4;"/>
-                            <Button styleClass="page-btn" text="8" onAction="#handlePageChange"/>
-                            <Button styleClass="page-btn-nav" text="›" onAction="#handleNextPage"/>
-                            <Region HBox.hgrow="ALWAYS"/>
-                            <Label styleClass="page-size-label" text="Show"/>
-                            <ComboBox fx:id="cbPageSize" prefWidth="80.0" styleClass="filter-dropdown"/>
-                            <Label styleClass="page-size-label" text="per page"/>
-                        </HBox>
 
                     </VBox>
                     <!-- END TABLE CARD -->

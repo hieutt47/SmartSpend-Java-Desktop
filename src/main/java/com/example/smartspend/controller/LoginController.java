@@ -98,8 +98,8 @@ public class LoginController {
     @FXML
     private void handleGoogleLogin(ActionEvent event) {
         TextInputDialog dialog = new TextInputDialog(emailField.getText() == null ? "" : emailField.getText().trim());
-        dialog.setTitle("Google Sign-In");
-        dialog.setHeaderText("Google Sign-In demo mode");
+        dialog.setTitle("Gmail quick access");
+        dialog.setHeaderText("Gmail quick access (local)");
         dialog.setContentText("Nhập Gmail để tiếp tục. Khi cấu hình OAuth Client ID thật, nút này có thể nối với Google OAuth.");
 
         Optional<String> result = dialog.showAndWait();
@@ -107,7 +107,7 @@ public class LoginController {
 
         String email = result.get().trim().toLowerCase();
         if (!EMAIL_PATTERN.matcher(email).matches()) {
-            showError("Google Sign-In", "Email không hợp lệ. Vui lòng nhập dạng name@example.com");
+            showError("Gmail quick access", "Email không hợp lệ. Vui lòng nhập dạng name@example.com");
             return;
         }
 
@@ -115,7 +115,7 @@ public class LoginController {
         UserDAO userDAO = new UserDAO();
         int userId = userDAO.getOrCreateExternalUser(name, email, "GOOGLE");
         if (userId <= 0) {
-            showError("Google Sign-In", "Không thể tạo hoặc mở tài khoản Google demo.");
+            showError("Gmail quick access", "Không thể tạo hoặc mở tài khoản Gmail local.");
             return;
         }
 
@@ -123,11 +123,6 @@ public class LoginController {
         keepLoggedInCheckBox.setSelected(true);
         new EmailService().sendLoginNotice(email);
         openMainLayout(event, userId, email);
-    }
-
-    @FXML
-    private void handleAppleLogin(ActionEvent event) {
-        showError("Apple ID", "Tính năng Apple ID đang để ở trạng thái demo. Bản này ưu tiên Google Sign-In và email/password.");
     }
 
     private void openMainLayout(ActionEvent event, int userId, String email) {

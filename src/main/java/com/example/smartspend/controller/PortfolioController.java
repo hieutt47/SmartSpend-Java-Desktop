@@ -177,7 +177,19 @@ public class PortfolioController {
             styleSeries(incomeSeries, "#16a34a");
             styleSeries(expenseSeries, "#ef4444");
             styleSeries(netSeries, "#2563eb");
+            styleChartLegend();
         });
+    }
+
+    private void styleChartLegend() {
+        if (portfolioChart == null) return;
+        String[] colors = {"#16a34a", "#ef4444", "#2563eb"};
+        int index = 0;
+        for (javafx.scene.Node symbol : portfolioChart.lookupAll(".chart-legend-item-symbol")) {
+            if (index >= colors.length) break;
+            symbol.setStyle("-fx-background-color: " + colors[index] + "; -fx-background-radius: 6; -fx-padding: 5;");
+            index++;
+        }
     }
 
     private void styleSeries(XYChart.Series<String, Number> series, String color) {

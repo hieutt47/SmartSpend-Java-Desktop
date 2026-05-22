@@ -223,10 +223,26 @@
 .axis { -fx-tick-label-fill: #64748b; }
 .axis-label { -fx-text-fill: #64748b; }
 .default-color0.chart-bar {
-    -fx-bar-fill: linear-gradient(to top, #1d4ed8, #60a5fa);
+    -fx-bar-fill: #16a34a;
     -fx-background-radius: 10 10 0 0;
 }
 .chart-series-bar-line { -fx-stroke: transparent; }
+
+.default-color0.chart-legend-item-symbol {
+    -fx-background-color: #16a34a;
+    -fx-background-radius: 6;
+    -fx-padding: 5;
+}
+.default-color1.chart-legend-item-symbol {
+    -fx-background-color: #ef4444;
+    -fx-background-radius: 6;
+    -fx-padding: 5;
+}
+.default-color2.chart-legend-item-symbol {
+    -fx-background-color: #2563eb;
+    -fx-background-radius: 6;
+    -fx-padding: 5;
+}
 
 
 .avatar-label {

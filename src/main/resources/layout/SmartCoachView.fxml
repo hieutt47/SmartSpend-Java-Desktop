@@ -2,7 +2,10 @@
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.BorderPane?>
@@ -17,38 +20,49 @@
     <center>
         <ScrollPane fitToWidth="true" styleClass="coach-scroll">
             <content>
-                <VBox spacing="24.0" styleClass="coach-content">
-                    <padding><Insets top="34" right="38" bottom="42" left="38" /></padding>
+                <VBox spacing="22.0" styleClass="coach-content">
+                    <padding><Insets top="30" right="38" bottom="42" left="38" /></padding>
                     <children>
-                        <HBox alignment="CENTER_LEFT">
+                        <HBox alignment="CENTER_LEFT" spacing="14">
                             <children>
-                                <VBox spacing="8.0">
-                                    <Label styleClass="eyebrow" text="AUTO-DETECTED LOCAL AI FINANCIAL COACH" />
-                                    <Label styleClass="page-title" text="SmartSpend Money Advisor" />
+                                <VBox spacing="6.0">
+                                    <Label styleClass="eyebrow" text="PRIVATE FINANCIAL INTELLIGENCE" />
+                                    <Label styleClass="page-title" text="Smart Coach AI Center" />
                                     <Label fx:id="lblHost" styleClass="host-line" text="Host: Trần Trung Hiếu" />
-                                    <Label fx:id="lblProviderStatus" styleClass="provider-line" text="Offline coach active" />
                                 </VBox>
                                 <Region HBox.hgrow="ALWAYS" />
-                                <Button text="Refresh analysis" onAction="#handleRefresh" styleClass="coach-secondary-btn" />
+                                <Button text="Refresh data" onAction="#handleRefresh" styleClass="coach-secondary-btn" />
                                 <Button text="Email report" onAction="#handleEmailReport" styleClass="coach-primary-btn" />
+                            </children>
+                        </HBox>
+
+                        <HBox spacing="16.0" styleClass="engine-panel" alignment="CENTER_LEFT">
+                            <children>
+                                <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                    <Label styleClass="engine-title" text="AI Engine" />
+                                    <Label fx:id="lblProviderStatus" styleClass="provider-line" text="Đang kiểm tra AI local..." wrapText="true" />
+                                </VBox>
+                                <CheckBox fx:id="chkUseLocalAi" text="Use Ollama AI" styleClass="engine-check" />
+                                <ComboBox fx:id="cbModel" promptText="Auto model" prefWidth="185" styleClass="coach-combo" />
+                                <Button text="Reconnect" onAction="#handleRefreshAi" styleClass="coach-secondary-btn" />
                             </children>
                         </HBox>
 
                         <HBox spacing="18.0">
                             <children>
                                 <VBox styleClass="hero-card" spacing="12.0" HBox.hgrow="ALWAYS">
-                                    <Label styleClass="hero-title" text="Personalized financial guidance" />
+                                    <Label styleClass="hero-title" text="Your financial briefing" />
                                     <Label fx:id="lblCoachSummary" styleClass="hero-body" text="Analyzing your transactions..." wrapText="true" />
                                 </VBox>
-                                <VBox styleClass="stat-card" spacing="6.0" prefWidth="210.0">
+                                <VBox styleClass="stat-card" spacing="6.0" prefWidth="195.0">
                                     <Label styleClass="stat-label" text="NET BALANCE" />
                                     <Label fx:id="lblNetBalance" styleClass="stat-value" text="0" />
                                 </VBox>
-                                <VBox styleClass="stat-card" spacing="6.0" prefWidth="190.0">
+                                <VBox styleClass="stat-card" spacing="6.0" prefWidth="180.0">
                                     <Label styleClass="stat-label" text="SAVINGS RATE" />
                                     <Label fx:id="lblSavingsRate" styleClass="stat-value" text="0%" />
                                 </VBox>
-                                <VBox styleClass="stat-card" spacing="6.0" prefWidth="190.0">
+                                <VBox styleClass="stat-card" spacing="6.0" prefWidth="155.0">
                                     <Label styleClass="stat-label" text="RISK LEVEL" />
                                     <Label fx:id="lblRiskLevel" styleClass="stat-value-small" text="—" />
                                 </VBox>
@@ -57,11 +71,23 @@
 
                         <VBox styleClass="panel-card" spacing="14.0">
                             <children>
-                                <Label styleClass="panel-title" text="Ask Smart Coach" />
-                                <TextArea fx:id="txtQuestion" prefRowCount="3" wrapText="true" promptText="Ví dụ: Tháng này tôi nên tiết kiệm bao nhiêu? Danh mục nào nguy hiểm? Hãy lập kế hoạch tiết kiệm 3 tháng." styleClass="coach-question" />
+                                <HBox alignment="CENTER_LEFT" spacing="12">
+                                    <Label styleClass="panel-title" text="Ask a specialist" />
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <Label styleClass="muted-text" text="Specialist mode" />
+                                    <ComboBox fx:id="cbMode" prefWidth="210" styleClass="coach-combo" />
+                                </HBox>
+                                <HBox spacing="8">
+                                    <Button text="Savings plan" onAction="#handleQuickSaving" styleClass="chip-btn" />
+                                    <Button text="Budget proposal" onAction="#handleQuickBudget" styleClass="chip-btn" />
+                                    <Button text="Risk scan" onAction="#handleQuickRisk" styleClass="chip-btn" />
+                                    <Button text="Full review" onAction="#handleFullReview" styleClass="chip-btn" />
+                                </HBox>
+                                <TextArea fx:id="txtQuestion" prefRowCount="3" wrapText="true" promptText="Hỏi về tiết kiệm, ngân sách, rủi ro hoặc kế hoạch tài chính..." styleClass="coach-question" />
                                 <HBox alignment="CENTER_LEFT" spacing="12.0">
-                                    <Button text="Ask Coach" onAction="#handleAskCoach" styleClass="coach-primary-btn" />
-                                    <Label text="Works offline. If Ollama is installed, SmartSpend uses it automatically." styleClass="muted-text" />
+                                    <Button fx:id="btnAsk" text="Generate advice" onAction="#handleAskCoach" styleClass="coach-primary-btn" />
+                                    <ProgressIndicator fx:id="piThinking" prefHeight="24" prefWidth="24" visible="false" managed="false" />
+                                    <Label fx:id="lblTaskStatus" text="Sẵn sàng tư vấn." styleClass="muted-text" />
                                 </HBox>
                                 <Label fx:id="lblCoachAnswer" wrapText="true" styleClass="coach-answer" text="" />
                             </children>
