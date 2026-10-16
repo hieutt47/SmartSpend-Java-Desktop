@@ -4,8 +4,9 @@
 
 Ứng dụng được xây dựng bằng **JavaFX** với giao diện dashboard trực quan, phù hợp cho việc theo dõi thói quen chi tiêu hằng ngày và lập kế hoạch sử dụng tiền hợp lý hơn.
 
-**Host / Developer:** Lê Hoàng Anh  
-**Email:** hoanganh1612006@gmail.com
+**Developers:**  
+- Lê Hoàng Anh — hoanganh1612006@gmail.com  
+- Trần Trung Hiếu — trantrunghieu30032006@gmail.com
 
 ## Những gì SmartSpend làm được
 
