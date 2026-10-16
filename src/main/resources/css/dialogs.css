@@ -1,0 +1,67 @@
+
+.dialog-root {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 24;
+    -fx-font-family: "Segoe UI", "Inter", Arial, sans-serif;
+}
+.dialog-header {
+    -fx-background-color: linear-gradient(to right, #0f172a, #1d4ed8);
+    -fx-background-radius: 24 24 0 0;
+    -fx-padding: 24 26 22 26;
+}
+.dialog-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: 900;
+    -fx-text-fill: white;
+}
+.dialog-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #dbeafe;
+}
+.dialog-body {
+    -fx-padding: 22 26 22 26;
+    -fx-spacing: 16;
+}
+.field-label {
+    -fx-font-size: 11px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #64748b;
+    -fx-letter-spacing: 1px;
+}
+.field-input {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 10 12;
+    -fx-font-size: 13px;
+}
+.field-input:focused {
+    -fx-border-color: #93c5fd;
+    -fx-background-color: white;
+}
+.text-area.field-input {
+    -fx-padding: 8 10;
+}
+.dialog-footer {
+    -fx-border-color: #eef2f7 transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+    -fx-padding: 18 26 24 26;
+}
+.dialog-btn-success, .dialog-btn-danger, .dialog-btn-primary {
+    -fx-font-size: 13px;
+    -fx-font-weight: 800;
+    -fx-padding: 12 16;
+    -fx-background-radius: 14;
+    -fx-cursor: hand;
+    -fx-text-fill: white;
+}
+.dialog-btn-success {
+    -fx-background-color: #16a34a;
+}
+.dialog-btn-danger {
+    -fx-background-color: #dc2626;
+}
+.dialog-btn-primary {
+    -fx-background-color: #2563eb;
+}

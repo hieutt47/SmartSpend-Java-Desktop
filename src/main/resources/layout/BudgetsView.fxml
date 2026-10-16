@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:controller="com.example.smartspend.controller.BudgetsController" prefHeight="900.0" prefWidth="1040.0" styleClass="root-pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+    <stylesheets>
+        <URL value="@../css/BudgetsView.css" />
+    </stylesheets>
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="main-scroll">
+            <content>
+                <VBox spacing="26.0" styleClass="main-content">
+                    <padding><Insets bottom="40" left="40" right="40" top="32" /></padding>
+                    <children>
+                        <HBox alignment="CENTER_LEFT">
+                            <children>
+                                <VBox spacing="6">
+                                    <Label styleClass="page-title" text="Monthly Budgets" />
+                                    <Label styleClass="page-subtitle" text="Đặt giới hạn chi tiêu và theo dõi mức an toàn trong tháng." />
+                                </VBox>
+                                <Region HBox.hgrow="ALWAYS" />
+                                <VBox alignment="CENTER_RIGHT" spacing="4">
+                                    <Label styleClass="user-name" text="Trần Trung Hiếu" />
+                                    <Label styleClass="user-role" text="Host / Developer" />
+                                </VBox>
+                                <Label styleClass="avatar-label" text="TH" />
+                            </children>
+                        </HBox>
+
+                        <HBox alignment="CENTER_LEFT">
+                            <children>
+                                <HBox alignment="CENTER" styleClass="date-selector">
+                                    <children><Label fx:id="lblBudgetMonth" styleClass="date-text" text="Current month" /></children>
+                                </HBox>
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Button onAction="#handleRefreshBudgets" styleClass="btn-outline" text="Refresh" />
+                                <Button onAction="#handleSetBudget" styleClass="btn-primary" text="Set budget" />
+                            </children>
+                            <spacing>12</spacing>
+                        </HBox>
+
+                        <HBox styleClass="hero-card">
+                            <padding><Insets bottom="28" left="30" right="30" top="28" /></padding>
+                            <children>
+                                <VBox spacing="18" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <VBox spacing="5">
+                                            <Label styleClass="hero-subtitle" text="TOTAL MONTHLY ALLOCATION" />
+                                            <Label fx:id="lblTotalAllocation" styleClass="hero-title" text="0" />
+                                        </VBox>
+                                        <VBox spacing="8">
+                                            <HBox>
+                                                <Label fx:id="lblBudgetProgress" styleClass="hero-text-muted" text="Tiến độ ngân sách" />
+                                                <Region HBox.hgrow="ALWAYS" />
+                                                <Label fx:id="lblSpent" styleClass="hero-text-muted" text="0 đã chi" />
+                                            </HBox>
+                                            <ProgressBar fx:id="overallProgress" maxWidth="Infinity" progress="0" styleClass="hero-progress" />
+                                        </VBox>
+                                    </children>
+                                </VBox>
+                                <Region prefWidth="28" />
+                                <VBox prefWidth="270" styleClass="hero-glass-card">
+                                    <children>
+                                        <Label styleClass="hero-subtitle" text="REMAINING BUDGET" />
+                                        <Label fx:id="lblRemaining" styleClass="hero-glass-value" text="0" />
+                                        <Label fx:id="lblBudgetInsight" styleClass="hero-glass-desc" text="Thiết lập budget để bắt đầu." wrapText="true" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+
+                        <VBox spacing="14">
+                            <children>
+                                <Label styleClass="section-title" text="Budget Allocation" />
+                                <FlowPane fx:id="budgetGrid" hgap="18" vgap="18" />
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+</BorderPane>
